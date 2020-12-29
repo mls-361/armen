@@ -1,0 +1,29 @@
+## https://taskfile.dev
+###---------------------
+
+version: '3'
+
+vars:
+    VERSION: 0.0.0
+    BUILTAT:
+        sh: date +%s
+    LDFLAGS: -X 'main._version={{.VERSION}}' -X 'main._builtAt={{.BUILTAT}}'
+
+tasks:
+    lint:
+        cmds:
+            - golangci-lint run
+
+    test:
+        cmds:
+            - go test -cover -v ./...
+
+    build:
+        cmds:
+            - go build -ldflags "{{.LDFLAGS}}" -o $GOPATH/bin/armen ./cmd/main.go
+
+    default:
+        cmds:
+            - task: lint
+            - task: test
+            - task: build
