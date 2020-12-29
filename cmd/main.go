@@ -7,6 +7,7 @@
 package main
 
 import (
+	"errors"
 	"math/rand"
 	"os"
 	"time"
@@ -60,6 +61,10 @@ func run() error {
 	}
 
 	if err := manager.Run(); err != nil {
+		if errors.Is(err, config.ErrStopAppRequested) { // --help, --version ///////////////////////////////////////////
+			return nil
+		}
+
 		return app.OnError(err)
 	}
 

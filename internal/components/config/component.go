@@ -17,6 +17,7 @@ type (
 	Config struct {
 		*component.Base
 		config *config
+		data   interface{}
 	}
 )
 
@@ -40,6 +41,12 @@ func (cc *Config) Dependencies() []string {
 
 // Build AFAIRE.
 func (cc *Config) Build(_ *component.Manager) error {
+	if err := cc.config.build(&cc.data); err != nil {
+		return err
+	}
+
+	cc.Built()
+
 	return nil
 }
 
