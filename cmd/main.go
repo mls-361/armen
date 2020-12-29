@@ -13,6 +13,7 @@ import (
 
 	"github.com/mls-361/component"
 
+	"github.com/mls-361/armen/internal/components"
 	"github.com/mls-361/armen/internal/components/application"
 	"github.com/mls-361/armen/internal/components/bus"
 	"github.com/mls-361/armen/internal/components/config"
@@ -37,13 +38,14 @@ func init() {
 }
 
 func run() error {
-	app := application.New("armen", _version, _builtAt)
+	cs := components.New()
+	app := application.New(cs, "armen", _version, _builtAt)
 	manager := component.NewManager()
 
 	if err := manager.AddComponents(
 		app,
 		bus.New(),
-		config.New(),
+		config.New(cs),
 		crypto.New(),
 		leader.New(),
 		logger.New(),

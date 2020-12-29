@@ -1,24 +1,24 @@
 /*
 ------------------------------------------------------------------------------------------------------------------------
-####### config ####### (c) 2020-2021 mls-361 ####################################################### MIT License #######
+####### components ####### (c) 2020-2021 mls-361 ################################################### MIT License #######
 ------------------------------------------------------------------------------------------------------------------------
 */
 
-package config
+package components
 
-import (
-	"github.com/mls-361/armen/internal/components"
-)
+import "github.com/mls-361/armen-sdk/components"
 
 type (
-	config struct {
-		components *components.Components
+	// Components AFAIRE.
+	Components struct {
+		*components.Components
 	}
 )
 
-func newConfig(components *components.Components) *config {
-	return &config{
-		components: components,
+// New AFAIRE.
+func New() *Components {
+	return &Components{
+		Components: &components.Components{},
 	}
 }
 

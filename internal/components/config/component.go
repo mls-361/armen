@@ -7,19 +7,40 @@
 package config
 
 import (
+	"github.com/mls-361/component"
+
 	"github.com/mls-361/armen/internal/components"
 )
 
 type (
-	config struct {
-		components *components.Components
+	// Config AFAIRE.
+	Config struct {
+		*component.Base
+		config *config
 	}
 )
 
-func newConfig(components *components.Components) *config {
-	return &config{
-		components: components,
+// New AFAIRE.
+func New(components *components.Components) *Config {
+	config := newConfig(components)
+	components.Config = config
+
+	return &Config{
+		Base:   component.NewBase("config", "config"),
+		config: config,
 	}
+}
+
+// Dependencies AFAIRE.
+func (cc *Config) Dependencies() []string {
+	return []string{
+		"application",
+	}
+}
+
+// Build AFAIRE.
+func (cc *Config) Build(_ *component.Manager) error {
+	return nil
 }
 
 /*

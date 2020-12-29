@@ -9,6 +9,8 @@ package application
 import (
 	"github.com/mls-361/application"
 	"github.com/mls-361/component"
+
+	"github.com/mls-361/armen/internal/components"
 )
 
 type (
@@ -20,10 +22,13 @@ type (
 )
 
 // New AFAIRE.
-func New(name, version, builtAt string) *Application {
+func New(components *components.Components, name, version, builtAt string) *Application {
+	application := application.New(name, version, builtAt)
+	components.Application = application
+
 	return &Application{
 		Base:        component.NewBase("application", "application"),
-		application: application.New(name, version, builtAt),
+		application: application,
 	}
 }
 
@@ -40,7 +45,6 @@ func (ca *Application) Initialize(_ *component.Manager) error {
 // Build AFAIRE.
 func (ca *Application) Build(_ *component.Manager) error {
 	ca.Built()
-	ca.SetComponent(ca.application)
 	return nil
 }
 
