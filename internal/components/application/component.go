@@ -42,6 +42,11 @@ func (ca *Application) Initialize(_ *component.Manager) error {
 	return ca.application.Initialize()
 }
 
+// Devel AFAIRE.
+func (ca *Application) Devel() int {
+	return ca.application.Devel()
+}
+
 // Build AFAIRE.
 func (ca *Application) Build(_ *component.Manager) error {
 	ca.Built()

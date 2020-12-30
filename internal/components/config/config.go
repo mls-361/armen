@@ -17,12 +17,8 @@ import (
 
 	"gopkg.in/yaml.v3"
 
+	"github.com/mls-361/armen/internal/client"
 	"github.com/mls-361/armen/internal/components"
-)
-
-var (
-	// ErrStopAppRequested AFAIRE.
-	ErrStopAppRequested = errors.New("stop application requested")
 )
 
 type (
@@ -55,9 +51,15 @@ func (c *config) parse() error {
 	fs.SetOutput(os.Stdout)
 	fs.Usage = func() {
 		fmt.Println()
-		fmt.Println(" ", app.Name())
-		fmt.Println("================================================================================")
+		fmt.Println("--------------------------------------------------------------------------------")
+		fmt.Println("Usage:", "armen [global options] [command [options]]")
+		fmt.Println()
+		fmt.Println("Global options:")
+		fmt.Println()
 		fs.PrintDefaults()
+		fmt.Println()
+		fmt.Println("Commands [client mode]:")
+		client.Usage(c.components)
 		fmt.Println("----------------------------------------------------------------------@(°_°)@---")
 		fmt.Println()
 	}
@@ -66,12 +68,12 @@ func (c *config) parse() error {
 
 	cfgFile := c.defaultCfgFile()
 
-	fs.BoolVar(&version, "version", false, "print version information and quit")
-	fs.StringVar(&c.cfgFile, "config-file", cfgFile, "the YAML configuration file")
+	fs.BoolVar(&version, "version", false, "print version information and quit.")
+	fs.StringVar(&c.cfgFile, "config-file", cfgFile, "the YAML configuration file.")
 
 	if err := fs.Parse(os.Args[1:]); err != nil {
 		if errors.Is(err, flag.ErrHelp) {
-			return ErrStopAppRequested
+			return client.ErrStopApp
 		}
 
 		return err
@@ -79,16 +81,18 @@ func (c *config) parse() error {
 
 	if version {
 		fmt.Println()
-		fmt.Println(" ", app.Name())
-		fmt.Println("===============================================")
-		fmt.Println("  version  :", app.Version())
-		fmt.Println("  built at :", app.BuiltAt().String())
-		fmt.Println("  by       :", "mls-361")
+		fmt.Println("-----------------------------------------------")
+		fmt.Println("  armen     :", "v"+app.Version())
+		fmt.Println("  built at  :", app.BuiltAt().String())
+		fmt.Println("  copyright :", "mls-361")
+		fmt.Println("  license   :", "MIT")
 		fmt.Println("-------------------------------------@(°_°)@---")
 		fmt.Println()
 
-		return ErrStopAppRequested
+		return client.ErrStopApp
 	}
+
+	os.Args = append(os.Args[:1], fs.Args()...)
 
 	return nil
 }
@@ -105,6 +109,10 @@ func (c *config) load(cfg interface{}) error {
 func (c *config) build(cfg interface{}) error {
 	if err := c.parse(); err != nil {
 		return err
+	}
+
+	if c.components.Application.Devel() >= 2 {
+		fmt.Printf("=== Config: cfgFile=%s\n", c.cfgFile) //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	}
 
 	return c.load(cfg)

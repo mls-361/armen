@@ -14,6 +14,7 @@ import (
 
 	"github.com/mls-361/component"
 
+	"github.com/mls-361/armen/internal/client"
 	"github.com/mls-361/armen/internal/components"
 	"github.com/mls-361/armen/internal/components/application"
 	"github.com/mls-361/armen/internal/components/bus"
@@ -41,18 +42,18 @@ func init() {
 func run() error {
 	cs := components.New()
 	app := application.New(cs, "armen", _version, _builtAt)
-	manager := component.NewManager()
+	manager := component.NewManager(app)
 
 	if err := manager.AddComponents(
 		app,
 		bus.New(),
 		config.New(cs),
-		crypto.New(),
+		crypto.New(cs),
 		leader.New(),
 		logger.New(),
 		model.New(),
 		plugins.New(),
-		runner.New(),
+		runner.New(cs),
 		scheduler.New(),
 		server.New(),
 		workers.New(),
@@ -61,7 +62,7 @@ func run() error {
 	}
 
 	if err := manager.Run(); err != nil {
-		if errors.Is(err, config.ErrStopAppRequested) { // --help, --version ///////////////////////////////////////////
+		if errors.Is(err, client.ErrStopApp) { // -help, -version //////////////////////////////////////////////////////
 			return nil
 		}
 
