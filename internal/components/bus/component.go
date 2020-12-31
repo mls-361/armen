@@ -1,40 +1,47 @@
 /*
 ------------------------------------------------------------------------------------------------------------------------
-####### model ####### (c) 2020-2021 mls-361 ######################################################## MIT License #######
+####### bus ####### (c) 2020-2021 mls-361 ########################################################## MIT License #######
 ------------------------------------------------------------------------------------------------------------------------
 */
 
-package model
+package bus
 
 import (
 	"github.com/mls-361/component"
+
+	"github.com/mls-361/armen/internal/components"
 )
 
 type (
-	// Model AFAIRE.
-	Model struct {
+	// Bus AFAIRE.
+	Bus struct {
 		*component.Base
+		bus *bus
 	}
 )
 
 // New AFAIRE.
-func New() *Model {
-	return &Model{
-		Base: component.NewBase("model", "model"),
+func New(components *components.Components) *Bus {
+	bus := newBus(components)
+	components.Bus = bus
+
+	return &Bus{
+		Base: component.NewBase("bus", "bus"),
+		bus:  bus,
 	}
 }
 
 // Dependencies AFAIRE.
-func (cm *Model) Dependencies() []string {
+func (cb *Bus) Dependencies() []string {
 	return []string{
-		"config",
-		"crypto",
 		"logger",
 	}
 }
 
 // Build AFAIRE.
-func (cm *Model) Build(_ *component.Manager) error {
+func (cb *Bus) Build(_ *component.Manager) error {
+	cb.Built()
+
 	return nil
 }
 

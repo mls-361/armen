@@ -17,6 +17,7 @@ import (
 	"github.com/mls-361/armen/internal/client"
 	"github.com/mls-361/armen/internal/components"
 	"github.com/mls-361/armen/internal/components/application"
+	"github.com/mls-361/armen/internal/components/backend"
 	"github.com/mls-361/armen/internal/components/bus"
 	"github.com/mls-361/armen/internal/components/config"
 	"github.com/mls-361/armen/internal/components/crypto"
@@ -46,7 +47,8 @@ func run() error {
 
 	if err := manager.AddComponents(
 		app,
-		bus.New(),
+		backend.New(cs),
+		bus.New(cs),
 		config.New(cs),
 		crypto.New(cs),
 		leader.New(),
