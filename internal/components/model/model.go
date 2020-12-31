@@ -29,6 +29,7 @@ func (cm *Model) Dependencies() []string {
 	return []string{
 		"config",
 		"crypto",
+		"logger",
 	}
 }
 

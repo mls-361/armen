@@ -62,7 +62,7 @@ func run() error {
 	}
 
 	if err := manager.Run(); err != nil {
-		if errors.Is(err, client.ErrStopApp) { // -help, -version //////////////////////////////////////////////////////
+		if errors.Is(err, client.ErrStopApp) { // -help, -version & mode client ////////////////////////////////////////
 			return nil
 		}
 
