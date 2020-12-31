@@ -18,7 +18,7 @@ import (
 
 type (
 	cmd struct {
-		*_cmd.CsFs
+		*_cmd.CmdFS
 		data struct {
 			s string
 		}
@@ -28,7 +28,7 @@ type (
 // New AFAIRE.
 func New(cs *components.Components) *cmd {
 	return &cmd{
-		CsFs: _cmd.New(cs),
+		CmdFS: _cmd.New(cs),
 	}
 }
 
@@ -40,7 +40,7 @@ func (c *cmd) setFlags() {
 func (c *cmd) Usage() {
 	c.setFlags()
 	fmt.Println("decrypt a string.")
-	c.CsFs.Usage()
+	c.CmdFS.Usage()
 }
 
 // Execute AFAIRE
@@ -65,7 +65,7 @@ func (c *cmd) Execute(m *component.Manager) error {
 		return err
 	}
 
-	fmt.Printf("decrypt: %s ==> %s\n", c.data.s, s)
+	fmt.Printf("decrypt: %s --> %s\n", c.data.s, s)
 
 	return nil
 }

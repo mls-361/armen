@@ -14,42 +14,42 @@ import (
 )
 
 type (
-	// CsFs AFAIRE.
-	CsFs struct {
-		cs *components.Components
-		fs *flag.FlagSet
+	// CmdFS AFAIRE.
+	CmdFS struct {
+		components *components.Components
+		flagSet    *flag.FlagSet
 	}
 )
 
 // New AFAIRE.
-func New(cs *components.Components) *CsFs {
-	fs := flag.NewFlagSet(cs.Application.Name(), flag.ContinueOnError)
-	fs.SetOutput(os.Stdout)
+func New(components *components.Components) *CmdFS {
+	flagSet := flag.NewFlagSet(components.Application.Name(), flag.ContinueOnError)
+	flagSet.SetOutput(os.Stdout)
 
-	return &CsFs{
-		cs: cs,
-		fs: fs,
+	return &CmdFS{
+		components: components,
+		flagSet:    flagSet,
 	}
 }
 
 // Components AFAIRE
-func (c *CsFs) Components() *components.Components {
-	return c.cs
+func (c *CmdFS) Components() *components.Components {
+	return c.components
 }
 
 // StringVar AFAIRE.
-func (c *CsFs) StringVar(p *string, name string, value string, usage string) {
-	c.fs.StringVar(p, name, value, usage)
+func (c *CmdFS) StringVar(p *string, name string, value string, usage string) {
+	c.flagSet.StringVar(p, name, value, usage)
 }
 
 // Usage AFAIRE.
-func (c *CsFs) Usage() {
-	c.fs.PrintDefaults()
+func (c *CmdFS) Usage() {
+	c.flagSet.PrintDefaults()
 }
 
 // Parse AFAIRE.
-func (c *CsFs) Parse() error {
-	return c.fs.Parse(os.Args[2:])
+func (c *CmdFS) Parse() error {
+	return c.flagSet.Parse(os.Args[2:])
 }
 
 /*

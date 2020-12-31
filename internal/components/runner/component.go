@@ -19,15 +19,15 @@ type (
 	// Runner AFAIRE.
 	Runner struct {
 		*component.Base
-		cs *components.Components
+		components *components.Components
 	}
 )
 
 // New AFAIRE.
-func New(cs *components.Components) *Runner {
+func New(components *components.Components) *Runner {
 	return &Runner{
-		Base: component.NewBase("runner", component.CategoryRunner),
-		cs:   cs,
+		Base:       component.NewBase("runner", component.CategoryRunner),
+		components: components,
 	}
 }
 
@@ -60,7 +60,7 @@ func (cr *Runner) Run(m *component.Manager) error {
 	}
 
 	if len(os.Args) > 1 {
-		if err := client.Execute(m, cr.cs); err != nil {
+		if err := client.Execute(m, cr.components); err != nil {
 			return err
 		}
 	}

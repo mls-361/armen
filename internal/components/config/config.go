@@ -37,7 +37,7 @@ func newConfig(components *components.Components) *config {
 func (c *config) defaultCfgFile() string {
 	app := c.components.Application
 
-	if cfgFile, ok := os.LookupEnv(strings.ToUpper(app.Name()) + "_CONFIG_FILE"); ok {
+	if cfgFile, ok := os.LookupEnv(strings.ToUpper(app.Name()) + "_CONFIG"); ok {
 		return cfgFile
 	}
 
@@ -69,7 +69,7 @@ func (c *config) parse() error {
 	cfgFile := c.defaultCfgFile()
 
 	fs.BoolVar(&version, "version", false, "print version information and quit.")
-	fs.StringVar(&c.cfgFile, "config-file", cfgFile, "the YAML configuration file.")
+	fs.StringVar(&c.cfgFile, "config", cfgFile, "the YAML configuration file.")
 
 	if err := fs.Parse(os.Args[1:]); err != nil {
 		if errors.Is(err, flag.ErrHelp) {

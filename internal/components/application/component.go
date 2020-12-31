@@ -50,6 +50,7 @@ func (ca *Application) Devel() int {
 // Build AFAIRE.
 func (ca *Application) Build(_ *component.Manager) error {
 	ca.Built()
+
 	return nil
 }
 
