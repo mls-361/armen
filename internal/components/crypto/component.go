@@ -11,9 +11,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/mls-361/armen/internal/components"
 	"github.com/mls-361/component"
 	"github.com/mls-361/crypto"
+
+	"github.com/mls-361/armen/internal/components"
 )
 
 type (

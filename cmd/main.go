@@ -50,7 +50,7 @@ func run() error {
 		config.New(cs),
 		crypto.New(cs),
 		leader.New(),
-		logger.New(),
+		logger.New(cs),
 		model.New(),
 		plugins.New(),
 		runner.New(cs),

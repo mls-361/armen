@@ -15,6 +15,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/mls-361/datamap"
+	"github.com/mls-361/util"
 	"gopkg.in/yaml.v3"
 
 	"github.com/mls-361/armen/internal/client"
@@ -25,6 +27,7 @@ type (
 	config struct {
 		components *components.Components
 		cfgFile    string
+		data       datamap.DataMap
 	}
 )
 
@@ -97,16 +100,16 @@ func (c *config) parse() error {
 	return nil
 }
 
-func (c *config) load(cfg interface{}) error {
+func (c *config) load() error {
 	data, err := ioutil.ReadFile(c.cfgFile)
 	if err != nil {
 		return err
 	}
 
-	return yaml.Unmarshal(data, cfg)
+	return yaml.Unmarshal(data, &c.data)
 }
 
-func (c *config) build(cfg interface{}) error {
+func (c *config) build() error {
 	if err := c.parse(); err != nil {
 		return err
 	}
@@ -115,7 +118,30 @@ func (c *config) build(cfg interface{}) error {
 		fmt.Printf("=== Config: cfgFile=%s\n", c.cfgFile) //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	}
 
-	return c.load(cfg)
+	return c.load()
+}
+
+// Data AFAIRE.
+func (c *config) Data() datamap.DataMap {
+	return c.data
+}
+
+// Decode AFAIRE.
+func (c *config) Decode(to interface{}, mustExist bool, keys ...string) error {
+	value, err := c.data.Retrieve(keys...)
+	if err != nil {
+		if errors.Is(err, datamap.ErrNotFound) {
+			if mustExist {
+				return err
+			}
+
+			return nil
+		}
+
+		return err
+	}
+
+	return util.DecodeData(value, to)
 }
 
 /*
