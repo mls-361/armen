@@ -7,20 +7,20 @@
 package model
 
 import (
-	"github.com/mls-361/component"
+	"github.com/mls-361/minikit"
 )
 
 type (
 	// Model AFAIRE.
 	Model struct {
-		*component.Base
+		*minikit.Base
 	}
 )
 
 // New AFAIRE.
 func New() *Model {
 	return &Model{
-		Base: component.NewBase("model", "model"),
+		Base: minikit.NewBase("model", "model"),
 	}
 }
 
@@ -35,7 +35,7 @@ func (cm *Model) Dependencies() []string {
 }
 
 // Build AFAIRE.
-func (cm *Model) Build(_ *component.Manager) error {
+func (cm *Model) Build(_ *minikit.Manager) error {
 	return nil
 }
 

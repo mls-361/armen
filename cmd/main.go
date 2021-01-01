@@ -12,7 +12,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/mls-361/component"
+	"github.com/mls-361/minikit"
 
 	"github.com/mls-361/armen/internal/client"
 	"github.com/mls-361/armen/internal/components"
@@ -43,7 +43,7 @@ func init() {
 func run() error {
 	cs := components.New()
 	app := application.New(cs, "armen", _version, _builtAt)
-	manager := component.NewManager(app)
+	manager := minikit.NewManager(app)
 
 	if err := manager.AddComponents(
 		app,

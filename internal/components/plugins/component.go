@@ -7,20 +7,20 @@
 package plugins
 
 import (
-	"github.com/mls-361/component"
+	"github.com/mls-361/minikit"
 )
 
 type (
 	// Plugins AFAIRE.
 	Plugins struct {
-		*component.Base
+		*minikit.Base
 	}
 )
 
 // New AFAIRE.
 func New() *Plugins {
 	return &Plugins{
-		Base: component.NewBase("plugins", "plugins"),
+		Base: minikit.NewBase("plugins", "plugins"),
 	}
 }
 
@@ -33,7 +33,7 @@ func (cp *Plugins) Dependencies() []string {
 }
 
 // Build AFAIRE.
-func (cp *Plugins) Build(_ *component.Manager) error {
+func (cp *Plugins) Build(_ *minikit.Manager) error {
 	return nil
 }
 

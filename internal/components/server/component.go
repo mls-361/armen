@@ -7,20 +7,20 @@
 package server
 
 import (
-	"github.com/mls-361/component"
+	"github.com/mls-361/minikit"
 )
 
 type (
 	// Server AFAIRE.
 	Server struct {
-		*component.Base
+		*minikit.Base
 	}
 )
 
 // New AFAIRE.
 func New() *Server {
 	return &Server{
-		Base: component.NewBase("server", "server"),
+		Base: minikit.NewBase("server", "server"),
 	}
 }
 
@@ -33,7 +33,7 @@ func (cs *Server) Dependencies() []string {
 }
 
 // Build AFAIRE.
-func (cs *Server) Build(_ *component.Manager) error {
+func (cs *Server) Build(_ *minikit.Manager) error {
 	return nil
 }
 

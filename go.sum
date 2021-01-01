@@ -6,8 +6,6 @@ github.com/mls-361/armen-sdk v0.0.0-20201231223433-606f54afaab7 h1:k2MOeBoM53PRq
 github.com/mls-361/armen-sdk v0.0.0-20201231223433-606f54afaab7/go.mod h1:qyP7Ci8LIGwDTNBJrfE7pErWQotlQPdZiJfhUJkAg6c=
 github.com/mls-361/buffer v0.0.0-20201227143939-c64ae381f889 h1:fSUuC8iBO9B0foEMuh3DiisLUPpYmnkOnqZOeSfHtlI=
 github.com/mls-361/buffer v0.0.0-20201227143939-c64ae381f889/go.mod h1:skxL3BFTFnQe9Z8QD8DpEygWzVGTlcRPWc3tcQgRDRY=
-github.com/mls-361/component v0.0.0-20201231202711-c0fa8f767de2 h1:vluHIvC+jAPgkBM0q+uN61kYDgEmXmac4o3u67wihRA=
-github.com/mls-361/component v0.0.0-20201231202711-c0fa8f767de2/go.mod h1:/Zkbgyqs/Edw11yl/UgFosP0Nr0rSgExmlbHWB+ean0=
 github.com/mls-361/crypto v0.0.0-20201227163331-98578e7e6b52 h1:mpMmUWjZeTaIEgSwoVtVrJoQF8afifs8pN+fXk1bEAY=
 github.com/mls-361/crypto v0.0.0-20201227163331-98578e7e6b52/go.mod h1:0+R8fC/vf6JevghlgxWNWZcOdXlr/05sekdQOzffbHM=
 github.com/mls-361/datamap v0.0.0-20201231104354-a9976b7134dc h1:yU0uF518QwXbPpmxdklN3glL53ijO+BsY5s/2w2FRUA=
@@ -20,6 +18,8 @@ github.com/mls-361/logfmt v0.0.0-20201227152049-109f0b8c6ea8 h1:8YS1mr0XNoI4qrbb
 github.com/mls-361/logfmt v0.0.0-20201227152049-109f0b8c6ea8/go.mod h1:eZFCuCrYbT2CH7QHrPpDYQdg8rtmdaSpwJoN9mWGNLQ=
 github.com/mls-361/logger v0.0.0-20201231194053-9932ffa02c0c h1:iY6mhA3cyYQ3oOK3hgozF12pZfL2PrtU//MzsLVKqsQ=
 github.com/mls-361/logger v0.0.0-20201231194053-9932ffa02c0c/go.mod h1:yuVL68Q9NVyHOEKC+z/wogq3ovhZU4Bl92pN4+JNSi4=
+github.com/mls-361/minikit v0.0.0-20210101142631-27f414426ad4 h1:E6I7BSIVaJxkAwWAKM/kVk7HtDJrc9/X4nssgXg6fx0=
+github.com/mls-361/minikit v0.0.0-20210101142631-27f414426ad4/go.mod h1:/lA15LjXot9ApHG1nMD9jjtGwYziqphculU6676yUAQ=
 github.com/mls-361/util v0.0.0-20201231105418-58f776f5e44e h1:UNLWs7sGur7/zmYGFrKH7H/p1ZvxXErMAFud+tKfN4Q=
 github.com/mls-361/util v0.0.0-20201231105418-58f776f5e44e/go.mod h1:3+DskC4gA22lOo2GEaXdf5QF9DD3uOM6Rn+tjLNmPWc=
 github.com/mls-361/uuid v0.0.0-20201227141247-b31d88caee2c h1:T1aYcdAMfTaIb4t0qYHHPnIx86RP1ci+jC46ZjAktls=

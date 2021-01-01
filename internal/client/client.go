@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mls-361/component"
+	"github.com/mls-361/minikit"
 	"github.com/mls-361/failure"
 
 	"github.com/mls-361/armen/internal/cmd/decrypt"
@@ -27,7 +27,7 @@ var (
 type (
 	cmd interface {
 		Usage()
-		Execute(m *component.Manager) error
+		Execute(m *minikit.Manager) error
 	}
 )
 
@@ -48,7 +48,7 @@ func Usage(cs *components.Components) {
 }
 
 // Excecute AFAIRE.
-func Execute(m *component.Manager, cs *components.Components) error {
+func Execute(m *minikit.Manager, cs *components.Components) error {
 	name := os.Args[1]
 	c, ok := initialize(cs)[name]
 	if !ok {

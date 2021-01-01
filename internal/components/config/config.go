@@ -37,8 +37,8 @@ func newConfig(components *components.Components) *config {
 	}
 }
 
-func (c *config) defaultCfgFile() string {
-	app := c.components.Application
+func (cc *config) defaultCfgFile() string {
+	app := cc.components.Application
 
 	if cfgFile, ok := os.LookupEnv(strings.ToUpper(app.Name()) + "_CONFIG"); ok {
 		return cfgFile
@@ -47,8 +47,8 @@ func (c *config) defaultCfgFile() string {
 	return filepath.Join("/etc", app.Name(), app.Name()+".yaml")
 }
 
-func (c *config) parse() error {
-	app := c.components.Application
+func (cc *config) parse() error {
+	app := cc.components.Application
 	fs := flag.NewFlagSet(app.Name(), flag.ContinueOnError)
 
 	fs.SetOutput(os.Stdout)
@@ -62,17 +62,17 @@ func (c *config) parse() error {
 		fs.PrintDefaults()
 		fmt.Println()
 		fmt.Println("Commands [client mode]:")
-		client.Usage(c.components)
+		client.Usage(cc.components)
 		fmt.Println("----------------------------------------------------------------------@(°_°)@---")
 		fmt.Println()
 	}
 
 	var version bool
 
-	cfgFile := c.defaultCfgFile()
+	cfgFile := cc.defaultCfgFile()
 
 	fs.BoolVar(&version, "version", false, "print version information and quit.")
-	fs.StringVar(&c.cfgFile, "config", cfgFile, "the YAML configuration file.")
+	fs.StringVar(&cc.cfgFile, "config", cfgFile, "the YAML configuration file.")
 
 	if err := fs.Parse(os.Args[1:]); err != nil {
 		if errors.Is(err, flag.ErrHelp) {
@@ -100,35 +100,35 @@ func (c *config) parse() error {
 	return nil
 }
 
-func (c *config) load() error {
-	data, err := ioutil.ReadFile(c.cfgFile)
+func (cc *config) load() error {
+	data, err := ioutil.ReadFile(cc.cfgFile)
 	if err != nil {
 		return err
 	}
 
-	return yaml.Unmarshal(data, &c.data)
+	return yaml.Unmarshal(data, &cc.data)
 }
 
-func (c *config) build() error {
-	if err := c.parse(); err != nil {
+func (cc *config) build() error {
+	if err := cc.parse(); err != nil {
 		return err
 	}
 
-	if c.components.Application.Devel() >= 2 {
-		fmt.Printf("=== Config: cfgFile=%s\n", c.cfgFile) //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	if cc.components.Application.Devel() >= 2 {
+		fmt.Printf("=== Config: cfgFile=%s\n", cc.cfgFile) //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	}
 
-	return c.load()
+	return cc.load()
 }
 
 // Data AFAIRE.
-func (c *config) Data() datamap.DataMap {
-	return c.data
+func (cc *config) Data() datamap.DataMap {
+	return cc.data
 }
 
 // Decode AFAIRE.
-func (c *config) Decode(to interface{}, mustExist bool, keys ...string) error {
-	value, err := c.data.Retrieve(keys...)
+func (cc *config) Decode(to interface{}, mustExist bool, keys ...string) error {
+	value, err := cc.data.Retrieve(keys...)
 	if err != nil {
 		if errors.Is(err, datamap.ErrNotFound) {
 			if mustExist {

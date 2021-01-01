@@ -7,7 +7,7 @@
 package bus
 
 import (
-	"github.com/mls-361/component"
+	"github.com/mls-361/minikit"
 
 	"github.com/mls-361/armen/internal/components"
 )
@@ -15,7 +15,7 @@ import (
 type (
 	// Bus AFAIRE.
 	Bus struct {
-		*component.Base
+		*minikit.Base
 		bus *bus
 	}
 )
@@ -26,7 +26,7 @@ func New(components *components.Components) *Bus {
 	components.Bus = bus
 
 	return &Bus{
-		Base: component.NewBase("bus", "bus"),
+		Base: minikit.NewBase("bus", "bus"),
 		bus:  bus,
 	}
 }
@@ -34,15 +34,9 @@ func New(components *components.Components) *Bus {
 // Dependencies AFAIRE.
 func (cb *Bus) Dependencies() []string {
 	return []string{
+		"application",
 		"logger",
 	}
-}
-
-// Build AFAIRE.
-func (cb *Bus) Build(_ *component.Manager) error {
-	cb.Built()
-
-	return nil
 }
 
 /*

@@ -9,7 +9,7 @@ package runner
 import (
 	"os"
 
-	"github.com/mls-361/component"
+	"github.com/mls-361/minikit"
 
 	"github.com/mls-361/armen/internal/client"
 	"github.com/mls-361/armen/internal/components"
@@ -18,7 +18,7 @@ import (
 type (
 	// Runner AFAIRE.
 	Runner struct {
-		*component.Base
+		*minikit.Base
 		components *components.Components
 	}
 )
@@ -26,18 +26,18 @@ type (
 // New AFAIRE.
 func New(components *components.Components) *Runner {
 	return &Runner{
-		Base:       component.NewBase("runner", component.CategoryRunner),
+		Base:       minikit.NewBase("runner", minikit.CategoryRunner),
 		components: components,
 	}
 }
 
 // Build AFAIRE.
-func (cr *Runner) Build(_ *component.Manager) error {
+func (cr *Runner) Build(_ *minikit.Manager) error {
 	cr.Built()
 	return nil
 }
 
-func (cr *Runner) run(m *component.Manager) error {
+func (cr *Runner) run(m *minikit.Manager) error {
 	if err := m.BuildComponents(); err != nil {
 		return err
 	}
@@ -48,7 +48,7 @@ func (cr *Runner) run(m *component.Manager) error {
 }
 
 // Run AFAIRE.
-func (cr *Runner) Run(m *component.Manager) error {
+func (cr *Runner) Run(m *minikit.Manager) error {
 	if err := m.InitializeComponents(); err != nil {
 		return err
 	}

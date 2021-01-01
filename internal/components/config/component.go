@@ -7,7 +7,7 @@
 package config
 
 import (
-	"github.com/mls-361/component"
+	"github.com/mls-361/minikit"
 
 	"github.com/mls-361/armen/internal/components"
 )
@@ -15,7 +15,7 @@ import (
 type (
 	// Config AFAIRE.
 	Config struct {
-		*component.Base
+		*minikit.Base
 		config *config
 	}
 )
@@ -26,7 +26,7 @@ func New(components *components.Components) *Config {
 	components.Config = config
 
 	return &Config{
-		Base:   component.NewBase("config", "config"),
+		Base:   minikit.NewBase("config", "config"),
 		config: config,
 	}
 }
@@ -39,7 +39,7 @@ func (cc *Config) Dependencies() []string {
 }
 
 // Build AFAIRE.
-func (cc *Config) Build(_ *component.Manager) error {
+func (cc *Config) Build(_ *minikit.Manager) error {
 	if err := cc.config.build(); err != nil {
 		return err
 	}

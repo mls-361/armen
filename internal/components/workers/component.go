@@ -7,20 +7,20 @@
 package workers
 
 import (
-	"github.com/mls-361/component"
+	"github.com/mls-361/minikit"
 )
 
 type (
 	// Workers AFAIRE.
 	Workers struct {
-		*component.Base
+		*minikit.Base
 	}
 )
 
 // New AFAIRE.
 func New() *Workers {
 	return &Workers{
-		Base: component.NewBase("workers", "workers"),
+		Base: minikit.NewBase("workers", "workers"),
 	}
 }
 
@@ -34,7 +34,7 @@ func (cw *Workers) Dependencies() []string {
 }
 
 // Build AFAIRE.
-func (cw *Workers) Build(_ *component.Manager) error {
+func (cw *Workers) Build(_ *minikit.Manager) error {
 	return nil
 }
 

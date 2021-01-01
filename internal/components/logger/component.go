@@ -10,7 +10,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/mls-361/component"
+	"github.com/mls-361/minikit"
 	"github.com/mls-361/logger"
 
 	"github.com/mls-361/armen/internal/components"
@@ -19,7 +19,7 @@ import (
 type (
 	// Logger AFAIRE.
 	Logger struct {
-		*component.Base
+		*minikit.Base
 		components *components.Components
 		logger     *logger.Master
 	}
@@ -31,7 +31,7 @@ func New(components *components.Components) *Logger {
 	components.Logger = logger
 
 	return &Logger{
-		Base:       component.NewBase("logger", "logger"),
+		Base:       minikit.NewBase("logger", "logger"),
 		components: components,
 		logger:     logger,
 	}
@@ -46,7 +46,7 @@ func (cl *Logger) Dependencies() []string {
 }
 
 // Build AFAIRE.
-func (cl *Logger) Build(_ *component.Manager) error {
+func (cl *Logger) Build(_ *minikit.Manager) error {
 	app := cl.components.Application
 	level := "info"
 

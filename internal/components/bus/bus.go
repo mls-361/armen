@@ -38,41 +38,41 @@ func newBus(components *components.Components) *bus {
 	}
 }
 
-func (b *bus) goConsumer(publisher string, ch <-chan *message.Message) {
-	b.waitGroup.Add(1)
+func (cb *bus) goConsumer(publisher string, ch <-chan *message.Message) {
+	cb.waitGroup.Add(1)
 
 	go func() { //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-		logger := b.components.Logger.CreateLogger(uuid.New(), publisher)
+		logger := cb.components.Logger.CreateLogger(uuid.New(), publisher)
 
 		logger.Info(">>>Bus") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 		for msg := range ch {
-			msg.Host = b.components.Application.Host()
+			msg.Host = cb.components.Application.Host()
 			msg.Publisher = publisher
 
 			logger.Debug("Publish message", "id", msg.ID, "topic", msg.Topic) //::::::::::::::::::::::::::::::::::::::::
 
-			b.rwMutex.RLock()
+			cb.rwMutex.RLock()
 
-			for re, cb := range b.subscribers {
+			for re, cb := range cb.subscribers {
 				if re.MatchString(msg.Topic) {
 					cb(msg)
 				}
 			}
 
-			b.rwMutex.RUnlock()
+			cb.rwMutex.RUnlock()
 		}
 
 		logger.Info("<<<Bus") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 		logger.RemoveLogger("")
 
-		b.waitGroup.Done()
+		cb.waitGroup.Done()
 	}()
 }
 
 // AddPublisher AFAIRE.
-func (b *bus) AddPublisher(name string, chCapacity, nbConsumer int) chan<- *message.Message {
+func (cb *bus) AddPublisher(name string, chCapacity, nbConsumer int) chan<- *message.Message {
 	if chCapacity < 0 {
 		chCapacity = 0
 	} else if chCapacity > _maxChannelCapacity {
@@ -88,16 +88,16 @@ func (b *bus) AddPublisher(name string, chCapacity, nbConsumer int) chan<- *mess
 	}
 
 	for i := 0; i < nbConsumer; i++ {
-		b.goConsumer(name, ch)
+		cb.goConsumer(name, ch)
 	}
 
 	return ch
 }
 
 // Subscribe AFAIRE.
-func (b *bus) Subscribe(callback func(*message.Message), regexpList ...string) error {
-	b.rwMutex.Lock()
-	defer b.rwMutex.Unlock()
+func (cb *bus) Subscribe(callback func(*message.Message), regexpList ...string) error {
+	cb.rwMutex.Lock()
+	defer cb.rwMutex.Unlock()
 
 	for _, re := range regexpList {
 		regExp, err := regexp.Compile(fmt.Sprintf(`^%s$`, re))
@@ -105,13 +105,13 @@ func (b *bus) Subscribe(callback func(*message.Message), regexpList ...string) e
 			return err
 		}
 
-		b.subscribers[regExp] = callback
+		cb.subscribers[regExp] = callback
 	}
 
 	return nil
 }
 
-func (b *bus) Close() { b.waitGroup.Wait() }
+func (cb *bus) Close() { cb.waitGroup.Wait() }
 
 /*
 ######################################################################################################## @(°_°)@ #######

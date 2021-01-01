@@ -8,20 +8,20 @@ package backend
 
 import (
 	"github.com/mls-361/armen/internal/components"
-	"github.com/mls-361/component"
+	"github.com/mls-361/minikit"
 )
 
 type (
 	// Backend AFAIRE.
 	Backend struct {
-		*component.Base
+		*minikit.Base
 	}
 )
 
 // New AFAIRE.
 func New(components *components.Components) *Backend {
 	return &Backend{
-		Base: component.NewBase("backend", "backend"),
+		Base: minikit.NewBase("backend", "backend"),
 	}
 }
 
@@ -34,7 +34,7 @@ func (cb *Backend) Dependencies() []string {
 }
 
 // Build AFAIRE.
-func (cb *Backend) Build(_ *component.Manager) error {
+func (cb *Backend) Build(_ *minikit.Manager) error {
 	return nil
 }
 

@@ -7,20 +7,20 @@
 package scheduler
 
 import (
-	"github.com/mls-361/component"
+	"github.com/mls-361/minikit"
 )
 
 type (
 	// Scheduler AFAIRE.
 	Scheduler struct {
-		*component.Base
+		*minikit.Base
 	}
 )
 
 // New AFAIRE.
 func New() *Scheduler {
 	return &Scheduler{
-		Base: component.NewBase("scheduler", "scheduler"),
+		Base: minikit.NewBase("scheduler", "scheduler"),
 	}
 }
 
@@ -34,7 +34,7 @@ func (cs *Scheduler) Dependencies() []string {
 }
 
 // Build AFAIRE.
-func (cs *Scheduler) Build(_ *component.Manager) error {
+func (cs *Scheduler) Build(_ *minikit.Manager) error {
 	return nil
 }
 

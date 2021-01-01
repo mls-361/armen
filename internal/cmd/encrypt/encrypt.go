@@ -9,7 +9,7 @@ package encrypt
 import (
 	"fmt"
 
-	"github.com/mls-361/component"
+	"github.com/mls-361/minikit"
 	"github.com/mls-361/failure"
 
 	_cmd "github.com/mls-361/armen/internal/cmd"
@@ -44,7 +44,7 @@ func (c *cmd) Usage() {
 }
 
 // Execute AFAIRE
-func (c *cmd) Execute(m *component.Manager) error {
+func (c *cmd) Execute(m *minikit.Manager) error {
 	c.setFlags()
 
 	if err := c.Parse(); err != nil {

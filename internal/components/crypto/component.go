@@ -11,7 +11,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/mls-361/component"
+	"github.com/mls-361/minikit"
 	"github.com/mls-361/crypto"
 
 	"github.com/mls-361/armen/internal/components"
@@ -20,7 +20,7 @@ import (
 type (
 	// Crypto AFAIRE.
 	Crypto struct {
-		*component.Base
+		*minikit.Base
 		components *components.Components
 		crypto     *crypto.Crypto
 	}
@@ -32,7 +32,7 @@ func New(components *components.Components) *Crypto {
 	components.Crypto = crypto
 
 	return &Crypto{
-		Base:       component.NewBase("crypto", "crypto"),
+		Base:       minikit.NewBase("crypto", "crypto"),
 		components: components,
 		crypto:     crypto,
 	}
@@ -46,7 +46,7 @@ func (cc *Crypto) Dependencies() []string {
 }
 
 // Build AFAIRE.
-func (cc *Crypto) Build(_ *component.Manager) error {
+func (cc *Crypto) Build(_ *minikit.Manager) error {
 	keyFile, ok := os.LookupEnv(strings.ToUpper(cc.components.Application.Name()) + "_KEY_FILE")
 	if !ok {
 		return nil

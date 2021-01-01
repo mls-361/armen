@@ -7,20 +7,20 @@
 package leader
 
 import (
-	"github.com/mls-361/component"
+	"github.com/mls-361/minikit"
 )
 
 type (
 	// Leader AFAIRE.
 	Leader struct {
-		*component.Base
+		*minikit.Base
 	}
 )
 
 // New AFAIRE.
 func New() *Leader {
 	return &Leader{
-		Base: component.NewBase("leader", "leader"),
+		Base: minikit.NewBase("leader", "leader"),
 	}
 }
 
@@ -33,7 +33,7 @@ func (cl *Leader) Dependencies() []string {
 }
 
 // Build AFAIRE.
-func (cl *Leader) Build(_ *component.Manager) error {
+func (cl *Leader) Build(_ *minikit.Manager) error {
 	return nil
 }
 
