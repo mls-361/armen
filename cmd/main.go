@@ -25,6 +25,7 @@ import (
 	"github.com/mls-361/armen/internal/components/logger"
 	"github.com/mls-361/armen/internal/components/model"
 	"github.com/mls-361/armen/internal/components/plugins"
+	"github.com/mls-361/armen/internal/components/router"
 	"github.com/mls-361/armen/internal/components/runner"
 	"github.com/mls-361/armen/internal/components/scheduler"
 	"github.com/mls-361/armen/internal/components/server"
@@ -55,6 +56,7 @@ func run() error {
 		logger.New(cs),
 		model.New(),
 		plugins.New(),
+		router.New(cs),
 		runner.New(cs),
 		scheduler.New(),
 		server.New(),

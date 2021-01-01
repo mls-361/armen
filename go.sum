@@ -1,9 +1,11 @@
+github.com/julienschmidt/httprouter v1.3.0 h1:U0609e9tgbseu3rBINet9P48AI/D3oJs4dN7jwJOQ1U=
+github.com/julienschmidt/httprouter v1.3.0/go.mod h1:JR6WtHb+2LUe8TCKY3cZOxFyyO8IZAc4RVcycCCAKdM=
 github.com/mitchellh/mapstructure v1.4.0 h1:7ks8ZkOP5/ujthUsT07rNv+nkLXCQWKNHuwzOAesEks=
 github.com/mitchellh/mapstructure v1.4.0/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
 github.com/mls-361/application v0.0.0-20201231105806-88050ad32576 h1:Ztuea+xC2y/2qwP2YBCCf89p6MuRSWdVSe2DECGw5es=
 github.com/mls-361/application v0.0.0-20201231105806-88050ad32576/go.mod h1:dSu+VBp6VrZjzghJ4zQ5KC40lJuGlkHYrT1cMq4lOQc=
-github.com/mls-361/armen-sdk v0.0.0-20201231223433-606f54afaab7 h1:k2MOeBoM53PRqTrE134gTfaoM7CfwXX/X4fIHKGy99g=
-github.com/mls-361/armen-sdk v0.0.0-20201231223433-606f54afaab7/go.mod h1:qyP7Ci8LIGwDTNBJrfE7pErWQotlQPdZiJfhUJkAg6c=
+github.com/mls-361/armen-sdk v0.0.0-20210101155310-19a071c674f1 h1:fdZ2o0UJtv1ILt0qQR8fO7GF7Y9bT94R+LfKmMkEL3s=
+github.com/mls-361/armen-sdk v0.0.0-20210101155310-19a071c674f1/go.mod h1:qyP7Ci8LIGwDTNBJrfE7pErWQotlQPdZiJfhUJkAg6c=
 github.com/mls-361/buffer v0.0.0-20201227143939-c64ae381f889 h1:fSUuC8iBO9B0foEMuh3DiisLUPpYmnkOnqZOeSfHtlI=
 github.com/mls-361/buffer v0.0.0-20201227143939-c64ae381f889/go.mod h1:skxL3BFTFnQe9Z8QD8DpEygWzVGTlcRPWc3tcQgRDRY=
 github.com/mls-361/crypto v0.0.0-20201227163331-98578e7e6b52 h1:mpMmUWjZeTaIEgSwoVtVrJoQF8afifs8pN+fXk1bEAY=
