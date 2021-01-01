@@ -42,7 +42,13 @@ func (cr *Runner) run(m *minikit.Manager) error {
 		return err
 	}
 
-	// AFINIR
+	server := cr.components.Server
+
+	if err := server.Start(); err != nil {
+		return err
+	}
+
+	server.Stop()
 
 	return nil
 }

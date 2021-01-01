@@ -8,19 +8,26 @@ package server
 
 import (
 	"github.com/mls-361/minikit"
+
+	"github.com/mls-361/armen/internal/components"
 )
 
 type (
 	// Server AFAIRE.
 	Server struct {
 		*minikit.Base
+		server *server
 	}
 )
 
 // New AFAIRE.
-func New() *Server {
+func New(components *components.Components) *Server {
+	server := newServer(components)
+	components.Server = server
+
 	return &Server{
-		Base: minikit.NewBase("server", "server"),
+		Base:   minikit.NewBase("server", "server"),
+		server: server,
 	}
 }
 
@@ -29,12 +36,24 @@ func (cs *Server) Dependencies() []string {
 	return []string{
 		"config",
 		"logger",
+		"router",
 	}
 }
 
 // Build AFAIRE.
 func (cs *Server) Build(_ *minikit.Manager) error {
+	if err := cs.server.build(); err != nil {
+		return err
+	}
+
+	cs.Built()
+
 	return nil
+}
+
+// Close AFAIRE.
+func (cs *Server) Close() {
+	cs.server.close()
 }
 
 /*

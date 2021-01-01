@@ -59,7 +59,7 @@ func run() error {
 		router.New(cs),
 		runner.New(cs),
 		scheduler.New(),
-		server.New(),
+		server.New(cs),
 		workers.New(),
 	); err != nil {
 		return app.OnError(err)

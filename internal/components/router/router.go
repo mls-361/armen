@@ -30,6 +30,11 @@ func newRouter() *router {
 	}
 }
 
+// ServeHTTP AFAIRE.
+func (cr *router) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+	cr.httprouter.ServeHTTP(rw, r)
+}
+
 // Get AFAIRE.
 func (cr *router) Get(path string, handler http.HandlerFunc) {
 	cr.httprouter.HandlerFunc(http.MethodGet, path, handler)
