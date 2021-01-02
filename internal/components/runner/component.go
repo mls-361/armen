@@ -33,12 +33,23 @@ func New(components *components.Components) *Runner {
 	}
 }
 
+func waitEnd() {
+	end := make(chan os.Signal, 1)
+
+	signal.Notify(end, os.Interrupt, syscall.SIGABRT, syscall.SIGQUIT, syscall.SIGTERM)
+
+	<-end
+
+	close(end)
+}
+
 func (cr *Runner) run(m *minikit.Manager) error {
 	if err := m.BuildComponents(); err != nil {
 		return err
 	}
 
 	leader := cr.components.Leader
+	scheduler := cr.components.Scheduler
 	server := cr.components.Server
 
 	if err := server.Start(); err != nil {
@@ -47,15 +58,13 @@ func (cr *Runner) run(m *minikit.Manager) error {
 
 	leader.Start()
 
-	defer leader.Stop()
-	defer server.Stop()
+	scheduler.Start()
 
-	end := make(chan os.Signal, 1)
-	defer close(end)
+	waitEnd()
 
-	signal.Notify(end, os.Interrupt, syscall.SIGABRT, syscall.SIGQUIT, syscall.SIGTERM)
-
-	<-end
+	scheduler.Stop()
+	leader.Stop()
+	server.Stop()
 
 	cr.components.Logger.Info("...Stopping...") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
