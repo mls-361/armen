@@ -7,6 +7,7 @@
 package bus
 
 import (
+	"expvar"
 	"fmt"
 	"regexp"
 	"sync"
@@ -28,6 +29,7 @@ type (
 		subscribers map[*regexp.Regexp]func(*message.Message)
 		rwMutex     sync.RWMutex
 		waitGroup   sync.WaitGroup
+		publishers  *expvar.Map
 	}
 )
 
@@ -35,6 +37,7 @@ func newBus(components *components.Components) *bus {
 	return &bus{
 		components:  components,
 		subscribers: make(map[*regexp.Regexp]func(*message.Message)),
+		publishers:  expvar.NewMap("publishers"),
 	}
 }
 
@@ -54,13 +57,15 @@ func (cb *bus) goConsumer(publisher string, ch <-chan *message.Message) {
 
 			cb.rwMutex.RLock()
 
-			for re, cb := range cb.subscribers {
+			for re, callback := range cb.subscribers {
 				if re.MatchString(msg.Topic) {
-					cb(msg)
+					callback(msg)
 				}
 			}
 
 			cb.rwMutex.RUnlock()
+
+			cb.publishers.Add(publisher, 1)
 		}
 
 		logger.Info("<<<Bus") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

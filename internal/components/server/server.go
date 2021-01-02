@@ -53,7 +53,7 @@ func (cs *server) build() error {
 
 	cs.httpserver = &http.Server{
 		Addr:         fmt.Sprintf(":%d", cs.config.Port),
-		Handler:      cs.components.Router,
+		Handler:      cs.components.Router.Handler(),
 		ErrorLog:     cs.components.Logger.NewStdLogger("error", "", log.Llongfile),
 		IdleTimeout:  1 * time.Minute,
 		ReadTimeout:  5 * time.Second,

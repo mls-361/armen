@@ -8,6 +8,8 @@ package runner
 
 import (
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/mls-361/minikit"
 
@@ -31,12 +33,6 @@ func New(components *components.Components) *Runner {
 	}
 }
 
-// Build AFAIRE.
-func (cr *Runner) Build(_ *minikit.Manager) error {
-	cr.Built()
-	return nil
-}
-
 func (cr *Runner) run(m *minikit.Manager) error {
 	if err := m.BuildComponents(); err != nil {
 		return err
@@ -48,7 +44,16 @@ func (cr *Runner) run(m *minikit.Manager) error {
 		return err
 	}
 
-	server.Stop()
+	defer server.Stop()
+
+	end := make(chan os.Signal, 1)
+	defer close(end)
+
+	signal.Notify(end, syscall.SIGABRT, syscall.SIGQUIT, syscall.SIGTERM)
+
+	<-end
+
+	cr.components.Logger.Info("...Stopping...") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 	return nil
 }
