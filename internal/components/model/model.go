@@ -13,28 +13,28 @@ import (
 )
 
 type (
-	model struct {
+	cModel struct {
 		components *components.Components
 	}
 )
 
-func newModel(components *components.Components) *model {
-	return &model{
+func newCModel(components *components.Components) *cModel {
+	return &cModel{
 		components: components,
 	}
 }
 
-func (cm *model) build() error {
+func (cm *cModel) build() error {
 	return nil
 }
 
 // AcquireLock AFAIRE.
-func (cm *model) AcquireLock(name, owner string, duration time.Duration) (bool, error) {
+func (cm *cModel) AcquireLock(name, owner string, duration time.Duration) (bool, error) {
 	return cm.components.Backend.AcquireLock(name, owner, duration)
 }
 
 // ReleaseLock AFAIRE.
-func (cm *model) ReleaseLock(name, owner string) error {
+func (cm *cModel) ReleaseLock(name, owner string) error {
 	return cm.components.Backend.ReleaseLock(name, owner)
 }
 

@@ -16,13 +16,13 @@ type (
 	// Bus AFAIRE.
 	Bus struct {
 		*minikit.Base
-		bus *bus
+		bus *cBus
 	}
 )
 
 // New AFAIRE.
 func New(components *components.Components) *Bus {
-	bus := newBus(components)
+	bus := newCBus(components)
 	components.Bus = bus
 
 	return &Bus{

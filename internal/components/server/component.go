@@ -16,13 +16,13 @@ type (
 	// Server AFAIRE.
 	Server struct {
 		*minikit.Base
-		server *server
+		server *cServer
 	}
 )
 
 // New AFAIRE.
 func New(components *components.Components) *Server {
-	server := newServer(components)
+	server := newCServer(components)
 	components.Server = server
 
 	return &Server{

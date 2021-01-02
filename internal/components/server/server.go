@@ -30,7 +30,7 @@ type (
 		KeyFile  string
 	}
 
-	server struct {
+	cServer struct {
 		components *components.Components
 		config     *config
 		httpserver *http.Server
@@ -38,15 +38,15 @@ type (
 	}
 )
 
-func newServer(components *components.Components) *server {
-	return &server{
+func newCServer(components *components.Components) *cServer {
+	return &cServer{
 		components: components,
 		config:     &config{Port: _defaultPort},
 		stopped:    make(chan error, 1),
 	}
 }
 
-func (cs *server) build() error {
+func (cs *cServer) build() error {
 	if err := cs.components.Config.Decode(&cs.config, false, "components", "server"); err != nil {
 		return err
 	}
@@ -71,12 +71,12 @@ func (cs *server) build() error {
 }
 
 // Port AFAIRE.
-func (cs *server) Port() int {
+func (cs *cServer) Port() int {
 	return cs.config.Port
 }
 
 // Start AFAIRE.
-func (cs *server) Start() error {
+func (cs *cServer) Start() error {
 	go func() { //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 		var err error
 
@@ -99,7 +99,7 @@ func (cs *server) Start() error {
 }
 
 // Stop AFAIRE.
-func (cs *server) Stop() {
+func (cs *cServer) Stop() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -116,7 +116,7 @@ func (cs *server) Stop() {
 	cs.components.Logger.Info("<<<Server") //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 }
 
-func (cs *server) close() {
+func (cs *cServer) close() {
 	close(cs.stopped)
 }
 

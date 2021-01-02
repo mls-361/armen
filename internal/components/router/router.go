@@ -14,12 +14,12 @@ import (
 )
 
 type (
-	router struct {
+	cRouter struct {
 		mux *httprouter.Router
 	}
 )
 
-func newRouter() *router {
+func newCRouter() *cRouter {
 	mux := httprouter.New()
 
 	mux.PanicHandler = func(rw http.ResponseWriter, _ *http.Request, _ interface{}) {
@@ -31,23 +31,23 @@ func newRouter() *router {
 		rw.WriteHeader(http.StatusOK)
 	})
 
-	return &router{
+	return &cRouter{
 		mux: mux,
 	}
 }
 
 // ServeHTTP AFAIRE.
-func (cr *router) Handler() http.Handler {
+func (cr *cRouter) Handler() http.Handler {
 	return cr.mux
 }
 
 // Get AFAIRE.
-func (cr *router) Get(path string, handler http.HandlerFunc) {
+func (cr *cRouter) Get(path string, handler http.HandlerFunc) {
 	cr.mux.HandlerFunc(http.MethodGet, path, handler)
 }
 
 // Post AFAIRE.
-func (cr *router) Post(path string, handler http.HandlerFunc) {
+func (cr *cRouter) Post(path string, handler http.HandlerFunc) {
 	cr.mux.HandlerFunc(http.MethodPost, path, handler)
 }
 

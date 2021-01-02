@@ -16,13 +16,13 @@ type (
 	// Leader AFAIRE.
 	Leader struct {
 		*minikit.Base
-		leader *leader
+		leader *cLeader
 	}
 )
 
 // New AFAIRE.
 func New(components *components.Components) *Leader {
-	leader := newLeader(components)
+	leader := newCLeader(components)
 	components.Leader = leader
 
 	return &Leader{

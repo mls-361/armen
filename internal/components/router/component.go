@@ -16,13 +16,13 @@ type (
 	// Router AFAIRE.
 	Router struct {
 		*minikit.Base
-		router *router
+		router *cRouter
 	}
 )
 
 // New AFAIRE.
 func New(components *components.Components) *Router {
-	router := newRouter()
+	router := newCRouter()
 	components.Router = router
 
 	return &Router{

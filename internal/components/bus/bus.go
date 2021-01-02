@@ -24,7 +24,7 @@ const (
 )
 
 type (
-	bus struct {
+	cBus struct {
 		components  *components.Components
 		subscribers map[*regexp.Regexp]func(*message.Message)
 		rwMutex     sync.RWMutex
@@ -33,15 +33,15 @@ type (
 	}
 )
 
-func newBus(components *components.Components) *bus {
-	return &bus{
+func newCBus(components *components.Components) *cBus {
+	return &cBus{
 		components:  components,
 		subscribers: make(map[*regexp.Regexp]func(*message.Message)),
 		publishers:  expvar.NewMap("publishers"),
 	}
 }
 
-func (cb *bus) goConsumer(publisher string, ch <-chan *message.Message) {
+func (cb *cBus) goConsumer(publisher string, ch <-chan *message.Message) {
 	cb.waitGroup.Add(1)
 
 	go func() { //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -77,7 +77,7 @@ func (cb *bus) goConsumer(publisher string, ch <-chan *message.Message) {
 }
 
 // AddPublisher AFAIRE.
-func (cb *bus) AddPublisher(name string, chCapacity, nbConsumer int) chan<- *message.Message {
+func (cb *cBus) AddPublisher(name string, chCapacity, nbConsumer int) chan<- *message.Message {
 	if chCapacity < 0 {
 		chCapacity = 0
 	} else if chCapacity > _maxChannelCapacity {
@@ -100,7 +100,7 @@ func (cb *bus) AddPublisher(name string, chCapacity, nbConsumer int) chan<- *mes
 }
 
 // Subscribe AFAIRE.
-func (cb *bus) Subscribe(callback func(*message.Message), regexpList ...string) error {
+func (cb *cBus) Subscribe(callback func(*message.Message), regexpList ...string) error {
 	cb.rwMutex.Lock()
 	defer cb.rwMutex.Unlock()
 
@@ -116,7 +116,7 @@ func (cb *bus) Subscribe(callback func(*message.Message), regexpList ...string) 
 	return nil
 }
 
-func (cb *bus) Close() { cb.waitGroup.Wait() }
+func (cb *cBus) Close() { cb.waitGroup.Wait() }
 
 /*
 ######################################################################################################## @(°_°)@ #######

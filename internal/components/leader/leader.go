@@ -19,7 +19,7 @@ const (
 )
 
 type (
-	leader struct {
+	cLeader struct {
 		components   *components.Components
 		mutex        sync.Mutex
 		amITheLeader bool
@@ -28,14 +28,14 @@ type (
 	}
 )
 
-func newLeader(components *components.Components) *leader {
-	return &leader{
+func newCLeader(components *components.Components) *cLeader {
+	return &cLeader{
 		components: components,
 		stop:       make(chan struct{}),
 	}
 }
 
-func (cl *leader) tryAcquireLock() {
+func (cl *cLeader) tryAcquireLock() {
 	ok, err := cl.components.Model.AcquireLock(
 		_lockName,
 		cl.components.Application.ID(),
@@ -60,7 +60,7 @@ func (cl *leader) tryAcquireLock() {
 }
 
 // Start AFAIRE.
-func (cl *leader) Start() {
+func (cl *cLeader) Start() {
 	cl.waitGroup.Add(1)
 
 	go func() { //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -90,7 +90,7 @@ func (cl *leader) Start() {
 }
 
 // AmITheLeader AFAIRE.
-func (cl *leader) AmITheLeader() bool {
+func (cl *cLeader) AmITheLeader() bool {
 	cl.mutex.Lock()
 	defer cl.mutex.Unlock()
 
@@ -98,7 +98,7 @@ func (cl *leader) AmITheLeader() bool {
 }
 
 // Stop AFAIRE.
-func (cl *leader) Stop() {
+func (cl *cLeader) Stop() {
 	close(cl.stop)
 	cl.waitGroup.Wait()
 

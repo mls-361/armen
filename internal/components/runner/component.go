@@ -33,12 +33,14 @@ func New(components *components.Components) *Runner {
 	}
 }
 
-func waitEnd() {
+func (cr *Runner) waitEnd() {
 	end := make(chan os.Signal, 1)
 
 	signal.Notify(end, os.Interrupt, syscall.SIGABRT, syscall.SIGQUIT, syscall.SIGTERM)
 
 	<-end
+
+	cr.components.Logger.Info("...Stopping...") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 	close(end)
 }
@@ -60,13 +62,11 @@ func (cr *Runner) run(m *minikit.Manager) error {
 
 	scheduler.Start()
 
-	waitEnd()
+	cr.waitEnd()
 
 	scheduler.Stop()
 	leader.Stop()
 	server.Stop()
-
-	cr.components.Logger.Info("...Stopping...") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 	return nil
 }

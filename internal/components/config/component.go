@@ -16,13 +16,13 @@ type (
 	// Config AFAIRE.
 	Config struct {
 		*minikit.Base
-		config *config
+		config *cConfig
 	}
 )
 
 // New AFAIRE.
 func New(components *components.Components) *Config {
-	config := newConfig(components)
+	config := newCConfig(components)
 	components.Config = config
 
 	return &Config{

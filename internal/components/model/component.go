@@ -16,13 +16,13 @@ type (
 	// Model AFAIRE.
 	Model struct {
 		*minikit.Base
-		model *model
+		model *cModel
 	}
 )
 
 // New AFAIRE.
 func New(components *components.Components) *Model {
-	model := newModel(components)
+	model := newCModel(components)
 	components.Model = model
 
 	return &Model{

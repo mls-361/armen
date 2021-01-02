@@ -23,20 +23,20 @@ import (
 )
 
 type (
-	config struct {
+	cConfig struct {
 		components *components.Components
 		cfgFile    string
 		data       datamap.DataMap
 	}
 )
 
-func newConfig(components *components.Components) *config {
-	return &config{
+func newCConfig(components *components.Components) *cConfig {
+	return &cConfig{
 		components: components,
 	}
 }
 
-func (cc *config) defaultCfgFile() string {
+func (cc *cConfig) defaultCfgFile() string {
 	app := cc.components.Application
 
 	if cfgFile, ok := app.LookupEnv("CONFIG"); ok {
@@ -46,7 +46,7 @@ func (cc *config) defaultCfgFile() string {
 	return filepath.Join("/etc", app.Name(), app.Name()+".yaml")
 }
 
-func (cc *config) parse() error {
+func (cc *cConfig) parse() error {
 	app := cc.components.Application
 	fs := flag.NewFlagSet(app.Name(), flag.ContinueOnError)
 
@@ -99,7 +99,7 @@ func (cc *config) parse() error {
 	return nil
 }
 
-func (cc *config) load() error {
+func (cc *cConfig) load() error {
 	data, err := ioutil.ReadFile(cc.cfgFile)
 	if err != nil {
 		return err
@@ -108,7 +108,7 @@ func (cc *config) load() error {
 	return yaml.Unmarshal(data, &cc.data)
 }
 
-func (cc *config) build() error {
+func (cc *cConfig) build() error {
 	if err := cc.parse(); err != nil {
 		return err
 	}
@@ -121,12 +121,12 @@ func (cc *config) build() error {
 }
 
 // Data AFAIRE.
-func (cc *config) Data() datamap.DataMap {
+func (cc *cConfig) Data() datamap.DataMap {
 	return cc.data
 }
 
 // Decode AFAIRE.
-func (cc *config) Decode(to interface{}, mustExist bool, keys ...string) error {
+func (cc *cConfig) Decode(to interface{}, mustExist bool, keys ...string) error {
 	value, err := cc.data.Retrieve(keys...)
 	if err != nil {
 		if errors.Is(err, datamap.ErrNotFound) {
