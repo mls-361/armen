@@ -8,11 +8,9 @@ package crypto
 
 import (
 	"io/ioutil"
-	"os"
-	"strings"
 
-	"github.com/mls-361/minikit"
 	"github.com/mls-361/crypto"
+	"github.com/mls-361/minikit"
 
 	"github.com/mls-361/armen/internal/components"
 )
@@ -47,7 +45,7 @@ func (cc *Crypto) Dependencies() []string {
 
 // Build AFAIRE.
 func (cc *Crypto) Build(_ *minikit.Manager) error {
-	keyFile, ok := os.LookupEnv(strings.ToUpper(cc.components.Application.Name()) + "_KEY_FILE")
+	keyFile, ok := cc.components.Application.LookupEnv("KEY_FILE")
 	if !ok {
 		return nil
 	}

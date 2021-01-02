@@ -30,6 +30,8 @@ func (cw *Workers) Dependencies() []string {
 		"bus",
 		"config",
 		"logger",
+		"model",
+		"plugins",
 	}
 }
 

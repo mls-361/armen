@@ -8,6 +8,8 @@ package scheduler
 
 import (
 	"github.com/mls-361/minikit"
+
+	"github.com/mls-361/armen/internal/components"
 )
 
 type (
@@ -18,7 +20,7 @@ type (
 )
 
 // New AFAIRE.
-func New() *Scheduler {
+func New(components *components.Components) *Scheduler {
 	return &Scheduler{
 		Base: minikit.NewBase("scheduler", "scheduler"),
 	}

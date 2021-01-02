@@ -10,8 +10,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/mls-361/minikit"
 	"github.com/mls-361/logger"
+	"github.com/mls-361/minikit"
 
 	"github.com/mls-361/armen/internal/components"
 )
@@ -50,13 +50,13 @@ func (cl *Logger) Build(_ *minikit.Manager) error {
 	app := cl.components.Application
 	level := "info"
 
-	if app.Devel() > 0 {
-		level = "trace"
-	}
-
 	level, err := cl.components.Config.Data().StringWD(level, "components", "logger", "level")
 	if err != nil {
 		return err
+	}
+
+	if app.Devel() > 0 {
+		level = "trace"
 	}
 
 	if err := cl.logger.Build(app.ID(), app.Name(), level, nil); err != nil {

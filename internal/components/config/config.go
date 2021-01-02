@@ -13,7 +13,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/mls-361/datamap"
 	"github.com/mls-361/util"
@@ -40,7 +39,7 @@ func newConfig(components *components.Components) *config {
 func (cc *config) defaultCfgFile() string {
 	app := cc.components.Application
 
-	if cfgFile, ok := os.LookupEnv(strings.ToUpper(app.Name()) + "_CONFIG"); ok {
+	if cfgFile, ok := app.LookupEnv("CONFIG"); ok {
 		return cfgFile
 	}
 
@@ -114,7 +113,7 @@ func (cc *config) build() error {
 		return err
 	}
 
-	if cc.components.Application.Devel() >= 2 {
+	if cc.components.Application.Devel() > 1 {
 		fmt.Printf("=== Config: cfgFile=%s\n", cc.cfgFile) //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	}
 

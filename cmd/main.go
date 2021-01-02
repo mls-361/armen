@@ -58,7 +58,7 @@ func run() error {
 		plugins.New(),
 		router.New(cs),
 		runner.New(cs),
-		scheduler.New(),
+		scheduler.New(cs),
 		server.New(cs),
 		workers.New(),
 	); err != nil {

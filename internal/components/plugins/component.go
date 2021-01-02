@@ -27,8 +27,14 @@ func New() *Plugins {
 // Dependencies AFAIRE.
 func (cp *Plugins) Dependencies() []string {
 	return []string{
+		"application",
+		"bus",
 		"config",
+		"crypto",
+		"leader",
 		"logger",
+		"model",
+		"router",
 	}
 }
 

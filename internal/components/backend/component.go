@@ -7,21 +7,51 @@
 package backend
 
 import (
-	"github.com/mls-361/armen/internal/components"
+	"fmt"
+
+	_cpts "github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/minikit"
+
+	"github.com/mls-361/armen/internal/components"
+	"github.com/mls-361/armen/internal/components/backend/memory"
+	"github.com/mls-361/armen/internal/components/backend/pgsql"
 )
 
 type (
+	backend interface {
+		_cpts.Backend
+		Build() error
+	}
+
 	// Backend AFAIRE.
 	Backend struct {
 		*minikit.Base
+		backend backend
 	}
 )
 
 // New AFAIRE.
 func New(components *components.Components) *Backend {
+	var backend backend
+
+	value, _ := components.Application.LookupEnv("BACKEND")
+
+	switch value {
+	case "memory":
+		backend = memory.New(components)
+	default:
+		backend = pgsql.New(components)
+	}
+
+	if components.Application.Devel() > 1 {
+		fmt.Printf("=== Backend: backend=%s\n", value) //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	}
+
+	components.Backend = backend
+
 	return &Backend{
-		Base: minikit.NewBase("backend", "backend"),
+		Base:    minikit.NewBase("backend", "backend"),
+		backend: backend,
 	}
 }
 
@@ -35,6 +65,12 @@ func (cb *Backend) Dependencies() []string {
 
 // Build AFAIRE.
 func (cb *Backend) Build(_ *minikit.Manager) error {
+	if err := cb.backend.Build(); err != nil {
+		return err
+	}
+
+	cb.Built()
+
 	return nil
 }
 

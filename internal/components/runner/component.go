@@ -49,7 +49,7 @@ func (cr *Runner) run(m *minikit.Manager) error {
 	end := make(chan os.Signal, 1)
 	defer close(end)
 
-	signal.Notify(end, syscall.SIGABRT, syscall.SIGQUIT, syscall.SIGTERM)
+	signal.Notify(end, os.Interrupt, syscall.SIGABRT, syscall.SIGQUIT, syscall.SIGTERM)
 
 	<-end
 
