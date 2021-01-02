@@ -38,12 +38,16 @@ func (cr *Runner) run(m *minikit.Manager) error {
 		return err
 	}
 
+	leader := cr.components.Leader
 	server := cr.components.Server
 
 	if err := server.Start(); err != nil {
 		return err
 	}
 
+	leader.Start()
+
+	defer leader.Stop()
 	defer server.Stop()
 
 	end := make(chan os.Signal, 1)

@@ -34,20 +34,10 @@ func New(components *components.Components) *Leader {
 // Dependencies AFAIRE.
 func (cl *Leader) Dependencies() []string {
 	return []string{
+		"application",
 		"logger",
 		"model",
 	}
-}
-
-// Build AFAIRE.
-func (cl *Leader) Build(_ *minikit.Manager) error {
-	if err := cl.leader.build(); err != nil {
-		return err
-	}
-
-	cl.Built()
-
-	return nil
 }
 
 /*

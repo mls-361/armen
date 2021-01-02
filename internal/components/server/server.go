@@ -106,11 +106,11 @@ func (cs *server) Stop() {
 	cs.httpserver.SetKeepAlivesEnabled(false)
 
 	if err := cs.httpserver.Shutdown(ctx); err != nil {
-		cs.components.Logger.Error(err.Error(), "func", "Server.Shutdown()") //:::::::::::::::::::::::::::::::::::::::::
+		cs.components.Logger.Error(err.Error(), "func", "server.Shutdown") //:::::::::::::::::::::::::::::::::::::::::::
 	}
 
 	if err := <-cs.stopped; !errors.Is(err, http.ErrServerClosed) {
-		cs.components.Logger.Error(err.Error(), "func", "Server.ListenAndServe[TLS]()") //::::::::::::::::::::::::::::::
+		cs.components.Logger.Error(err.Error(), "func", "server.ListenAndServe[TLS]") //::::::::::::::::::::::::::::::::
 	}
 
 	cs.components.Logger.Info("<<<Server") //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

@@ -6,26 +6,109 @@
 
 package leader
 
-import "github.com/mls-361/armen/internal/components"
+import (
+	"sync"
+	"time"
+
+	"github.com/mls-361/armen/internal/components"
+)
+
+const (
+	_lockName    = "leader"
+	_lockTimeout = 20 * time.Second
+)
 
 type (
 	leader struct {
-		components *components.Components
+		components   *components.Components
+		mutex        sync.Mutex
+		amITheLeader bool
+		waitGroup    sync.WaitGroup
+		stop         chan struct{}
 	}
 )
 
 func newLeader(components *components.Components) *leader {
 	return &leader{
 		components: components,
+		stop:       make(chan struct{}),
 	}
 }
 
-func (cl *leader) build() error {
-	return nil
+func (cl *leader) tryAcquireLock() {
+	ok, err := cl.components.Model.AcquireLock(
+		_lockName,
+		cl.components.Application.ID(),
+		_lockTimeout,
+	)
+	if err != nil {
+		cl.components.Logger.Warning( //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+			"Impossible to become the leader",
+			"reason", err.Error(),
+		)
+
+		return
+	}
+
+	cl.mutex.Lock()
+	defer cl.mutex.Unlock()
+
+	if cl.amITheLeader != ok {
+		cl.components.Logger.Notice("Leader", "amITheLeader", ok) //::::::::::::::::::::::::::::::::::::::::::::::::::::
+		cl.amITheLeader = ok
+	}
 }
 
+// Start AFAIRE.
+func (cl *leader) Start() {
+	cl.waitGroup.Add(1)
+
+	go func() { //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+		defer cl.waitGroup.Done()
+
+		var after time.Duration
+
+		cl.tryAcquireLock()
+
+		for {
+			if cl.amITheLeader {
+				after = _lockTimeout * 3 / 4
+			} else {
+				after = _lockTimeout / 4
+			}
+
+			select {
+			case <-cl.stop:
+				return
+			case <-time.After(after):
+				cl.tryAcquireLock()
+			}
+		}
+	}()
+
+	cl.components.Logger.Info(">>>Leader") //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+}
+
+// AmITheLeader AFAIRE.
 func (cl *leader) AmITheLeader() bool {
-	return false
+	cl.mutex.Lock()
+	defer cl.mutex.Unlock()
+
+	return cl.amITheLeader
+}
+
+// Stop AFAIRE.
+func (cl *leader) Stop() {
+	close(cl.stop)
+	cl.waitGroup.Wait()
+
+	cl.components.Logger.Info("<<<Leader") //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+	if cl.amITheLeader {
+		if err := cl.components.Model.ReleaseLock(_lockName, cl.components.Application.ID()); err != nil {
+			cl.components.Logger.Error(err.Error(), "func", "leader.Stop") //:::::::::::::::::::::::::::::::::::::::::::
+		}
+	}
 }
 
 /*
