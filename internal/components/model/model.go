@@ -7,47 +7,35 @@
 package model
 
 import (
-	"github.com/mls-361/minikit"
+	"time"
 
 	"github.com/mls-361/armen/internal/components"
 )
 
 type (
-	// Model AFAIRE.
-	Model struct {
-		*minikit.Base
-		model *model
+	model struct {
+		components *components.Components
 	}
 )
 
-// New AFAIRE.
-func New(components *components.Components) *Model {
-	model := newModel(components)
-	components.Model = model
-
-	return &Model{
-		Base:  minikit.NewBase("model", "model"),
-		model: model,
+func newModel(components *components.Components) *model {
+	return &model{
+		components: components,
 	}
 }
 
-// Dependencies AFAIRE.
-func (cm *Model) Dependencies() []string {
-	return []string{
-		"backend",
-		"logger",
-	}
-}
-
-// Build AFAIRE.
-func (cm *Model) Build(_ *minikit.Manager) error {
-	if err := cm.model.build(); err != nil {
-		return err
-	}
-
-	cm.Built()
-
+func (cm *model) build() error {
 	return nil
+}
+
+// AcquireLock AFAIRE.
+func (cm *model) AcquireLock(name, owner string, duration time.Duration) (bool, error) {
+	return cm.components.Backend.AcquireLock(name, owner, duration)
+}
+
+// ReleaseLock AFAIRE.
+func (cm *model) ReleaseLock(name, owner string) error {
+	return cm.components.Backend.ReleaseLock(name, owner)
 }
 
 /*

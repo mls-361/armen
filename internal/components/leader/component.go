@@ -8,19 +8,26 @@ package leader
 
 import (
 	"github.com/mls-361/minikit"
+
+	"github.com/mls-361/armen/internal/components"
 )
 
 type (
 	// Leader AFAIRE.
 	Leader struct {
 		*minikit.Base
+		leader *leader
 	}
 )
 
 // New AFAIRE.
-func New() *Leader {
+func New(components *components.Components) *Leader {
+	leader := newLeader(components)
+	components.Leader = leader
+
 	return &Leader{
-		Base: minikit.NewBase("leader", "leader"),
+		Base:   minikit.NewBase("leader", "leader"),
+		leader: leader,
 	}
 }
 
@@ -34,6 +41,12 @@ func (cl *Leader) Dependencies() []string {
 
 // Build AFAIRE.
 func (cl *Leader) Build(_ *minikit.Manager) error {
+	if err := cl.leader.build(); err != nil {
+		return err
+	}
+
+	cl.Built()
+
 	return nil
 }
 
