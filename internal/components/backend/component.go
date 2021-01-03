@@ -43,7 +43,7 @@ func New(components *components.Components) *Backend {
 		backend = pgsql.New(components)
 	}
 
-	if components.Application.Devel() > 1 {
+	if components.Application.Debug() > 1 {
 		fmt.Printf("=== Backend: backend=%s\n", value) //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	}
 

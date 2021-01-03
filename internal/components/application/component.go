@@ -43,8 +43,8 @@ func (ca *Application) Initialize(_ *minikit.Manager) error {
 }
 
 // Devel AFAIRE.
-func (ca *Application) Devel() int {
-	return ca.application.Devel()
+func (ca *Application) Debug() int {
+	return ca.application.Debug()
 }
 
 /*

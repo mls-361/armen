@@ -113,7 +113,7 @@ func (cc *cConfig) build() error {
 		return err
 	}
 
-	if cc.components.Application.Devel() > 1 {
+	if cc.components.Application.Debug() > 1 {
 		fmt.Printf("=== Config: cfgFile=%s\n", cc.cfgFile) //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	}
 

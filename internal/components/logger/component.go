@@ -55,7 +55,7 @@ func (cl *Logger) Build(_ *minikit.Manager) error {
 		return err
 	}
 
-	if app.Devel() > 0 {
+	if app.Debug() > 0 {
 		level = "trace"
 	}
 
