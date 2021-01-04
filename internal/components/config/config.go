@@ -15,11 +15,11 @@ import (
 	"path/filepath"
 
 	"github.com/mls-361/datamap"
-	"github.com/mls-361/util"
 	"gopkg.in/yaml.v3"
 
 	"github.com/mls-361/armen/internal/client"
 	"github.com/mls-361/armen/internal/components"
+	"github.com/mls-361/armen/internal/util"
 )
 
 type (

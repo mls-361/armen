@@ -24,8 +24,6 @@ github.com/mls-361/minikit v0.0.0-20210103214416-252993e4d097 h1:Cvh2wwr2dAzBnOx
 github.com/mls-361/minikit v0.0.0-20210103214416-252993e4d097/go.mod h1:V+CaZ8dMQScqWIB0J/47IoQhtF5AFJ6MLFHERyQXRos=
 github.com/mls-361/scheduler v0.0.0-20210103214308-7ca2f1a917bd h1:Ek7QU7EGYNb8RBp45dDHToM6KXJOYrMrAaHGw1t4q+g=
 github.com/mls-361/scheduler v0.0.0-20210103214308-7ca2f1a917bd/go.mod h1:BqHhZ542wstDLN5AOqoDRc5EdAgVWXp0rfEFYlrglZM=
-github.com/mls-361/util v0.0.0-20210103213909-65014ee1e292 h1:cGBlBfO2bIHnuOlApkR2jzYJfWm6UX8pCvv3sSuXM+8=
-github.com/mls-361/util v0.0.0-20210103213909-65014ee1e292/go.mod h1:3+DskC4gA22lOo2GEaXdf5QF9DD3uOM6Rn+tjLNmPWc=
 github.com/mls-361/uuid v0.0.0-20210103213509-f52b091b96f3 h1:AZahXz9O0+Wc0BlyZ3JUESgMNAs58RHBHzs2O2yb9No=
 github.com/mls-361/uuid v0.0.0-20210103213509-f52b091b96f3/go.mod h1:rfCILTqOE/XTkQ8I/2IvePWDmueuVJAi8g+NejjDP2A=
 github.com/robfig/cron/v3 v3.0.1 h1:WdRxkvbJztn8LMz/QEvLN5sBU+xKpSqwwUO1Pjr4qDs=
