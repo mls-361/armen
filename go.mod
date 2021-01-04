@@ -4,7 +4,7 @@ go 1.15
 
 require (
 	github.com/julienschmidt/httprouter v1.3.0
-	github.com/mls-361/application v0.0.0-20210103214005-d538c2a9c5a7
+	github.com/mls-361/application v0.0.0-20210104213928-2879b3af8d92
 	github.com/mls-361/armen-sdk v0.0.0-20210103214504-1a56ded9c4ba
 	github.com/mls-361/crypto v0.0.0-20210103214043-e8a0934ef17a
 	github.com/mls-361/datamap v0.0.0-20210103214129-fd806a229ad0
