@@ -25,6 +25,7 @@ import (
 type (
 	cConfig struct {
 		components *components.Components
+		flagSet    *flag.FlagSet
 		cfgFile    string
 		data       datamap.DataMap
 	}
@@ -33,6 +34,7 @@ type (
 func newCConfig(components *components.Components) *cConfig {
 	return &cConfig{
 		components: components,
+		flagSet:    flag.NewFlagSet(components.Application.Name(), flag.ContinueOnError),
 	}
 }
 
@@ -48,17 +50,16 @@ func (cc *cConfig) defaultCfgFile() string {
 
 func (cc *cConfig) parse() error {
 	app := cc.components.Application
-	fs := flag.NewFlagSet(app.Name(), flag.ContinueOnError)
 
-	fs.SetOutput(os.Stdout)
-	fs.Usage = func() {
+	cc.flagSet.SetOutput(os.Stdout)
+	cc.flagSet.Usage = func() {
 		fmt.Println()
 		fmt.Println("--------------------------------------------------------------------------------")
 		fmt.Println("Usage:", "armen [global options] [command [options]]")
 		fmt.Println()
 		fmt.Println("Global options:")
 		fmt.Println()
-		fs.PrintDefaults()
+		cc.flagSet.PrintDefaults()
 		fmt.Println()
 		fmt.Println("Commands [client mode]:")
 		client.Usage(cc.components)
@@ -70,10 +71,10 @@ func (cc *cConfig) parse() error {
 
 	cfgFile := cc.defaultCfgFile()
 
-	fs.BoolVar(&version, "version", false, "print version information and quit.")
-	fs.StringVar(&cc.cfgFile, "config", cfgFile, "the YAML configuration file.")
+	cc.flagSet.BoolVar(&version, "version", false, "print version information and quit.")
+	cc.flagSet.StringVar(&cc.cfgFile, "config", cfgFile, "the YAML configuration file.")
 
-	if err := fs.Parse(os.Args[1:]); err != nil {
+	if err := cc.flagSet.Parse(os.Args[1:]); err != nil {
 		if errors.Is(err, flag.ErrHelp) {
 			return client.ErrStopApp
 		}
@@ -94,7 +95,7 @@ func (cc *cConfig) parse() error {
 		return client.ErrStopApp
 	}
 
-	os.Args = append(os.Args[:1], fs.Args()...)
+	os.Args = append(os.Args[:1], cc.flagSet.Args()...)
 
 	return nil
 }
