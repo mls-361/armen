@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/mls-361/armen/internal/components"
+	"github.com/mls-361/armen-sdk/components"
 )
 
 type (

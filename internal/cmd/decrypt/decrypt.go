@@ -9,11 +9,11 @@ package decrypt
 import (
 	"fmt"
 
-	"github.com/mls-361/minikit"
+	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/failure"
+	"github.com/mls-361/minikit"
 
 	_cmd "github.com/mls-361/armen/internal/cmd"
-	"github.com/mls-361/armen/internal/components"
 )
 
 type (

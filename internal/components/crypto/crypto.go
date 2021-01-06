@@ -9,10 +9,9 @@ package crypto
 import (
 	"io/ioutil"
 
+	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/crypto"
 	"github.com/mls-361/minikit"
-
-	"github.com/mls-361/armen/internal/components"
 )
 
 type (
@@ -39,7 +38,7 @@ func New(components *components.Components) *Crypto {
 // Dependencies AFAIRE.
 func (cc *Crypto) Dependencies() []string {
 	return []string{
-		"logger",
+		"application",
 	}
 }
 

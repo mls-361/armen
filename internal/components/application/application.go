@@ -8,16 +8,15 @@ package application
 
 import (
 	"github.com/mls-361/application"
+	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/minikit"
-
-	"github.com/mls-361/armen/internal/components"
 )
 
 type (
 	// Application AFAIRE.
 	Application struct {
 		*minikit.Base
-		application *application.Application
+		*application.Application
 	}
 )
 
@@ -28,23 +27,13 @@ func New(components *components.Components, name, version, builtAt string) *Appl
 
 	return &Application{
 		Base:        minikit.NewBase("application", "application"),
-		application: application,
+		Application: application,
 	}
-}
-
-// OnError AFAIRE.
-func (ca *Application) OnError(err error) error {
-	return ca.application.OnError(err)
 }
 
 // Initialize AFAIRE.
 func (ca *Application) Initialize(_ *minikit.Manager) error {
-	return ca.application.Initialize()
-}
-
-// Devel AFAIRE.
-func (ca *Application) Debug() int {
-	return ca.application.Debug()
+	return ca.Application.Initialize()
 }
 
 /*

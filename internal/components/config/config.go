@@ -14,11 +14,11 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/datamap"
 	"gopkg.in/yaml.v3"
 
 	"github.com/mls-361/armen/internal/client"
-	"github.com/mls-361/armen/internal/components"
 	"github.com/mls-361/armen/internal/util"
 )
 

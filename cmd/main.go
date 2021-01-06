@@ -12,10 +12,10 @@ import (
 	"os"
 	"time"
 
+	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/minikit"
 
 	"github.com/mls-361/armen/internal/client"
-	"github.com/mls-361/armen/internal/components"
 	"github.com/mls-361/armen/internal/components/application"
 	"github.com/mls-361/armen/internal/components/backend"
 	"github.com/mls-361/armen/internal/components/bus"
@@ -24,7 +24,6 @@ import (
 	"github.com/mls-361/armen/internal/components/leader"
 	"github.com/mls-361/armen/internal/components/logger"
 	"github.com/mls-361/armen/internal/components/model"
-	"github.com/mls-361/armen/internal/components/plugins"
 	"github.com/mls-361/armen/internal/components/router"
 	"github.com/mls-361/armen/internal/components/runner"
 	"github.com/mls-361/armen/internal/components/scheduler"
@@ -55,7 +54,6 @@ func run() error {
 		leader.New(cs),
 		logger.New(cs),
 		model.New(cs),
-		plugins.New(),
 		router.New(cs),
 		runner.New(cs),
 		scheduler.New(cs),

@@ -11,12 +11,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mls-361/minikit"
+	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/failure"
+	"github.com/mls-361/minikit"
 
 	"github.com/mls-361/armen/internal/cmd/decrypt"
 	"github.com/mls-361/armen/internal/cmd/encrypt"
-	"github.com/mls-361/armen/internal/components"
 )
 
 var (

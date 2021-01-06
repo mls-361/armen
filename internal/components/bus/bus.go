@@ -12,10 +12,9 @@ import (
 	"regexp"
 	"sync"
 
+	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/armen-sdk/message"
 	"github.com/mls-361/uuid"
-
-	"github.com/mls-361/armen/internal/components"
 )
 
 const (

@@ -10,10 +10,9 @@ import (
 	"os"
 	"time"
 
+	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/logger"
 	"github.com/mls-361/minikit"
-
-	"github.com/mls-361/armen/internal/components"
 )
 
 type (

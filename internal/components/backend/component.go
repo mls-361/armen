@@ -9,17 +9,16 @@ package backend
 import (
 	"fmt"
 
-	_cpts "github.com/mls-361/armen-sdk/components"
+	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/minikit"
 
-	"github.com/mls-361/armen/internal/components"
 	"github.com/mls-361/armen/internal/components/backend/memory"
 	"github.com/mls-361/armen/internal/components/backend/pgsql"
 )
 
 type (
 	backend interface {
-		_cpts.Backend
+		components.Backend
 		Build() error
 	}
 

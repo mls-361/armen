@@ -7,10 +7,9 @@
 package scheduler
 
 import (
+	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/armen-sdk/message"
 	"github.com/mls-361/scheduler"
-
-	"github.com/mls-361/armen/internal/components"
 )
 
 type (
