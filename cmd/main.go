@@ -10,9 +10,11 @@ import (
 	"errors"
 	"math/rand"
 	"os"
+	"plugin"
 	"time"
 
 	"github.com/mls-361/armen-sdk/components"
+	"github.com/mls-361/failure"
 	"github.com/mls-361/minikit"
 
 	"github.com/mls-361/armen/internal/client"
@@ -59,6 +61,23 @@ func run() error {
 		scheduler.New(cs),
 		server.New(cs),
 		workers.New(),
+	); err != nil {
+		return app.OnError(err)
+	}
+
+	if err := manager.AddPlugins(
+		app.PluginsDir(),
+		"Export",
+		func(_ *minikit.Manager, pSym plugin.Symbol) error {
+			fn, ok := pSym.(func(*minikit.Manager, *components.Components))
+			if !ok {
+				return failure.New(nil).Msg("PLUGINS ERROR") // ???
+			}
+
+			fn(manager, cs)
+
+			return nil
+		},
 	); err != nil {
 		return app.OnError(err)
 	}

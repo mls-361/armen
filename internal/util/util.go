@@ -7,8 +7,21 @@
 package util
 
 import (
+	"os"
+	"path/filepath"
+
 	"github.com/mitchellh/mapstructure"
 )
+
+// BinaryDir AFAIRE.
+func BinaryDir() (string, error) {
+	path, err := os.Executable()
+	if err != nil {
+		return "", err
+	}
+
+	return filepath.Dir(path), nil
+}
 
 // DecodeData AFAIRE.
 func DecodeData(input, output interface{}) error {

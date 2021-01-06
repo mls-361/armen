@@ -7,9 +7,13 @@
 package application
 
 import (
+	"fmt"
+
 	"github.com/mls-361/application"
 	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/minikit"
+
+	"github.com/mls-361/armen/internal/util"
 )
 
 type (
@@ -34,6 +38,25 @@ func New(components *components.Components, name, version, builtAt string) *Appl
 // Initialize AFAIRE.
 func (ca *Application) Initialize(_ *minikit.Manager) error {
 	return ca.Application.Initialize()
+}
+
+// PluginsDir AFAIRE.
+func (ca *Application) PluginsDir() string {
+	dir, ok := ca.LookupEnv("PLUGINS")
+	if !ok {
+		var err error
+
+		dir, err = util.BinaryDir()
+		if err != nil {
+			dir = ""
+		}
+	}
+
+	if ca.Debug() > 1 {
+		fmt.Printf("=== Application: pluginsDir=%s\n", dir) //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	}
+
+	return dir
 }
 
 /*

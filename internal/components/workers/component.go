@@ -31,7 +31,6 @@ func (cw *Workers) Dependencies() []string {
 		"config",
 		"logger",
 		"model",
-		"plugins",
 	}
 }
 
