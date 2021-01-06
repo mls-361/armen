@@ -33,9 +33,13 @@ import (
 	"github.com/mls-361/armen/internal/components/workers"
 )
 
+const (
+	pluginFnName = "Export"
+)
+
 var (
-	_version string
-	_builtAt string
+	version string
+	builtAt string
 )
 
 func init() {
@@ -44,7 +48,7 @@ func init() {
 
 func run() error {
 	cs := components.New()
-	app := application.New(cs, "armen", _version, _builtAt)
+	app := application.New(cs, "armen", version, builtAt)
 	manager := minikit.NewManager(app)
 
 	if err := manager.AddComponents(
@@ -67,11 +71,11 @@ func run() error {
 
 	if err := manager.AddPlugins(
 		app.PluginsDir(),
-		"Export",
-		func(_ *minikit.Manager, pSym plugin.Symbol) error {
+		pluginFnName,
+		func(pSym plugin.Symbol) error {
 			fn, ok := pSym.(func(*minikit.Manager, *components.Components))
 			if !ok {
-				return failure.New(nil).Msg("PLUGINS ERROR") // ???
+				return failure.New(nil).Msg("the exported function is not of the right type") //////////////////////////
 			}
 
 			fn(manager, cs)

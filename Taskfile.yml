@@ -7,7 +7,7 @@ vars:
     VERSION: 0.0.0
     BUILTAT:
         sh: date +%s
-    LDFLAGS: -X 'main._version={{.VERSION}}' -X 'main._builtAt={{.BUILTAT}}'
+    LDFLAGS: -X 'main.version={{.VERSION}}' -X 'main.builtAt={{.BUILTAT}}'
 
 tasks:
     lint:
