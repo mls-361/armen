@@ -25,7 +25,7 @@ type (
 )
 
 // New AFAIRE.
-func New(components *components.Components, name, version, builtAt string) *Application {
+func New(name, version, builtAt string, components *components.Components) *Application {
 	application := application.New(name, version, builtAt)
 	components.Application = application
 

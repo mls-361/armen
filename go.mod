@@ -6,7 +6,7 @@ require (
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/mitchellh/mapstructure v1.4.0
 	github.com/mls-361/application v0.0.0-20210104213928-2879b3af8d92
-	github.com/mls-361/armen-sdk v0.0.0-20210106075953-9b9992597d0d
+	github.com/mls-361/armen-sdk v0.0.0-20210106204519-8b91673d19be
 	github.com/mls-361/crypto v0.0.0-20210103214043-e8a0934ef17a
 	github.com/mls-361/datamap v0.0.0-20210103214129-fd806a229ad0
 	github.com/mls-361/failure v0.0.0-20210103213724-67f4cd2e77b7

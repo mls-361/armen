@@ -48,7 +48,7 @@ func init() {
 
 func run() error {
 	cs := components.New()
-	app := application.New(cs, "armen", version, builtAt)
+	app := application.New("armen", version, builtAt, cs)
 	manager := minikit.NewManager(app)
 
 	if err := manager.AddComponents(
@@ -73,14 +73,12 @@ func run() error {
 		app.PluginsDir(),
 		pluginFnName,
 		func(pSym plugin.Symbol) error {
-			fn, ok := pSym.(func(*minikit.Manager, *components.Components))
+			fn, ok := pSym.(func(*minikit.Manager, *components.Components) error)
 			if !ok {
 				return failure.New(nil).Msg("the exported function is not of the right type") //////////////////////////
 			}
 
-			fn(manager, cs)
-
-			return nil
+			return fn(manager, cs)
 		},
 	); err != nil {
 		return app.OnError(err)
