@@ -7,35 +7,55 @@
 package model
 
 import (
-	"time"
-
 	"github.com/mls-361/armen-sdk/components"
+	"github.com/mls-361/armen-sdk/message"
+	"github.com/mls-361/minikit"
 )
 
 type (
-	cModel struct {
+	// Model AFAIRE.
+	Model struct {
+		*minikit.Base
 		components *components.Components
+		busCh      chan<- *message.Message
 	}
 )
 
-func newCModel(components *components.Components) *cModel {
-	return &cModel{
+// New AFAIRE.
+func New(components *components.Components) *Model {
+	model := &Model{
+		Base:       minikit.NewBase("model", "model"),
 		components: components,
+	}
+
+	components.Model = model
+
+	return model
+}
+
+// Dependencies AFAIRE.
+func (cm *Model) Dependencies() []string {
+	return []string{
+		"backend",
+		"bus",
+		"logger",
 	}
 }
 
-func (cm *cModel) build() error {
+// Build AFAIRE.
+func (cm *Model) Build(_ *minikit.Manager) error {
+	cm.busCh = cm.components.Bus.AddPublisher("model", 1, 1)
+
 	return nil
 }
 
-// AcquireLock AFAIRE.
-func (cm *cModel) AcquireLock(name, owner string, duration time.Duration) (bool, error) {
-	return cm.components.Backend.AcquireLock(name, owner, duration)
+func (cm *Model) publish(topic string, data interface{}) {
+	cm.busCh <- message.New(topic, data)
 }
 
-// ReleaseLock AFAIRE.
-func (cm *cModel) ReleaseLock(name, owner string) error {
-	return cm.components.Backend.ReleaseLock(name, owner)
+// Close AFAIRE.
+func (cm *Model) Close() {
+	close(cm.busCh)
 }
 
 /*

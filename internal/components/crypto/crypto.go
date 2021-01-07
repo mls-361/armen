@@ -54,13 +54,7 @@ func (cc *Crypto) Build(_ *minikit.Manager) error {
 		return err
 	}
 
-	if err := cc.crypto.SetKey(string(key)); err != nil {
-		return err
-	}
-
-	cc.Built()
-
-	return nil
+	return cc.crypto.SetKey(string(key))
 }
 
 /*

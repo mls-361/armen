@@ -6,30 +6,12 @@
 
 package pgsql
 
-import (
-	"github.com/mls-361/armen-sdk/components"
-)
+import "github.com/mls-361/armen-sdk/jw"
 
-type (
-	// Backend AFAIRE.
-	Backend struct {
-		components *components.Components
-	}
-)
-
-func New(components *components.Components) *Backend {
-	return &Backend{
-		components: components,
-	}
+// InsertJob AFAIRE.
+func (cb *Backend) InsertJob(job *jw.Job) (bool, error) {
+	return false, nil
 }
-
-// Build AFAIRE.
-func (cb *Backend) Build() error {
-	return nil
-}
-
-// Close AFAIRE.
-func (cb *Backend) Close() {}
 
 /*
 ######################################################################################################## @(°_°)@ #######

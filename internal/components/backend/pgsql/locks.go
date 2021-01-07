@@ -6,30 +6,17 @@
 
 package pgsql
 
-import (
-	"github.com/mls-361/armen-sdk/components"
-)
+import "time"
 
-type (
-	// Backend AFAIRE.
-	Backend struct {
-		components *components.Components
-	}
-)
-
-func New(components *components.Components) *Backend {
-	return &Backend{
-		components: components,
-	}
+// AcquireLock AFAIRE.
+func (cb *Backend) AcquireLock(name, owner string, duration time.Duration) (bool, error) {
+	return false, nil
 }
 
-// Build AFAIRE.
-func (cb *Backend) Build() error {
+// ReleaseLock AFAIRE.
+func (cb *Backend) ReleaseLock(name, owner string) error {
 	return nil
 }
-
-// Close AFAIRE.
-func (cb *Backend) Close() {}
 
 /*
 ######################################################################################################## @(°_°)@ #######

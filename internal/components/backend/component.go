@@ -20,6 +20,7 @@ type (
 	backend interface {
 		components.Backend
 		Build() error
+		Close()
 	}
 
 	// Backend AFAIRE.
@@ -64,13 +65,12 @@ func (cb *Backend) Dependencies() []string {
 
 // Build AFAIRE.
 func (cb *Backend) Build(_ *minikit.Manager) error {
-	if err := cb.backend.Build(); err != nil {
-		return err
-	}
+	return cb.backend.Build()
+}
 
-	cb.Built()
-
-	return nil
+// Close AFAIRE.
+func (cb *Backend) Close() {
+	cb.backend.Close()
 }
 
 /*

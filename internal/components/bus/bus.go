@@ -44,6 +44,8 @@ func (cb *cBus) goConsumer(publisher string, ch <-chan *message.Message) {
 	cb.waitGroup.Add(1)
 
 	go func() { //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+		defer cb.waitGroup.Done()
+
 		logger := cb.components.Logger.CreateLogger(uuid.New(), publisher)
 
 		logger.Info(">>>Bus") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -68,10 +70,6 @@ func (cb *cBus) goConsumer(publisher string, ch <-chan *message.Message) {
 		}
 
 		logger.Info("<<<Bus") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-		logger.RemoveLogger("")
-
-		cb.waitGroup.Done()
 	}()
 }
 
@@ -115,7 +113,9 @@ func (cb *cBus) Subscribe(callback func(*message.Message), regexpList ...string)
 	return nil
 }
 
-func (cb *cBus) Close() { cb.waitGroup.Wait() }
+func (cb *cBus) close() {
+	cb.waitGroup.Wait()
+}
 
 /*
 ######################################################################################################## @(°_°)@ #######

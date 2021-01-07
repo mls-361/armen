@@ -41,13 +41,7 @@ func (cs *Server) Dependencies() []string {
 
 // Build AFAIRE.
 func (cs *Server) Build(_ *minikit.Manager) error {
-	if err := cs.server.build(); err != nil {
-		return err
-	}
-
-	cs.Built()
-
-	return nil
+	return cs.server.build()
 }
 
 // Close AFAIRE.

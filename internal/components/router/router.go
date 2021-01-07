@@ -11,15 +11,20 @@ import (
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
+	"github.com/mls-361/armen-sdk/components"
+	"github.com/mls-361/minikit"
 )
 
 type (
-	cRouter struct {
+	// Router AFAIRE.
+	Router struct {
+		*minikit.Base
 		mux *httprouter.Router
 	}
 )
 
-func newCRouter() *cRouter {
+// New AFAIRE.
+func New(components *components.Components) *Router {
 	mux := httprouter.New()
 
 	mux.PanicHandler = func(rw http.ResponseWriter, _ *http.Request, _ interface{}) {
@@ -31,23 +36,28 @@ func newCRouter() *cRouter {
 		rw.WriteHeader(http.StatusOK)
 	})
 
-	return &cRouter{
-		mux: mux,
+	router := &Router{
+		Base: minikit.NewBase("router", "router"),
+		mux:  mux,
 	}
+
+	components.Router = router
+
+	return router
 }
 
 // ServeHTTP AFAIRE.
-func (cr *cRouter) Handler() http.Handler {
+func (cr *Router) Handler() http.Handler {
 	return cr.mux
 }
 
 // Get AFAIRE.
-func (cr *cRouter) Get(path string, handler http.HandlerFunc) {
+func (cr *Router) Get(path string, handler http.HandlerFunc) {
 	cr.mux.HandlerFunc(http.MethodGet, path, handler)
 }
 
 // Post AFAIRE.
-func (cr *cRouter) Post(path string, handler http.HandlerFunc) {
+func (cr *Router) Post(path string, handler http.HandlerFunc) {
 	cr.mux.HandlerFunc(http.MethodPost, path, handler)
 }
 

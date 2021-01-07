@@ -62,8 +62,6 @@ func (cl *Logger) Build(_ *minikit.Manager) error {
 		return err
 	}
 
-	cl.Built()
-
 	cl.logger.Info( //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 		"===BEGIN",
 		"id", app.ID(),

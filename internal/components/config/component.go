@@ -39,13 +39,7 @@ func (cc *Config) Dependencies() []string {
 
 // Build AFAIRE.
 func (cc *Config) Build(_ *minikit.Manager) error {
-	if err := cc.config.build(); err != nil {
-		return err
-	}
-
-	cc.Built()
-
-	return nil
+	return cc.config.build()
 }
 
 /*

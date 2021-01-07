@@ -4,8 +4,8 @@ github.com/mitchellh/mapstructure v1.4.0 h1:7ks8ZkOP5/ujthUsT07rNv+nkLXCQWKNHuwz
 github.com/mitchellh/mapstructure v1.4.0/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
 github.com/mls-361/application v0.0.0-20210104213928-2879b3af8d92 h1:xs0ZXcbrXuOaxxyoYioUJ2yL8RKAPn10nuJY3rF8B74=
 github.com/mls-361/application v0.0.0-20210104213928-2879b3af8d92/go.mod h1:lNd2RcDVJUY96gxE/gq1G5VSho+u2MkPwPRK/Y14CRc=
-github.com/mls-361/armen-sdk v0.0.0-20210106204519-8b91673d19be h1:P++MluRarOucqUhH4WOHR7FkA/LdkI845x5nSj2o+60=
-github.com/mls-361/armen-sdk v0.0.0-20210106204519-8b91673d19be/go.mod h1:I2NC7iYWe3ZkwfEuBVu6hroIeU4EQXT8FYfXYAEYtwk=
+github.com/mls-361/armen-sdk v0.0.0-20210107181556-112d415f1bc1 h1:2GtVEtPBIGqFT/sP/LPNerCfR7Zjmm09/UpkIzLa47o=
+github.com/mls-361/armen-sdk v0.0.0-20210107181556-112d415f1bc1/go.mod h1:wqYfeQOscOxX94yk8zU+SG6/VreeHrv8/18cgHYmFfI=
 github.com/mls-361/buffer v0.0.0-20210103213437-81ee3f6478c8 h1:SNPGm0iMWj0Mb26/TKSScvdE+w98++yMNe5LfzlQn8c=
 github.com/mls-361/buffer v0.0.0-20210103213437-81ee3f6478c8/go.mod h1:skxL3BFTFnQe9Z8QD8DpEygWzVGTlcRPWc3tcQgRDRY=
 github.com/mls-361/crypto v0.0.0-20210103214043-e8a0934ef17a h1:6Bon/E5awzrt+iIf5u3esSTwjPciArj1yuT2GQQX84Q=
@@ -20,8 +20,8 @@ github.com/mls-361/logfmt v0.0.0-20210103213624-dfce4a07a454 h1:jnBIBFsUZskioh57
 github.com/mls-361/logfmt v0.0.0-20210103213624-dfce4a07a454/go.mod h1:qBYtM0w3GM8BleORllSY/szCdDY1Qst6f32oumitrQs=
 github.com/mls-361/logger v0.0.0-20210103214222-796b123fd379 h1:fKMVsLJj+oJWxCncj3br/Ek/Tak1SAsO6hvm4ZDlHLU=
 github.com/mls-361/logger v0.0.0-20210103214222-796b123fd379/go.mod h1:JGD8K3v0sSvCozN2Rqz7annI18+SQ41OH8IELUk6Tus=
-github.com/mls-361/minikit v0.0.0-20210106124457-c076a78e4e7c h1:uNQ4IxvgklzYAZn2C3FfltgNR3ix0OkXX2bicOkztw4=
-github.com/mls-361/minikit v0.0.0-20210106124457-c076a78e4e7c/go.mod h1:V+CaZ8dMQScqWIB0J/47IoQhtF5AFJ6MLFHERyQXRos=
+github.com/mls-361/minikit v0.0.0-20210107180150-28817c294bb9 h1:0bOyMiWo3k/IBQmFXIAhpHpiMt11La58XCQorcaMgNo=
+github.com/mls-361/minikit v0.0.0-20210107180150-28817c294bb9/go.mod h1:V+CaZ8dMQScqWIB0J/47IoQhtF5AFJ6MLFHERyQXRos=
 github.com/mls-361/scheduler v0.0.0-20210103214308-7ca2f1a917bd h1:Ek7QU7EGYNb8RBp45dDHToM6KXJOYrMrAaHGw1t4q+g=
 github.com/mls-361/scheduler v0.0.0-20210103214308-7ca2f1a917bd/go.mod h1:BqHhZ542wstDLN5AOqoDRc5EdAgVWXp0rfEFYlrglZM=
 github.com/mls-361/uuid v0.0.0-20210103213509-f52b091b96f3 h1:AZahXz9O0+Wc0BlyZ3JUESgMNAs58RHBHzs2O2yb9No=
