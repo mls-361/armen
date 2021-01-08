@@ -71,7 +71,7 @@ func (cc *Config) parse() error {
 	cc.flagSet.Usage = func() {
 		fmt.Println()
 		fmt.Println("--------------------------------------------------------------------------------")
-		fmt.Println("Usage:", "armen [global options] [command [options]]")
+		fmt.Println("Usage:", app.Name(), "[global options] [command [options]]")
 		fmt.Println()
 		fmt.Println("Global options:")
 		fmt.Println()
@@ -101,10 +101,10 @@ func (cc *Config) parse() error {
 	if version {
 		fmt.Println()
 		fmt.Println("-----------------------------------------------")
-		fmt.Println("  armen     :", "v"+app.Version())
-		fmt.Println("  built at  :", app.BuiltAt().String())
-		fmt.Println("  copyright :", "mls-361")
-		fmt.Println("  license   :", "MIT")
+		fmt.Println("  application :", app.Name(), "v"+app.Version())
+		fmt.Println("  built at    :", app.BuiltAt().String())
+		fmt.Println("  copyright   :", "mls-361")
+		fmt.Println("  license     :", "MIT")
 		fmt.Println("-------------------------------------@(°_°)@---")
 		fmt.Println()
 
