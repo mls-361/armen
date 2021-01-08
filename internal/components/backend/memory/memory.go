@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/mls-361/armen-sdk/components"
+	"github.com/mls-361/armen-sdk/jw"
 )
 
 type (
@@ -24,6 +25,7 @@ type (
 		components *components.Components
 		mutex      sync.Mutex
 		locks      map[string]*lock
+		jobs       map[string]*jw.Job
 	}
 )
 
@@ -31,6 +33,7 @@ func New(components *components.Components) *Backend {
 	return &Backend{
 		components: components,
 		locks:      make(map[string]*lock),
+		jobs:       make(map[string]*jw.Job),
 	}
 }
 
