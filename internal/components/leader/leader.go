@@ -27,7 +27,7 @@ type (
 		mutex        sync.Mutex
 		amITheLeader bool
 		waitGroup    sync.WaitGroup
-		stop         chan struct{}
+		stopCh       chan struct{}
 	}
 )
 
@@ -36,7 +36,6 @@ func New(components *components.Components) *Leader {
 	cl := &Leader{
 		Base:       minikit.NewBase("leader", "leader"),
 		components: components,
-		stop:       make(chan struct{}),
 	}
 
 	components.Leader = cl
@@ -96,13 +95,15 @@ func (cl *Leader) Start() {
 			}
 
 			select {
-			case <-cl.stop:
+			case <-cl.stopCh:
 				return
 			case <-time.After(after):
 				cl.tryAcquireLock()
 			}
 		}
 	}()
+
+	cl.stopCh = make(chan struct{})
 
 	cl.components.Logger.Info(">>>Leader") //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 }
@@ -117,7 +118,7 @@ func (cl *Leader) AmITheLeader() bool {
 
 // Stop AFAIRE.
 func (cl *Leader) Stop() {
-	close(cl.stop)
+	close(cl.stopCh)
 	cl.waitGroup.Wait()
 
 	cl.components.Logger.Info("<<<Leader") //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

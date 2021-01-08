@@ -13,6 +13,11 @@ func (cb *Backend) InsertJob(job *jw.Job) (bool, error) {
 	return false, nil
 }
 
+// NextJob AFAIRE.
+func (cb *Backend) NextJob() *jw.Job {
+	return nil
+}
+
 /*
 ######################################################################################################## @(°_°)@ #######
 */

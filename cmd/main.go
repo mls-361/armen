@@ -64,7 +64,7 @@ func run() error {
 		runner.New(cs),
 		scheduler.New(cs),
 		server.New(cs),
-		workers.New(),
+		workers.New(cs),
 	); err != nil {
 		return app.OnError(err)
 	}

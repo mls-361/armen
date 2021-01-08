@@ -53,19 +53,21 @@ func (cr *Runner) run(m *minikit.Manager) error {
 	leader := cr.components.Leader
 	scheduler := cr.components.Scheduler
 	server := cr.components.Server
+	workers := cr.components.Workers
 
 	if err := server.Start(); err != nil {
 		return err
 	}
 
+	workers.Start()
 	leader.Start()
-
 	scheduler.Start()
 
 	cr.waitEnd()
 
 	scheduler.Stop()
 	leader.Stop()
+	workers.Stop()
 	server.Stop()
 
 	return nil

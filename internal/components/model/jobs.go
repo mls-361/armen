@@ -72,6 +72,11 @@ func (cm *Model) InsertJob(job *jw.Job) error {
 	return nil
 }
 
+// NextJob AFAIRE.
+func (cm *Model) NextJob() *jw.Job {
+	return nil
+}
+
 /*
 ######################################################################################################## @(°_°)@ #######
 */
