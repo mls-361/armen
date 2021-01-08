@@ -32,26 +32,26 @@ type (
 
 // New AFAIRE.
 func New(components *components.Components) *Backend {
-	var backend backend
+	var cb backend
 
 	value, _ := components.Application.LookupEnv("BACKEND")
 
 	switch value {
 	case "memory":
-		backend = memory.New(components)
+		cb = memory.New(components)
 	default:
-		backend = pgsql.New(components)
+		cb = pgsql.New(components)
 	}
 
 	if components.Application.Debug() > 1 {
 		fmt.Printf("=== Backend: backend=%s\n", value) //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	}
 
-	components.Backend = backend
+	components.Backend = cb
 
 	return &Backend{
 		Base:    minikit.NewBase("backend", "backend"),
-		backend: backend,
+		backend: cb,
 	}
 }
 

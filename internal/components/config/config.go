@@ -16,6 +16,7 @@ import (
 
 	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/datamap"
+	"github.com/mls-361/minikit"
 	"gopkg.in/yaml.v3"
 
 	"github.com/mls-361/armen/internal/client"
@@ -23,7 +24,9 @@ import (
 )
 
 type (
-	cConfig struct {
+	// Config AFAIRE.
+	Config struct {
+		*minikit.Base
 		components *components.Components
 		flagSet    *flag.FlagSet
 		cfgFile    string
@@ -31,14 +34,27 @@ type (
 	}
 )
 
-func newCConfig(components *components.Components) *cConfig {
-	return &cConfig{
+// New AFAIRE.
+func New(components *components.Components) *Config {
+	cc := &Config{
+		Base:       minikit.NewBase("config", "config"),
 		components: components,
 		flagSet:    flag.NewFlagSet(components.Application.Name(), flag.ContinueOnError),
 	}
+
+	components.Config = cc
+
+	return cc
 }
 
-func (cc *cConfig) defaultCfgFile() string {
+// Dependencies AFAIRE.
+func (cc *Config) Dependencies() []string {
+	return []string{
+		"application",
+	}
+}
+
+func (cc *Config) defaultCfgFile() string {
 	app := cc.components.Application
 
 	if cfgFile, ok := app.LookupEnv("CONFIG"); ok {
@@ -48,7 +64,7 @@ func (cc *cConfig) defaultCfgFile() string {
 	return filepath.Join("/etc", app.Name(), app.Name()+".yaml")
 }
 
-func (cc *cConfig) parse() error {
+func (cc *Config) parse() error {
 	app := cc.components.Application
 
 	cc.flagSet.SetOutput(os.Stdout)
@@ -100,7 +116,7 @@ func (cc *cConfig) parse() error {
 	return nil
 }
 
-func (cc *cConfig) load() error {
+func (cc *Config) load() error {
 	data, err := ioutil.ReadFile(cc.cfgFile)
 	if err != nil {
 		return err
@@ -109,7 +125,8 @@ func (cc *cConfig) load() error {
 	return yaml.Unmarshal(data, &cc.data)
 }
 
-func (cc *cConfig) build() error {
+// Build AFAIRE.
+func (cc *Config) Build(_ *minikit.Manager) error {
 	if err := cc.parse(); err != nil {
 		return err
 	}
@@ -122,12 +139,12 @@ func (cc *cConfig) build() error {
 }
 
 // Data AFAIRE.
-func (cc *cConfig) Data() datamap.DataMap {
+func (cc *Config) Data() datamap.DataMap {
 	return cc.data
 }
 
 // Decode AFAIRE.
-func (cc *cConfig) Decode(to interface{}, mustExist bool, keys ...string) error {
+func (cc *Config) Decode(to interface{}, mustExist bool, keys ...string) error {
 	value, err := cc.data.Retrieve(keys...)
 	if err != nil {
 		if errors.Is(err, datamap.ErrNotFound) {

@@ -36,14 +36,14 @@ func New(components *components.Components) *Router {
 		rw.WriteHeader(http.StatusOK)
 	})
 
-	router := &Router{
+	cr := &Router{
 		Base: minikit.NewBase("router", "router"),
 		mux:  mux,
 	}
 
-	components.Router = router
+	components.Router = cr
 
-	return router
+	return cr
 }
 
 // ServeHTTP AFAIRE.

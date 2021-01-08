@@ -26,13 +26,13 @@ type (
 
 // New AFAIRE.
 func New(components *components.Components) *Logger {
-	logger := logger.New()
-	components.Logger = logger
+	cl := logger.New()
+	components.Logger = cl
 
 	return &Logger{
 		Base:       minikit.NewBase("logger", "logger"),
 		components: components,
-		logger:     logger,
+		logger:     cl,
 	}
 }
 

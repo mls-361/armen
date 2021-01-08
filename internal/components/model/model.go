@@ -23,14 +23,14 @@ type (
 
 // New AFAIRE.
 func New(components *components.Components) *Model {
-	model := &Model{
+	cm := &Model{
 		Base:       minikit.NewBase("model", "model"),
 		components: components,
 	}
 
-	components.Model = model
+	components.Model = cm
 
-	return model
+	return cm
 }
 
 // Dependencies AFAIRE.

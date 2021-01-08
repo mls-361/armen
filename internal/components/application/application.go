@@ -26,12 +26,12 @@ type (
 
 // New AFAIRE.
 func New(name, version, builtAt string, components *components.Components) *Application {
-	application := application.New(name, version, builtAt)
-	components.Application = application
+	ca := application.New(name, version, builtAt)
+	components.Application = ca
 
 	return &Application{
 		Base:        minikit.NewBase("application", "application"),
-		Application: application,
+		Application: ca,
 	}
 }
 

@@ -14,16 +14,19 @@ import (
 
 	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/armen-sdk/message"
+	"github.com/mls-361/minikit"
 	"github.com/mls-361/uuid"
 )
 
 const (
-	_maxChannelCapacity = 10
-	_maxConsumer        = 3
+	maxChannelCapacity = 10
+	maxConsumer        = 3
 )
 
 type (
-	cBus struct {
+	// Bus AFAIRE.
+	Bus struct {
+		*minikit.Base
 		components  *components.Components
 		subscribers map[*regexp.Regexp]func(*message.Message)
 		rwMutex     sync.RWMutex
@@ -32,15 +35,29 @@ type (
 	}
 )
 
-func newCBus(components *components.Components) *cBus {
-	return &cBus{
+// New AFAIRE.
+func New(components *components.Components) *Bus {
+	cb := &Bus{
+		Base:        minikit.NewBase("bus", "bus"),
 		components:  components,
 		subscribers: make(map[*regexp.Regexp]func(*message.Message)),
 		publishers:  expvar.NewMap("publishers"),
 	}
+
+	components.Bus = cb
+
+	return cb
 }
 
-func (cb *cBus) goConsumer(publisher string, ch <-chan *message.Message) {
+// Dependencies AFAIRE.
+func (cb *Bus) Dependencies() []string {
+	return []string{
+		"application",
+		"logger",
+	}
+}
+
+func (cb *Bus) goConsumer(publisher string, ch <-chan *message.Message) {
 	cb.waitGroup.Add(1)
 
 	go func() { //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -74,19 +91,19 @@ func (cb *cBus) goConsumer(publisher string, ch <-chan *message.Message) {
 }
 
 // AddPublisher AFAIRE.
-func (cb *cBus) AddPublisher(name string, chCapacity, nbConsumer int) chan<- *message.Message {
+func (cb *Bus) AddPublisher(name string, chCapacity, nbConsumer int) chan<- *message.Message {
 	if chCapacity < 0 {
 		chCapacity = 0
-	} else if chCapacity > _maxChannelCapacity {
-		chCapacity = _maxChannelCapacity
+	} else if chCapacity > maxChannelCapacity {
+		chCapacity = maxChannelCapacity
 	}
 
 	ch := make(chan *message.Message, chCapacity)
 
 	if nbConsumer < 1 {
 		nbConsumer = 1
-	} else if nbConsumer > _maxConsumer {
-		nbConsumer = _maxConsumer
+	} else if nbConsumer > maxConsumer {
+		nbConsumer = maxConsumer
 	}
 
 	for i := 0; i < nbConsumer; i++ {
@@ -97,7 +114,7 @@ func (cb *cBus) AddPublisher(name string, chCapacity, nbConsumer int) chan<- *me
 }
 
 // Subscribe AFAIRE.
-func (cb *cBus) Subscribe(callback func(*message.Message), regexpList ...string) error {
+func (cb *Bus) Subscribe(callback func(*message.Message), regexpList ...string) error {
 	cb.rwMutex.Lock()
 	defer cb.rwMutex.Unlock()
 
@@ -113,7 +130,8 @@ func (cb *cBus) Subscribe(callback func(*message.Message), regexpList ...string)
 	return nil
 }
 
-func (cb *cBus) close() {
+// Close AFAIRE.
+func (cb *Bus) Close() {
 	cb.waitGroup.Wait()
 }
 

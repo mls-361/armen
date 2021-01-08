@@ -11,15 +11,18 @@ import (
 	"time"
 
 	"github.com/mls-361/armen-sdk/components"
+	"github.com/mls-361/minikit"
 )
 
 const (
-	_lockName    = "leader"
-	_lockTimeout = 20 * time.Second
+	lockName    = "leader"
+	lockTimeout = 20 * time.Second
 )
 
 type (
-	cLeader struct {
+	// Leader AFAIRE.
+	Leader struct {
+		*minikit.Base
 		components   *components.Components
 		mutex        sync.Mutex
 		amITheLeader bool
@@ -28,18 +31,33 @@ type (
 	}
 )
 
-func newCLeader(components *components.Components) *cLeader {
-	return &cLeader{
+// New AFAIRE.
+func New(components *components.Components) *Leader {
+	cl := &Leader{
+		Base:       minikit.NewBase("leader", "leader"),
 		components: components,
 		stop:       make(chan struct{}),
 	}
+
+	components.Leader = cl
+
+	return cl
 }
 
-func (cl *cLeader) tryAcquireLock() {
+// Dependencies AFAIRE.
+func (cl *Leader) Dependencies() []string {
+	return []string{
+		"application",
+		"logger",
+		"model",
+	}
+}
+
+func (cl *Leader) tryAcquireLock() {
 	ok, err := cl.components.Model.AcquireLock(
-		_lockName,
+		lockName,
 		cl.components.Application.ID(),
-		_lockTimeout,
+		lockTimeout,
 	)
 	if err != nil {
 		cl.components.Logger.Warning( //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -60,7 +78,7 @@ func (cl *cLeader) tryAcquireLock() {
 }
 
 // Start AFAIRE.
-func (cl *cLeader) Start() {
+func (cl *Leader) Start() {
 	cl.waitGroup.Add(1)
 
 	go func() { //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -72,9 +90,9 @@ func (cl *cLeader) Start() {
 
 		for {
 			if cl.amITheLeader {
-				after = _lockTimeout * 3 / 4
+				after = lockTimeout * 3 / 4
 			} else {
-				after = _lockTimeout / 4
+				after = lockTimeout / 4
 			}
 
 			select {
@@ -90,7 +108,7 @@ func (cl *cLeader) Start() {
 }
 
 // AmITheLeader AFAIRE.
-func (cl *cLeader) AmITheLeader() bool {
+func (cl *Leader) AmITheLeader() bool {
 	cl.mutex.Lock()
 	defer cl.mutex.Unlock()
 
@@ -98,14 +116,14 @@ func (cl *cLeader) AmITheLeader() bool {
 }
 
 // Stop AFAIRE.
-func (cl *cLeader) Stop() {
+func (cl *Leader) Stop() {
 	close(cl.stop)
 	cl.waitGroup.Wait()
 
 	cl.components.Logger.Info("<<<Leader") //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 	if cl.amITheLeader {
-		if err := cl.components.Model.ReleaseLock(_lockName, cl.components.Application.ID()); err != nil {
+		if err := cl.components.Model.ReleaseLock(lockName, cl.components.Application.ID()); err != nil {
 			cl.components.Logger.Error(err.Error(), "func", "leader.Stop") //:::::::::::::::::::::::::::::::::::::::::::
 		}
 	}

@@ -25,13 +25,13 @@ type (
 
 // New AFAIRE.
 func New(components *components.Components) *Crypto {
-	crypto := crypto.New()
-	components.Crypto = crypto
+	cc := crypto.New()
+	components.Crypto = cc
 
 	return &Crypto{
 		Base:       minikit.NewBase("crypto", "crypto"),
 		components: components,
-		crypto:     crypto,
+		crypto:     cc,
 	}
 }
 

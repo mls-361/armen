@@ -9,28 +9,46 @@ package scheduler
 import (
 	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/armen-sdk/message"
+	"github.com/mls-361/minikit"
 	"github.com/mls-361/scheduler"
 )
 
 type (
-	cScheduler struct {
+	// Scheduler AFAIRE.
+	Scheduler struct {
+		*minikit.Base
 		components *components.Components
 		scheduler  *scheduler.Scheduler
 		busCh      chan<- *message.Message
 	}
 )
 
-func newCScheduler(components *components.Components) *cScheduler {
-	cs := &cScheduler{
+// New AFAIRE.
+func New(components *components.Components) *Scheduler {
+	cs := &Scheduler{
+		Base:       minikit.NewBase("scheduler", "scheduler"),
 		components: components,
 	}
 
 	cs.scheduler = scheduler.New(cs.eventManager)
 
+	components.Scheduler = cs
+
 	return cs
 }
 
-func (cs *cScheduler) build() error {
+// Dependencies AFAIRE.
+func (cs *Scheduler) Dependencies() []string {
+	return []string{
+		"bus",
+		"config",
+		"leader",
+		"logger",
+	}
+}
+
+// Build AFAIRE.
+func (cs *Scheduler) Build(_ *minikit.Manager) error {
 	var events []*scheduler.Event
 
 	if err := cs.components.Config.Decode(&events, false, "components", "scheduler", "events"); err != nil {
@@ -56,7 +74,7 @@ func (cs *cScheduler) build() error {
 	return nil
 }
 
-func (cs *cScheduler) eventManager(name string, data interface{}) {
+func (cs *Scheduler) eventManager(name string, data interface{}) {
 	if cs.components.Leader.AmITheLeader() {
 		cs.components.Logger.Info("Emit event", "name", name) //::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 		cs.busCh <- message.New(name, data)                   //********************************************************
@@ -64,20 +82,21 @@ func (cs *cScheduler) eventManager(name string, data interface{}) {
 }
 
 // Start AFAIRE.
-func (cs *cScheduler) Start() {
+func (cs *Scheduler) Start() {
 	cs.scheduler.Start()
 
 	cs.components.Logger.Info(">>>Scheduler") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 }
 
 // Stop AFAIRE.
-func (cs *cScheduler) Stop() {
+func (cs *Scheduler) Stop() {
 	cs.scheduler.Stop()
 
 	cs.components.Logger.Info("<<<Scheduler") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 }
 
-func (cs *cScheduler) close() {
+// Close AFAIRE.
+func (cs *Scheduler) Close() {
 	close(cs.busCh)
 }
 
