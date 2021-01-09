@@ -31,7 +31,7 @@ type (
 		subscribers map[*regexp.Regexp]func(*message.Message)
 		rwMutex     sync.RWMutex
 		waitGroup   sync.WaitGroup
-		publishers  *expvar.Map
+		stats       *expvar.Map
 	}
 )
 
@@ -41,7 +41,7 @@ func New(components *components.Components) *Bus {
 		Base:        minikit.NewBase("bus", "bus"),
 		components:  components,
 		subscribers: make(map[*regexp.Regexp]func(*message.Message)),
-		publishers:  expvar.NewMap("publishers"),
+		stats:       expvar.NewMap("publishers"),
 	}
 
 	components.Bus = cb
@@ -83,7 +83,7 @@ func (cb *Bus) goConsumer(publisher string, ch <-chan *message.Message) {
 
 			cb.rwMutex.RUnlock()
 
-			cb.publishers.Add(publisher, 1)
+			cb.stats.Add(publisher, 1)
 		}
 
 		logger.Info("<<<Bus") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

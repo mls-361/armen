@@ -7,6 +7,7 @@
 package workers
 
 import (
+	"expvar"
 	"sync"
 
 	"github.com/mls-361/armen-sdk/components"
@@ -37,6 +38,7 @@ type (
 		workers    []chan struct{}
 		busCh      chan<- *message.Message
 		waitGroup  sync.WaitGroup
+		stats      *expvar.Map
 	}
 )
 
@@ -47,6 +49,7 @@ func New(components *components.Components) *Workers {
 		components: components,
 		config:     &config{Pool: struct{ Size int }{Size: defaultPoolSize}},
 		workers:    make([]chan struct{}, 0),
+		stats:      expvar.NewMap("workers"),
 	}
 
 	components.Workers = cw
@@ -81,16 +84,28 @@ func (cw *Workers) Build(_ *minikit.Manager) error {
 	return nil
 }
 
+func (cw *Workers) worker(stopCh chan struct{}) {
+	worker := worker.New(
+		cw.components,
+		cw.busCh,
+		stopCh,
+		func(id string) {
+			cw.stats.Add("Jobs", 1)
+		},
+	)
+
+	worker.Run()
+
+	cw.waitGroup.Done()
+}
+
 func (cw *Workers) startWorker() {
 	cw.waitGroup.Add(1)
 
 	stopCh := make(chan struct{})
 	cw.workers = append(cw.workers, stopCh)
 
-	go func() { //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-		worker.New(cw.components, cw.busCh, stopCh).Run()
-		cw.waitGroup.Done()
-	}()
+	go cw.worker(stopCh) //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 }
 
 func (cw *Workers) stopWorker() {
@@ -104,6 +119,8 @@ func (cw *Workers) Resize(size int) {
 	cw.mutex.Lock()
 	defer cw.mutex.Unlock()
 
+	delta := int64(size - len(cw.workers))
+
 	for len(cw.workers) < size {
 		cw.startWorker()
 	}
@@ -111,6 +128,8 @@ func (cw *Workers) Resize(size int) {
 	for len(cw.workers) > size {
 		cw.stopWorker()
 	}
+
+	cw.stats.Add("PoolSize", delta)
 }
 
 // Start AFAIRE.
