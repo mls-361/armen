@@ -7,7 +7,6 @@
 package router
 
 import (
-	"expvar"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
@@ -31,7 +30,7 @@ func New(components *components.Components) *Router {
 		rw.WriteHeader(http.StatusInternalServerError)
 	}
 
-	mux.Handler(http.MethodGet, "/statistics", expvar.Handler())
+	//mux.Handler(http.MethodGet, "/statistics", expvar.Handler())
 	mux.GET("/status", func(rw http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 		rw.WriteHeader(http.StatusOK)
 	})

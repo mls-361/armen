@@ -7,7 +7,6 @@
 package bus
 
 import (
-	"expvar"
 	"fmt"
 	"regexp"
 	"sync"
@@ -31,7 +30,6 @@ type (
 		subscribers map[*regexp.Regexp]func(*message.Message)
 		rwMutex     sync.RWMutex
 		waitGroup   sync.WaitGroup
-		stats       *expvar.Map
 	}
 )
 
@@ -41,7 +39,6 @@ func New(components *components.Components) *Bus {
 		Base:        minikit.NewBase("bus", "bus"),
 		components:  components,
 		subscribers: make(map[*regexp.Regexp]func(*message.Message)),
-		stats:       expvar.NewMap("publishers"),
 	}
 
 	components.Bus = cb
@@ -82,8 +79,6 @@ func (cb *Bus) goConsumer(publisher string, ch <-chan *message.Message) {
 			}
 
 			cb.rwMutex.RUnlock()
-
-			cb.stats.Add(publisher, 1)
 		}
 
 		logger.Info("<<<Bus") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

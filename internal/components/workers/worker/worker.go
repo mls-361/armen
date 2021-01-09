@@ -17,8 +17,6 @@ import (
 )
 
 type (
-	statsCallback func(id string)
-
 	// Worker AFAIRE.
 	Worker struct {
 		*worker.Worker
@@ -26,13 +24,11 @@ type (
 		busCh      chan<- *message.Message
 		stopCh     chan struct{}
 		logger     components.Logger
-		statsCb    statsCallback
 	}
 )
 
 // New AFAIRE.
-func New(components *components.Components, busCh chan<- *message.Message, stopCh chan struct{},
-	statsCb statsCallback) *Worker {
+func New(components *components.Components, busCh chan<- *message.Message, stopCh chan struct{}) *Worker {
 	worker := worker.New()
 
 	return &Worker{
@@ -41,7 +37,6 @@ func New(components *components.Components, busCh chan<- *message.Message, stopC
 		busCh:      busCh,
 		stopCh:     stopCh,
 		logger:     components.Logger.CreateLogger(worker.ID, "worker"),
-		statsCb:    statsCb,
 	}
 }
 
@@ -67,8 +62,6 @@ func (w *Worker) maybeRunJob() time.Duration {
 	runner.New(job, w.components, w.busCh).DoIt()
 
 	w.publish("worker.free", nil) //************************************************************************************
-
-	w.statsCb(w.ID)
 
 	return 0
 }
