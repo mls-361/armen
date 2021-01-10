@@ -25,6 +25,7 @@ import (
 	"github.com/mls-361/armen/internal/components/crypto"
 	"github.com/mls-361/armen/internal/components/leader"
 	"github.com/mls-361/armen/internal/components/logger"
+	"github.com/mls-361/armen/internal/components/metrics"
 	"github.com/mls-361/armen/internal/components/model"
 	"github.com/mls-361/armen/internal/components/router"
 	"github.com/mls-361/armen/internal/components/runner"
@@ -59,6 +60,7 @@ func run() error {
 		crypto.New(cs),
 		leader.New(cs),
 		logger.New(cs),
+		metrics.New(cs),
 		model.New(cs),
 		router.New(cs),
 		runner.New(cs),

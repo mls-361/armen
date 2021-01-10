@@ -51,6 +51,7 @@ func (cb *Bus) Dependencies() []string {
 	return []string{
 		"application",
 		"logger",
+		"metrics",
 	}
 }
 
@@ -79,6 +80,8 @@ func (cb *Bus) goConsumer(publisher string, ch <-chan *message.Message) {
 			}
 
 			cb.rwMutex.RUnlock()
+
+			cb.components.Metrics.AddInt(1, "bus", "publisher", publisher)
 		}
 
 		logger.Info("<<<Bus") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
