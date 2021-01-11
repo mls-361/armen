@@ -8,6 +8,7 @@ package metrics
 
 import (
 	"github.com/mls-361/armen-sdk/components"
+	"github.com/mls-361/metrics"
 	"github.com/mls-361/minikit"
 )
 
@@ -15,7 +16,7 @@ type (
 	// Metrics AFAIRE.
 	Metrics struct {
 		*minikit.Base
-		*tree
+		metrics.Metrics
 		components *components.Components
 	}
 )
@@ -24,7 +25,7 @@ type (
 func New(components *components.Components) *Metrics {
 	cm := &Metrics{
 		Base:       minikit.NewBase("metrics", "metrics"),
-		tree:       newTree(),
+		Metrics:    metrics.New(),
 		components: components,
 	}
 
@@ -42,10 +43,11 @@ func (cm *Metrics) Dependencies() []string {
 
 // Build AFAIRE.
 func (cm *Metrics) Build(_ *minikit.Manager) error {
-	cm.components.Router.Get("/metrics", cm.handler())
-
+	cm.components.Router.Get("/metrics", cm.Handler())
 	return nil
 }
+
+// NewCounter AFAIRE.
 
 /*
 ######################################################################################################## @(°_°)@ #######

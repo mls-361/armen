@@ -6,11 +6,12 @@ require (
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/mitchellh/mapstructure v1.4.0
 	github.com/mls-361/application v0.0.0-20210104213928-2879b3af8d92
-	github.com/mls-361/armen-sdk v0.0.0-20210110175851-b97969e4c6f5
+	github.com/mls-361/armen-sdk v0.0.0-20210111181758-f3785ebc0bfb
 	github.com/mls-361/crypto v0.0.0-20210103214043-e8a0934ef17a
 	github.com/mls-361/datamap v0.0.0-20210103214129-fd806a229ad0
 	github.com/mls-361/failure v0.0.0-20210103213724-67f4cd2e77b7
 	github.com/mls-361/logger v0.0.0-20210103214222-796b123fd379
+	github.com/mls-361/metrics v0.0.0-20210111181710-b7fea8fd978b
 	github.com/mls-361/minikit v0.0.0-20210107180150-28817c294bb9
 	github.com/mls-361/scheduler v0.0.0-20210103214308-7ca2f1a917bd
 	github.com/mls-361/uuid v0.0.0-20210103213509-f52b091b96f3

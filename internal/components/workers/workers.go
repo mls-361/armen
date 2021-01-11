@@ -11,6 +11,7 @@ import (
 
 	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/armen-sdk/message"
+	"github.com/mls-361/metrics"
 	"github.com/mls-361/minikit"
 
 	"github.com/mls-361/armen/internal/components/workers/worker"
@@ -31,12 +32,13 @@ type (
 	// Workers AFAIRE.
 	Workers struct {
 		*minikit.Base
-		components *components.Components
-		config     *config
-		mutex      sync.Mutex
-		workers    []chan struct{}
-		busCh      chan<- *message.Message
-		waitGroup  sync.WaitGroup
+		components  *components.Components
+		config      *config
+		mutex       sync.Mutex
+		workers     []chan struct{}
+		busCh       chan<- *message.Message
+		waitGroup   sync.WaitGroup
+		mcsPoolSize metrics.GaugeInt
 	}
 )
 
@@ -77,6 +79,7 @@ func (cw *Workers) Build(_ *minikit.Manager) error {
 	}
 
 	cw.busCh = cw.components.Bus.AddPublisher("workers", 1, 1)
+	cw.mcsPoolSize = cw.components.Metrics.NewGaugeInt("workers.pool.size")
 
 	return nil
 }
@@ -111,6 +114,8 @@ func (cw *Workers) Resize(size int) {
 	for len(cw.workers) > size {
 		cw.stopWorker()
 	}
+
+	cw.mcsPoolSize.Set(int64(size))
 }
 
 // Start AFAIRE.

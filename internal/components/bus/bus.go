@@ -65,6 +65,8 @@ func (cb *Bus) goConsumer(publisher string, ch <-chan *message.Message) {
 
 		logger.Info(">>>Bus") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+		mcsCounter := cb.components.Metrics.NewCounter("bus.publishers." + publisher)
+
 		for msg := range ch {
 			msg.Host = cb.components.Application.Host()
 			msg.Publisher = publisher
@@ -81,7 +83,7 @@ func (cb *Bus) goConsumer(publisher string, ch <-chan *message.Message) {
 
 			cb.rwMutex.RUnlock()
 
-			cb.components.Metrics.AddInt(1, "bus", "publisher", publisher)
+			mcsCounter.Inc()
 		}
 
 		logger.Info("<<<Bus") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
