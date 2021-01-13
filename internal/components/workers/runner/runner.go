@@ -7,9 +7,10 @@
 package runner
 
 import (
-	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/armen-sdk/jw"
 	"github.com/mls-361/armen-sdk/message"
+
+	"github.com/mls-361/armen/internal/components"
 )
 
 type (
@@ -24,10 +25,10 @@ type (
 
 func createLogger(job *jw.Job, components *components.Components) components.Logger {
 	if job.Workflow == nil {
-		return components.Logger.CreateLogger(job.ID, "job")
+		return components.CLogger.CreateLogger(job.ID, "job")
 	}
 
-	return components.Logger.CreateLogger(*job.Workflow, "workflow")
+	return components.CLogger.CreateLogger(*job.Workflow, "workflow")
 }
 
 // New AFAIRE.

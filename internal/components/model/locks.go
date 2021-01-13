@@ -10,12 +10,12 @@ import "time"
 
 // AcquireLock AFAIRE.
 func (cm *Model) AcquireLock(name, owner string, duration time.Duration) (bool, error) {
-	return cm.components.Backend.AcquireLock(name, owner, duration)
+	return cm.components.CBackend.AcquireLock(name, owner, duration)
 }
 
 // ReleaseLock AFAIRE.
 func (cm *Model) ReleaseLock(name, owner string) error {
-	return cm.components.Backend.ReleaseLock(name, owner)
+	return cm.components.CBackend.ReleaseLock(name, owner)
 }
 
 /*

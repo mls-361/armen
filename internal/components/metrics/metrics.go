@@ -7,9 +7,10 @@
 package metrics
 
 import (
-	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/metrics"
 	"github.com/mls-361/minikit"
+
+	"github.com/mls-361/armen/internal/components"
 )
 
 type (
@@ -29,7 +30,7 @@ func New(components *components.Components) *Metrics {
 		components: components,
 	}
 
-	components.Metrics = cm
+	components.CMetrics = cm
 
 	return cm
 }
@@ -43,7 +44,7 @@ func (cm *Metrics) Dependencies() []string {
 
 // Build AFAIRE.
 func (cm *Metrics) Build(_ *minikit.Manager) error {
-	cm.components.Router.Get("/metrics", cm.Handler())
+	cm.components.CRouter.Get("/metrics", cm.Handler())
 	return nil
 }
 

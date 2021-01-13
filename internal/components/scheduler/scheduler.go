@@ -7,10 +7,11 @@
 package scheduler
 
 import (
-	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/armen-sdk/message"
 	"github.com/mls-361/minikit"
 	"github.com/mls-361/scheduler"
+
+	"github.com/mls-361/armen/internal/components"
 )
 
 type (
@@ -32,7 +33,7 @@ func New(components *components.Components) *Scheduler {
 
 	cs.scheduler = scheduler.New(cs.eventManager)
 
-	components.Scheduler = cs
+	components.CScheduler = cs
 
 	return cs
 }
@@ -51,12 +52,12 @@ func (cs *Scheduler) Dependencies() []string {
 func (cs *Scheduler) Build(_ *minikit.Manager) error {
 	var events []*scheduler.Event
 
-	if err := cs.components.Config.Decode(&events, false, "components", "scheduler", "events"); err != nil {
+	if err := cs.components.CConfig.Decode(&events, false, "components", "scheduler", "events"); err != nil {
 		return err
 	}
 
 	for _, e := range events {
-		cs.components.Logger.Debug( //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		cs.components.CLogger.Debug( //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 			"Event",
 			"name", e.Name,
 			"disabled", e.Disabled,
@@ -69,15 +70,15 @@ func (cs *Scheduler) Build(_ *minikit.Manager) error {
 		}
 	}
 
-	cs.busCh = cs.components.Bus.AddPublisher("scheduler", 1, 1)
+	cs.busCh = cs.components.CBus.AddPublisher("scheduler", 1, 1)
 
 	return nil
 }
 
 func (cs *Scheduler) eventManager(name string, data interface{}) {
-	if cs.components.Leader.AmITheLeader() {
-		cs.components.Logger.Info("Emit event", "name", name) //::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-		cs.busCh <- message.New(name, data)                   //********************************************************
+	if cs.components.CLeader.AmITheLeader() {
+		cs.components.CLogger.Info("Emit event", "name", name) //:::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		cs.busCh <- message.New(name, data)                    //*******************************************************
 	}
 }
 
@@ -85,14 +86,14 @@ func (cs *Scheduler) eventManager(name string, data interface{}) {
 func (cs *Scheduler) Start() {
 	cs.scheduler.Start()
 
-	cs.components.Logger.Info(">>>Scheduler") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	cs.components.CLogger.Info(">>>Scheduler") //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 }
 
 // Stop AFAIRE.
 func (cs *Scheduler) Stop() {
 	cs.scheduler.Stop()
 
-	cs.components.Logger.Info("<<<Scheduler") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	cs.components.CLogger.Info("<<<Scheduler") //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 }
 
 // Close AFAIRE.

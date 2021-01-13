@@ -10,7 +10,7 @@ import (
 	"flag"
 	"os"
 
-	"github.com/mls-361/armen-sdk/components"
+	"github.com/mls-361/armen/internal/components"
 )
 
 type (
@@ -23,7 +23,7 @@ type (
 
 // New AFAIRE.
 func New(components *components.Components) *CmdFS {
-	flagSet := flag.NewFlagSet(components.Application.Name(), flag.ContinueOnError)
+	flagSet := flag.NewFlagSet(components.CApplication.Name(), flag.ContinueOnError)
 	flagSet.SetOutput(os.Stdout)
 
 	return &CmdFS{

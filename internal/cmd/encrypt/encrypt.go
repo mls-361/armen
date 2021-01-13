@@ -9,11 +9,11 @@ package encrypt
 import (
 	"fmt"
 
-	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/failure"
 	"github.com/mls-361/minikit"
 
 	_cmd "github.com/mls-361/armen/internal/cmd"
+	"github.com/mls-361/armen/internal/components"
 )
 
 type (
@@ -60,7 +60,7 @@ func (c *cmd) Execute(m *minikit.Manager) error {
 		return err
 	}
 
-	s, err := c.Components().Crypto.EncryptString(c.data.s)
+	s, err := c.Components().CCrypto.EncryptString(c.data.s)
 	if err != nil {
 		return err
 	}

@@ -9,17 +9,17 @@ package workers
 import (
 	"sync"
 
-	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/armen-sdk/message"
 	"github.com/mls-361/metrics"
 	"github.com/mls-361/minikit"
 
+	"github.com/mls-361/armen/internal/components"
 	"github.com/mls-361/armen/internal/components/workers/worker"
 )
 
 const (
-	defaultPoolSize = 10
-	maxPoolSize     = 100
+	_defaultPoolSize = 10
+	_maxPoolSize     = 100
 )
 
 type (
@@ -47,11 +47,11 @@ func New(components *components.Components) *Workers {
 	cw := &Workers{
 		Base:       minikit.NewBase("workers", "workers"),
 		components: components,
-		config:     &config{Pool: struct{ Size int }{Size: defaultPoolSize}},
+		config:     &config{Pool: struct{ Size int }{Size: _defaultPoolSize}},
 		workers:    make([]chan struct{}, 0),
 	}
 
-	components.Workers = cw
+	components.CWorkers = cw
 
 	return cw
 }
@@ -68,18 +68,18 @@ func (cw *Workers) Dependencies() []string {
 
 // Build AFAIRE.
 func (cw *Workers) Build(_ *minikit.Manager) error {
-	if err := cw.components.Config.Decode(&cw.config, false, "components", "workers"); err != nil {
+	if err := cw.components.CConfig.Decode(&cw.config, false, "components", "workers"); err != nil {
 		return err
 	}
 
 	if cw.config.Pool.Size < 0 {
 		cw.config.Pool.Size = 0
-	} else if cw.config.Pool.Size > maxPoolSize {
-		cw.config.Pool.Size = maxPoolSize
+	} else if cw.config.Pool.Size > _maxPoolSize {
+		cw.config.Pool.Size = _maxPoolSize
 	}
 
-	cw.busCh = cw.components.Bus.AddPublisher("workers", 1, 1)
-	cw.mcsPoolSize = cw.components.Metrics.NewGaugeInt("workers.pool.size")
+	cw.busCh = cw.components.CBus.AddPublisher("workers", 1, 1)
+	cw.mcsPoolSize = cw.components.CMetrics.NewGaugeInt("workers.pool.size")
 
 	return nil
 }

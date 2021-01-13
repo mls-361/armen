@@ -9,7 +9,7 @@ package crypto
 import (
 	"io/ioutil"
 
-	"github.com/mls-361/armen-sdk/components"
+	"github.com/mls-361/armen/internal/components"
 	"github.com/mls-361/crypto"
 	"github.com/mls-361/minikit"
 )
@@ -26,7 +26,7 @@ type (
 // New AFAIRE.
 func New(components *components.Components) *Crypto {
 	cc := crypto.New()
-	components.Crypto = cc
+	components.CCrypto = cc
 
 	return &Crypto{
 		Base:       minikit.NewBase("crypto", "crypto"),
@@ -44,7 +44,7 @@ func (cc *Crypto) Dependencies() []string {
 
 // Build AFAIRE.
 func (cc *Crypto) Build(_ *minikit.Manager) error {
-	keyFile, ok := cc.components.Application.LookupEnv("KEY_FILE")
+	keyFile, ok := cc.components.CApplication.LookupEnv("KEY_FILE")
 	if !ok {
 		return nil
 	}

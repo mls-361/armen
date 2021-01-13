@@ -13,11 +13,12 @@ import (
 	"plugin"
 	"time"
 
-	"github.com/mls-361/armen-sdk/components"
+	_sdk "github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/failure"
 	"github.com/mls-361/minikit"
 
 	"github.com/mls-361/armen/internal/client"
+	"github.com/mls-361/armen/internal/components"
 	"github.com/mls-361/armen/internal/components/application"
 	"github.com/mls-361/armen/internal/components/backend"
 	"github.com/mls-361/armen/internal/components/bus"
@@ -35,12 +36,12 @@ import (
 )
 
 const (
-	pluginFnName = "Export"
+	_pluginFnName = "Export"
 )
 
 var (
-	version string
-	builtAt string
+	_version string
+	_builtAt string
 )
 
 func init() {
@@ -49,7 +50,7 @@ func init() {
 
 func run() error {
 	cs := components.New()
-	app := application.New("armen", version, builtAt, cs)
+	app := application.New("armen", _version, _builtAt, cs)
 	manager := minikit.NewManager(app)
 
 	if err := manager.AddComponents(
@@ -73,9 +74,9 @@ func run() error {
 
 	if err := manager.AddPlugins(
 		app.PluginsDir(),
-		pluginFnName,
+		_pluginFnName,
 		func(pSym plugin.Symbol) error {
-			fn, ok := pSym.(func(*minikit.Manager, *components.Components) error)
+			fn, ok := pSym.(func(*minikit.Manager, _sdk.Components) error)
 			if !ok {
 				return failure.New(nil).Msg("the exported function is not of the right type") //////////////////////////
 			}

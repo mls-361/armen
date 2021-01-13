@@ -15,7 +15,7 @@ func (cm *Model) newJob(job *jw.Job) {
 		wf = *job.Workflow
 	}
 
-	cm.components.Logger.Info( //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	cm.components.Logger().Info( //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 		"New job",
 		"id", job.ID,
 		"name", job.Name,
@@ -23,7 +23,6 @@ func (cm *Model) newJob(job *jw.Job) {
 		"type", job.Type,
 		"origin", job.Origin,
 		"priority", job.Priority,
-		"exclusivity", job.Exclusivity,
 		"workflow", wf,
 	)
 
@@ -32,7 +31,7 @@ func (cm *Model) newJob(job *jw.Job) {
 
 // InsertJob AFAIRE.
 func (cm *Model) InsertJob(job *jw.Job) error {
-	done, err := cm.components.Backend.InsertJob(job)
+	done, err := cm.components.CBackend.InsertJob(job)
 	if err != nil {
 		var wf string
 
@@ -40,7 +39,7 @@ func (cm *Model) InsertJob(job *jw.Job) error {
 			wf = *job.Workflow
 		}
 
-		cm.components.Logger.Error( //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		cm.components.CLogger.Error( //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 			"Impossible to insert a new job",
 			"id", job.ID,
 			"name", job.Name,
@@ -56,12 +55,12 @@ func (cm *Model) InsertJob(job *jw.Job) error {
 	}
 
 	if !done {
-		cm.components.Logger.Notice( //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		cm.components.CLogger.Notice( //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 			"A job with the same key already exists",
 			"name", job.Name,
 			"namespace", job.Namespace,
 			"type", job.Type,
-			"unique_key", *job.UniqueKey,
+			"key", *job.Key,
 		)
 
 		return nil

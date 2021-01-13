@@ -11,10 +11,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/minikit"
 
 	"github.com/mls-361/armen/internal/client"
+	"github.com/mls-361/armen/internal/components"
 )
 
 type (
@@ -40,7 +40,7 @@ func (cr *Runner) waitEnd() {
 
 	<-end
 
-	cr.components.Logger.Info("...Stopping...") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	cr.components.Logger().Info("...Stopping...") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 	close(end)
 }
@@ -50,10 +50,10 @@ func (cr *Runner) run(m *minikit.Manager) error {
 		return err
 	}
 
-	leader := cr.components.Leader
-	scheduler := cr.components.Scheduler
-	server := cr.components.Server
-	workers := cr.components.Workers
+	leader := cr.components.CLeader
+	scheduler := cr.components.CScheduler
+	server := cr.components.CServer
+	workers := cr.components.CWorkers
 
 	if err := server.Start(); err != nil {
 		return err

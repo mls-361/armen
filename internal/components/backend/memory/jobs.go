@@ -13,9 +13,9 @@ func (cb *Backend) InsertJob(job *jw.Job) (bool, error) {
 	cb.mutex.Lock()
 	defer cb.mutex.Unlock()
 
-	if job.UniqueKey != nil {
+	if job.Key != nil {
 		for _, j := range cb.jobs {
-			if j.UniqueKey != nil && *j.UniqueKey == *job.UniqueKey &&
+			if j.Key != nil && *j.Key == *job.Key &&
 				j.Namespace == job.Namespace && j.Type == job.Type &&
 				(j.Status == jw.StatusToDo || j.Status == jw.StatusRunning || j.Status == jw.StatusPending) {
 				return false, nil

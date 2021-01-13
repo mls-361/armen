@@ -9,9 +9,9 @@ package backend
 import (
 	"fmt"
 
-	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/minikit"
 
+	"github.com/mls-361/armen/internal/components"
 	"github.com/mls-361/armen/internal/components/backend/memory"
 	"github.com/mls-361/armen/internal/components/backend/pgsql"
 )
@@ -34,7 +34,7 @@ type (
 func New(components *components.Components) *Backend {
 	var cb backend
 
-	value, _ := components.Application.LookupEnv("BACKEND")
+	value, _ := components.CApplication.LookupEnv("BACKEND")
 
 	switch value {
 	case "memory":
@@ -43,11 +43,11 @@ func New(components *components.Components) *Backend {
 		cb = pgsql.New(components)
 	}
 
-	if components.Application.Debug() > 1 {
+	if components.CApplication.Debug() > 1 {
 		fmt.Printf("=== Backend: backend=%s\n", value) //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	}
 
-	components.Backend = cb
+	components.CBackend = cb
 
 	return &Backend{
 		Base:    minikit.NewBase("backend", "backend"),

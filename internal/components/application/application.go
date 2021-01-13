@@ -10,9 +10,9 @@ import (
 	"fmt"
 
 	"github.com/mls-361/application"
-	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/minikit"
 
+	"github.com/mls-361/armen/internal/components"
 	"github.com/mls-361/armen/internal/util"
 )
 
@@ -27,7 +27,7 @@ type (
 // New AFAIRE.
 func New(name, version, builtAt string, components *components.Components) *Application {
 	ca := application.New(name, version, builtAt)
-	components.Application = ca
+	components.CApplication = ca
 
 	return &Application{
 		Base:        minikit.NewBase("application", "application"),

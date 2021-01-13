@@ -11,8 +11,9 @@ import (
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
-	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/minikit"
+
+	"github.com/mls-361/armen/internal/components"
 )
 
 type (
@@ -45,7 +46,7 @@ func New(components *components.Components) *Router {
 		mux:  mux,
 	}
 
-	components.Router = cr
+	components.CRouter = cr
 
 	return cr
 }

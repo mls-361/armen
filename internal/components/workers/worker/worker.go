@@ -9,10 +9,10 @@ package worker
 import (
 	"time"
 
-	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/armen-sdk/message"
 	"github.com/mls-361/armen-sdk/worker"
 
+	"github.com/mls-361/armen/internal/components"
 	"github.com/mls-361/armen/internal/components/workers/runner"
 )
 
@@ -36,7 +36,7 @@ func New(components *components.Components, busCh chan<- *message.Message, stopC
 		components: components,
 		busCh:      busCh,
 		stopCh:     stopCh,
-		logger:     components.Logger.CreateLogger(worker.ID, "worker"),
+		logger:     components.CLogger.CreateLogger(worker.ID, "worker"),
 	}
 }
 
@@ -47,7 +47,7 @@ func (w *Worker) publish(topic string, data interface{}) {
 }
 
 func (w *Worker) maybeRunJob() time.Duration {
-	job := w.components.Model.NextJob()
+	job := w.components.CModel.NextJob()
 
 	if job == nil {
 		return 1

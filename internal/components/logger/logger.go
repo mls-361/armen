@@ -10,9 +10,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/logger"
 	"github.com/mls-361/minikit"
+
+	"github.com/mls-361/armen/internal/components"
 )
 
 type (
@@ -27,7 +28,7 @@ type (
 // New AFAIRE.
 func New(components *components.Components) *Logger {
 	cl := logger.New()
-	components.Logger = cl
+	components.CLogger = cl
 
 	return &Logger{
 		Base:       minikit.NewBase("logger", "logger"),
@@ -46,10 +47,10 @@ func (cl *Logger) Dependencies() []string {
 
 // Build AFAIRE.
 func (cl *Logger) Build(_ *minikit.Manager) error {
-	app := cl.components.Application
+	app := cl.components.CApplication
 	level := "info"
 
-	level, err := cl.components.Config.Data().StringWD(level, "components", "logger", "level")
+	level, err := cl.components.CConfig.Data().StringWD(level, "components", "logger", "level")
 	if err != nil {
 		return err
 	}
@@ -79,7 +80,7 @@ func (cl *Logger) Close() {
 	cl.logger.Info( //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 		"===END",
 		"uptime",
-		time.Since(cl.components.Application.StartedAt()).Round(time.Second).String(),
+		time.Since(cl.components.CApplication.StartedAt()).Round(time.Second).String(),
 	)
 
 	cl.logger.Close()

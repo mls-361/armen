@@ -7,9 +7,10 @@
 package model
 
 import (
-	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/armen-sdk/message"
 	"github.com/mls-361/minikit"
+
+	"github.com/mls-361/armen/internal/components"
 )
 
 type (
@@ -28,7 +29,7 @@ func New(components *components.Components) *Model {
 		components: components,
 	}
 
-	components.Model = cm
+	components.CModel = cm
 
 	return cm
 }
@@ -44,7 +45,7 @@ func (cm *Model) Dependencies() []string {
 
 // Build AFAIRE.
 func (cm *Model) Build(_ *minikit.Manager) error {
-	cm.busCh = cm.components.Bus.AddPublisher("model", 1, 1)
+	cm.busCh = cm.components.CBus.AddPublisher("model", 1, 1)
 
 	return nil
 }

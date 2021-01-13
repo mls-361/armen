@@ -11,15 +11,16 @@ import (
 	"regexp"
 	"sync"
 
-	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/armen-sdk/message"
 	"github.com/mls-361/minikit"
 	"github.com/mls-361/uuid"
+
+	"github.com/mls-361/armen/internal/components"
 )
 
 const (
-	maxChannelCapacity = 10
-	maxConsumer        = 3
+	_maxChannelCapacity = 10
+	_maxConsumer        = 3
 )
 
 type (
@@ -41,7 +42,7 @@ func New(components *components.Components) *Bus {
 		subscribers: make(map[*regexp.Regexp]func(*message.Message)),
 	}
 
-	components.Bus = cb
+	components.CBus = cb
 
 	return cb
 }
@@ -61,14 +62,14 @@ func (cb *Bus) goConsumer(publisher string, ch <-chan *message.Message) {
 	go func() { //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 		defer cb.waitGroup.Done()
 
-		logger := cb.components.Logger.CreateLogger(uuid.New(), publisher)
+		logger := cb.components.CLogger.CreateLogger(uuid.New(), publisher)
 
 		logger.Info(">>>Bus") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-		mcsCounter := cb.components.Metrics.NewCounter("bus.publishers." + publisher)
+		mcsCounter := cb.components.CMetrics.NewCounter("bus.publishers." + publisher)
 
 		for msg := range ch {
-			msg.Host = cb.components.Application.Host()
+			msg.Host = cb.components.CApplication.Host()
 			msg.Publisher = publisher
 
 			logger.Debug("Publish message", "id", msg.ID, "topic", msg.Topic) //::::::::::::::::::::::::::::::::::::::::
@@ -94,16 +95,16 @@ func (cb *Bus) goConsumer(publisher string, ch <-chan *message.Message) {
 func (cb *Bus) AddPublisher(name string, chCapacity, nbConsumer int) chan<- *message.Message {
 	if chCapacity < 0 {
 		chCapacity = 0
-	} else if chCapacity > maxChannelCapacity {
-		chCapacity = maxChannelCapacity
+	} else if chCapacity > _maxChannelCapacity {
+		chCapacity = _maxChannelCapacity
 	}
 
 	ch := make(chan *message.Message, chCapacity)
 
 	if nbConsumer < 1 {
 		nbConsumer = 1
-	} else if nbConsumer > maxConsumer {
-		nbConsumer = maxConsumer
+	} else if nbConsumer > _maxConsumer {
+		nbConsumer = _maxConsumer
 	}
 
 	for i := 0; i < nbConsumer; i++ {

@@ -6,9 +6,7 @@
 
 package pgsql
 
-import (
-	"github.com/mls-361/armen-sdk/components"
-)
+import "github.com/mls-361/armen/internal/components"
 
 type (
 	// Backend AFAIRE.

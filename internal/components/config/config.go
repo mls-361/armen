@@ -14,12 +14,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/datamap"
 	"github.com/mls-361/minikit"
 	"gopkg.in/yaml.v3"
 
 	"github.com/mls-361/armen/internal/client"
+	"github.com/mls-361/armen/internal/components"
 	"github.com/mls-361/armen/internal/util"
 )
 
@@ -39,10 +39,10 @@ func New(components *components.Components) *Config {
 	cc := &Config{
 		Base:       minikit.NewBase("config", "config"),
 		components: components,
-		flagSet:    flag.NewFlagSet(components.Application.Name(), flag.ContinueOnError),
+		flagSet:    flag.NewFlagSet(components.CApplication.Name(), flag.ContinueOnError),
 	}
 
-	components.Config = cc
+	components.CConfig = cc
 
 	return cc
 }
@@ -55,7 +55,7 @@ func (cc *Config) Dependencies() []string {
 }
 
 func (cc *Config) defaultCfgFile() string {
-	app := cc.components.Application
+	app := cc.components.CApplication
 
 	if cfgFile, ok := app.LookupEnv("CONFIG"); ok {
 		return cfgFile
@@ -65,7 +65,7 @@ func (cc *Config) defaultCfgFile() string {
 }
 
 func (cc *Config) parse() error {
-	app := cc.components.Application
+	app := cc.components.CApplication
 
 	cc.flagSet.SetOutput(os.Stdout)
 	cc.flagSet.Usage = func() {
@@ -131,7 +131,7 @@ func (cc *Config) Build(_ *minikit.Manager) error {
 		return err
 	}
 
-	if cc.components.Application.Debug() > 1 {
+	if cc.components.CApplication.Debug() > 1 {
 		fmt.Printf("=== Config: cfgFile=%s\n", cc.cfgFile) //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	}
 
