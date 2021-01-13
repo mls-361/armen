@@ -7,6 +7,8 @@
 package metrics
 
 import (
+	"net/http"
+
 	"github.com/mls-361/metrics"
 	"github.com/mls-361/minikit"
 
@@ -19,6 +21,7 @@ type (
 		*minikit.Base
 		metrics.Metrics
 		components *components.Components
+		rtMetrics  *rtMetrics
 	}
 )
 
@@ -28,6 +31,7 @@ func New(components *components.Components) *Metrics {
 		Base:       minikit.NewBase("metrics", "metrics"),
 		Metrics:    metrics.New(),
 		components: components,
+		rtMetrics:  &rtMetrics{},
 	}
 
 	components.CMetrics = cm
@@ -44,11 +48,17 @@ func (cm *Metrics) Dependencies() []string {
 
 // Build AFAIRE.
 func (cm *Metrics) Build(_ *minikit.Manager) error {
+	cm.Register("runtime", cm.rtMetrics)
+
 	cm.components.CRouter.Get("/metrics", cm.Handler())
+
 	return nil
 }
 
-// NewCounter AFAIRE.
+func (cm *Metrics) Handler() http.HandlerFunc {
+	cm.updateRuntimeMetrics()
+	return cm.Metrics.Handler()
+}
 
 /*
 ######################################################################################################## @(°_°)@ #######
