@@ -38,7 +38,7 @@ type (
 		components *components.Components
 		config     *config
 		server     *http.Server
-		stopped    chan error
+		errCh      chan error
 	}
 )
 
@@ -48,7 +48,7 @@ func New(components *components.Components) *Server {
 		Base:       minikit.NewBase("server", "server"),
 		components: components,
 		config:     &config{Port: _defaultPort},
-		stopped:    make(chan error, 1),
+		errCh:      make(chan error, 1),
 	}
 
 	components.CServer = cs
@@ -106,11 +106,11 @@ func (cs *Server) Start() error {
 			err = cs.server.ListenAndServe()
 		}
 
-		cs.stopped <- err
+		cs.errCh <- err
 	}()
 
 	select {
-	case err := <-cs.stopped:
+	case err := <-cs.errCh:
 		return err
 	case <-time.After(50 * time.Millisecond):
 		cs.components.CLogger.Info(">>>Server", "port", cs.config.Port) //::::::::::::::::::::::::::::::::::::::::::::::
@@ -129,7 +129,7 @@ func (cs *Server) Stop() {
 		cs.components.CLogger.Error(err.Error(), "func", "server.Shutdown") //::::::::::::::::::::::::::::::::::::::::::
 	}
 
-	if err := <-cs.stopped; !errors.Is(err, http.ErrServerClosed) {
+	if err := <-cs.errCh; !errors.Is(err, http.ErrServerClosed) {
 		cs.components.CLogger.Error(err.Error(), "func", "server.ListenAndServe[TLS]") //:::::::::::::::::::::::::::::::
 	}
 
@@ -138,7 +138,7 @@ func (cs *Server) Stop() {
 
 // Close AFAIRE.
 func (cs *Server) Close() {
-	close(cs.stopped)
+	close(cs.errCh)
 }
 
 /*
