@@ -6,7 +6,11 @@
 
 package memory
 
-import "github.com/mls-361/armen-sdk/jw"
+import (
+	"time"
+
+	"github.com/mls-361/armen-sdk/jw"
+)
 
 // InsertJob AFAIRE.
 func (cb *Backend) InsertJob(job *jw.Job) (bool, error) {
@@ -29,8 +33,31 @@ func (cb *Backend) InsertJob(job *jw.Job) (bool, error) {
 }
 
 // NextJob AFAIRE.
-func (cb *Backend) NextJob() *jw.Job {
-	return nil
+func (cb *Backend) NextJob() (*jw.Job, error) {
+	cb.mutex.Lock()
+	defer cb.mutex.Unlock()
+
+	var job *jw.Job
+
+	now := time.Now()
+
+	for _, j := range cb.jobs {
+		if (j.Status != jw.StatusToDo && j.Status != jw.StatusPending) || j.RunAfter.After(now) {
+			continue
+		}
+
+		if job == nil || j.Priority > job.Priority || j.Weight < job.Weight ||
+			j.TimeReference.Before(job.TimeReference) {
+			job = j
+		}
+	}
+
+	if job != nil {
+		job.Status = jw.StatusRunning
+		job.Weight++
+	}
+
+	return job, nil
 }
 
 /*

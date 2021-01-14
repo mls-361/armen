@@ -7,6 +7,9 @@
 package model
 
 import (
+	"sync"
+	"time"
+
 	"github.com/mls-361/armen-sdk/message"
 	"github.com/mls-361/minikit"
 
@@ -19,6 +22,8 @@ type (
 		*minikit.Base
 		components *components.Components
 		busCh      chan<- *message.Message
+		njMutex    sync.Mutex
+		njTimeout  time.Time
 	}
 )
 
@@ -46,7 +51,6 @@ func (cm *Model) Dependencies() []string {
 // Build AFAIRE.
 func (cm *Model) Build(_ *minikit.Manager) error {
 	cm.busCh = cm.components.CBus.AddPublisher("model", 1, 1)
-
 	return nil
 }
 

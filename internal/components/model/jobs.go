@@ -6,7 +6,15 @@
 
 package model
 
-import "github.com/mls-361/armen-sdk/jw"
+import (
+	"time"
+
+	"github.com/mls-361/armen-sdk/jw"
+)
+
+const (
+	_njTimeout = 5 * time.Minute
+)
 
 func (cm *Model) newJob(job *jw.Job) {
 	var wf string
@@ -73,7 +81,26 @@ func (cm *Model) InsertJob(job *jw.Job) error {
 
 // NextJob AFAIRE.
 func (cm *Model) NextJob() *jw.Job {
-	return nil
+	cm.njMutex.Lock()
+	defer cm.njMutex.Unlock()
+
+	if cm.njTimeout.After(time.Now()) {
+		return nil
+	}
+
+	job, err := cm.components.CBackend.NextJob()
+	if err != nil {
+		cm.components.CLogger.Warning( //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+			"Cannot retrieve the next job to run",
+			"reason", err.Error(),
+		)
+
+		cm.njTimeout = time.Now().Add(_njTimeout)
+
+		return nil
+	}
+
+	return job
 }
 
 /*

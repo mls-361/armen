@@ -27,6 +27,7 @@ type (
 		AcquireLock(name, owner string, duration time.Duration) (bool, error)
 		ReleaseLock(name, owner string) error
 		InsertJob(job *jw.Job) (bool, error)
+		NextJob() (*jw.Job, error)
 	}
 
 	// Bus AFAIRE.

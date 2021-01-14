@@ -14,8 +14,8 @@ func (cb *Backend) InsertJob(job *jw.Job) (bool, error) {
 }
 
 // NextJob AFAIRE.
-func (cb *Backend) NextJob() *jw.Job {
-	return nil
+func (cb *Backend) NextJob() (*jw.Job, error) {
+	return nil, nil
 }
 
 /*
