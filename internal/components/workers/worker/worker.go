@@ -67,12 +67,20 @@ func (w *Worker) maybeRunJob() time.Duration {
 }
 
 func (w *Worker) run() {
+	timer := time.NewTimer(0)
+
 	for {
 		select {
+		case <-timer.C:
 		case <-w.stopCh:
+			if !timer.Stop() {
+				<-timer.C
+			}
+
 			return
-		case <-time.After(w.maybeRunJob() * time.Second):
 		}
+
+		timer.Reset(w.maybeRunJob() * time.Second)
 	}
 }
 

@@ -84,22 +84,24 @@ func (cl *Leader) Start() {
 	go func() { //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 		defer cl.waitGroup.Done()
 
-		var after time.Duration
-
-		cl.tryAcquireLock()
+		timer := time.NewTimer(0)
 
 		for {
-			if cl.amITheLeader {
-				after = _lockTimeout * 3 / 4
-			} else {
-				after = _lockTimeout / 4
+			select {
+			case <-timer.C:
+				cl.tryAcquireLock()
+			case <-cl.stopCh:
+				if !timer.Stop() {
+					<-timer.C
+				}
+
+				return
 			}
 
-			select {
-			case <-cl.stopCh:
-				return
-			case <-time.After(after):
-				cl.tryAcquireLock()
+			if cl.amITheLeader {
+				timer.Reset(_lockTimeout * 3 / 4)
+			} else {
+				timer.Reset(_lockTimeout / 4)
 			}
 		}
 	}()

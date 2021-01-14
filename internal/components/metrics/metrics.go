@@ -56,8 +56,10 @@ func (cm *Metrics) Build(_ *minikit.Manager) error {
 }
 
 func (cm *Metrics) Handler() http.HandlerFunc {
-	cm.updateRuntimeMetrics()
-	return cm.Metrics.Handler()
+	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+		cm.updateRuntimeMetrics()
+		cm.Metrics.Handler().ServeHTTP(rw, r)
+	})
 }
 
 /*

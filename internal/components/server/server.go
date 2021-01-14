@@ -109,12 +109,15 @@ func (cs *Server) Start() error {
 		cs.errCh <- err
 	}()
 
+	timer := time.NewTimer(50 * time.Millisecond)
+	defer timer.Stop()
+
 	select {
-	case err := <-cs.errCh:
-		return err
-	case <-time.After(50 * time.Millisecond):
+	case <-timer.C:
 		cs.components.CLogger.Info(">>>Server", "port", cs.config.Port) //::::::::::::::::::::::::::::::::::::::::::::::
 		return nil
+	case err := <-cs.errCh:
+		return err
 	}
 }
 
