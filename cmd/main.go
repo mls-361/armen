@@ -53,6 +53,8 @@ func run() error {
 	app := application.New("armen", _version, _builtAt, cs)
 	manager := minikit.NewManager(app)
 
+	cs.CManager = manager
+
 	if err := manager.AddComponents(
 		app,
 		backend.New(cs),

@@ -11,9 +11,11 @@ import (
 	"time"
 
 	"github.com/mls-361/metrics"
+	"github.com/mls-361/minikit"
 
 	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/armen-sdk/jw"
+	"github.com/mls-361/armen-sdk/logger"
 )
 
 type (
@@ -54,7 +56,12 @@ type (
 
 	// Logger AFAIRE.
 	Logger interface {
-		components.Logger
+		logger.Logger
+	}
+
+	// Manager AFAIRE.
+	Manager interface {
+		GetComponent(category string, mustExist bool) (minikit.Component, error)
 	}
 
 	// Metrics AFAIRE.
@@ -102,6 +109,7 @@ type (
 		CCrypto      Crypto
 		CLeader      Leader
 		CLogger      Logger
+		CManager     Manager
 		CMetrics     Metrics
 		CModel       Model
 		CRouter      Router
@@ -145,7 +153,7 @@ func (cs *Components) Leader() components.Leader {
 }
 
 // Logger AFAIRE.
-func (cs *Components) Logger() components.Logger {
+func (cs *Components) Logger() logger.Logger {
 	return cs.CLogger
 }
 

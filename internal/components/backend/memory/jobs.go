@@ -53,11 +53,15 @@ func (cb *Backend) NextJob() (*jw.Job, error) {
 	}
 
 	if job != nil {
+		j := *job
+
 		job.Status = jw.StatusRunning
 		job.Weight++
+
+		return &j, nil
 	}
 
-	return job, nil
+	return nil, nil
 }
 
 /*
