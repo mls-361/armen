@@ -30,6 +30,8 @@ type (
 		ReleaseLock(name, owner string) error
 		InsertJob(job *jw.Job) (bool, error)
 		NextJob() (*jw.Job, error)
+		UpdateJob(job *jw.Job) error
+		Workflow(id string, mustExist bool) (*jw.Workflow, error)
 	}
 
 	// Bus AFAIRE.

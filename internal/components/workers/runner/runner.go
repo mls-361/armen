@@ -199,6 +199,8 @@ func (rr *Runner) DoIt() {
 	} else {
 		rr.logger.Info("End", "status", rr.job.Status) //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	}
+
+	rr.components.CModel.UpdateJob(rr.job)
 }
 
 /*

@@ -103,6 +103,50 @@ func (cm *Model) NextJob() *jw.Job {
 	return job
 }
 
+// UpdateJob AFAIRE.
+func (cm *Model) UpdateJob(job *jw.Job) {
+	if err := cm.components.CBackend.UpdateJob(job); err != nil {
+		cm.components.CLogger.Error( //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+			"Impossible to update this job",
+			"id", job.ID,
+			"name", job.Name,
+			"namespace", job.Namespace,
+			"type", job.Type,
+			"reason", err.Error(),
+		)
+
+		return
+	}
+
+	if job.Workflow == nil || job.Status == jw.StatusPending {
+		return
+	}
+
+	wf, err := cm.components.CBackend.Workflow(*job.Workflow, true)
+	if err != nil {
+		cm.components.CLogger.Error( //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+			"Cannot retrieve the workflow associated with this job",
+			"id", job.ID,
+			"name", job.Name,
+			"namespace", job.Namespace,
+			"type", job.Type,
+			"workflow", *job.Workflow,
+			"reason", err.Error(),
+		)
+
+		return
+	}
+
+	if err := cm.updateWorkflow(job, wf); err != nil {
+		cm.components.CLogger.Error( //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+			"Impossible to update this workflow",
+			"id", wf.ID,
+			"name", wf.Name,
+			"reason", err.Error(),
+		)
+	}
+}
+
 /*
 ######################################################################################################## @(°_°)@ #######
 */
