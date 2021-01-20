@@ -4,8 +4,8 @@ github.com/mitchellh/mapstructure v1.4.0 h1:7ks8ZkOP5/ujthUsT07rNv+nkLXCQWKNHuwz
 github.com/mitchellh/mapstructure v1.4.0/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
 github.com/mls-361/application v0.0.0-20210104213928-2879b3af8d92 h1:xs0ZXcbrXuOaxxyoYioUJ2yL8RKAPn10nuJY3rF8B74=
 github.com/mls-361/application v0.0.0-20210104213928-2879b3af8d92/go.mod h1:lNd2RcDVJUY96gxE/gq1G5VSho+u2MkPwPRK/Y14CRc=
-github.com/mls-361/armen-sdk v0.0.0-20210119181112-8c58daeb9a52 h1:9R7mqbkVjwOSHVL7JKEMJbN24vWNM+IJRo+OtH1pAPM=
-github.com/mls-361/armen-sdk v0.0.0-20210119181112-8c58daeb9a52/go.mod h1:iM1VHviScf6MeSGittRAzeBk4X+1D/vQ5Qr5mc8jKGY=
+github.com/mls-361/armen-sdk v0.0.0-20210120150716-86fcea537f9c h1:1wP6n2n+q7y/PhO8plU6D8Vyd1mUZx3ybld2ugwW2xQ=
+github.com/mls-361/armen-sdk v0.0.0-20210120150716-86fcea537f9c/go.mod h1:iM1VHviScf6MeSGittRAzeBk4X+1D/vQ5Qr5mc8jKGY=
 github.com/mls-361/buffer v0.0.0-20210103213437-81ee3f6478c8 h1:SNPGm0iMWj0Mb26/TKSScvdE+w98++yMNe5LfzlQn8c=
 github.com/mls-361/buffer v0.0.0-20210103213437-81ee3f6478c8/go.mod h1:skxL3BFTFnQe9Z8QD8DpEygWzVGTlcRPWc3tcQgRDRY=
 github.com/mls-361/crypto v0.0.0-20210103214043-e8a0934ef17a h1:6Bon/E5awzrt+iIf5u3esSTwjPciArj1yuT2GQQX84Q=
@@ -24,8 +24,8 @@ github.com/mls-361/metrics v0.0.0-20210111181710-b7fea8fd978b h1:bVmWp0V1nMbYSbk
 github.com/mls-361/metrics v0.0.0-20210111181710-b7fea8fd978b/go.mod h1:5Y4ckyelXDC6QO6ykJBaGUs32AA/WrYGcdDOJ9FtenQ=
 github.com/mls-361/minikit v0.0.0-20210107180150-28817c294bb9 h1:0bOyMiWo3k/IBQmFXIAhpHpiMt11La58XCQorcaMgNo=
 github.com/mls-361/minikit v0.0.0-20210107180150-28817c294bb9/go.mod h1:V+CaZ8dMQScqWIB0J/47IoQhtF5AFJ6MLFHERyQXRos=
-github.com/mls-361/scheduler v0.0.0-20210103214308-7ca2f1a917bd h1:Ek7QU7EGYNb8RBp45dDHToM6KXJOYrMrAaHGw1t4q+g=
-github.com/mls-361/scheduler v0.0.0-20210103214308-7ca2f1a917bd/go.mod h1:BqHhZ542wstDLN5AOqoDRc5EdAgVWXp0rfEFYlrglZM=
+github.com/mls-361/scheduler v0.0.0-20210120170741-3cca028ea6f2 h1:ASQPazOrUIZITgaFl00QTmKoJi6OFykwL8z+aoTgwmo=
+github.com/mls-361/scheduler v0.0.0-20210120170741-3cca028ea6f2/go.mod h1:BqHhZ542wstDLN5AOqoDRc5EdAgVWXp0rfEFYlrglZM=
 github.com/mls-361/uuid v0.0.0-20210103213509-f52b091b96f3 h1:AZahXz9O0+Wc0BlyZ3JUESgMNAs58RHBHzs2O2yb9No=
 github.com/mls-361/uuid v0.0.0-20210103213509-f52b091b96f3/go.mod h1:rfCILTqOE/XTkQ8I/2IvePWDmueuVJAi8g+NejjDP2A=
 github.com/robfig/cron/v3 v3.0.1 h1:WdRxkvbJztn8LMz/QEvLN5sBU+xKpSqwwUO1Pjr4qDs=

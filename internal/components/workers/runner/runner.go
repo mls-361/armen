@@ -142,6 +142,8 @@ func (rr *Runner) pending(jwr *jw.Result) {
 func (rr *Runner) DoIt() {
 	defer rr.logger.RemoveLogger("")
 
+	rr.publish("job.before") //*****************************************************************************************
+
 	if rr.job.Status == jw.StatusToDo {
 		rr.logger.Info( //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 			"Begin",
@@ -158,8 +160,6 @@ func (rr *Runner) DoIt() {
 			"attempts", rr.job.Attempts,
 		)
 	}
-
-	rr.publish("job.before") //*****************************************************************************************
 
 	rr.job.Status = jw.StatusRunning
 
@@ -188,8 +188,6 @@ func (rr *Runner) DoIt() {
 		}
 	}
 
-	rr.publish("job.after") //******************************************************************************************
-
 	if rr.job.Status == jw.StatusPending {
 		rr.logger.Info( //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 			"Continuation",
@@ -199,6 +197,8 @@ func (rr *Runner) DoIt() {
 	} else {
 		rr.logger.Info("End", "status", rr.job.Status) //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	}
+
+	rr.publish("job.after") //******************************************************************************************
 
 	rr.components.CModel.UpdateJob(rr.job)
 }
