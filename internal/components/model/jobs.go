@@ -100,11 +100,17 @@ func (cm *Model) NextJob() *jw.Job {
 		return nil
 	}
 
+	if job != nil {
+		cm.publish("job.before", *job) //*******************************************************************************
+	}
+
 	return job
 }
 
 // UpdateJob AFAIRE.
 func (cm *Model) UpdateJob(job *jw.Job) {
+	cm.publish("job.after", *job) //************************************************************************************
+
 	if err := cm.components.CBackend.UpdateJob(job); err != nil {
 		cm.components.CLogger.Error( //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 			"Impossible to update this job",
