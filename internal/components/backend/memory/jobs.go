@@ -7,6 +7,7 @@
 package memory
 
 import (
+	"errors"
 	"time"
 
 	"github.com/mls-361/armen-sdk/jw"
@@ -62,6 +63,21 @@ func (cb *Backend) NextJob() (*jw.Job, error) {
 	}
 
 	return nil, nil
+}
+
+// UpdateJob AFAIRE.
+func (cb *Backend) UpdateJob(job *jw.Job) error {
+	cb.mutex.Lock()
+	defer cb.mutex.Unlock()
+
+	_, ok := cb.jobs[job.ID]
+	if !ok {
+		return errors.New("this job does not exist") ///////////////////////////////////////////////////////////////////
+	}
+
+	cb.jobs[job.ID] = job
+
+	return nil
 }
 
 /*

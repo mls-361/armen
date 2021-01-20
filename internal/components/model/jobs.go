@@ -141,7 +141,6 @@ func (cm *Model) UpdateJob(job *jw.Job) {
 		cm.components.CLogger.Error( //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 			"Impossible to update this workflow",
 			"id", wf.ID,
-			"name", wf.Name,
 			"reason", err.Error(),
 		)
 	}

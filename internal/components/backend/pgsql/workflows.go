@@ -8,18 +8,18 @@ package pgsql
 
 import "github.com/mls-361/armen-sdk/jw"
 
-// InsertJob AFAIRE.
-func (cb *Backend) InsertJob(job *jw.Job) (bool, error) {
-	return false, nil
-}
-
-// NextJob AFAIRE.
-func (cb *Backend) NextJob() (*jw.Job, error) {
+// Workflow AFAIRE.
+func (cb *Backend) Workflow(id string, mustExist bool) (*jw.Workflow, error) {
 	return nil, nil
 }
 
-// UpdateJob AFAIRE.
-func (cb *Backend) UpdateJob(job *jw.Job) error {
+// InsertWorkflow AFAIRE.
+func (cb *Backend) InsertWorkflow(wf *jw.Workflow, job *jw.Job) error {
+	return nil
+}
+
+// UpdateWorkflow AFAIRE.
+func (cb *Backend) UpdateWorkflow(wf *jw.Workflow) error {
 	return nil
 }
 

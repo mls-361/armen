@@ -32,6 +32,8 @@ type (
 		NextJob() (*jw.Job, error)
 		UpdateJob(job *jw.Job) error
 		Workflow(id string, mustExist bool) (*jw.Workflow, error)
+		InsertWorkflow(wf *jw.Workflow, job *jw.Job) error
+		UpdateWorkflow(wf *jw.Workflow) error
 	}
 
 	// Bus AFAIRE.

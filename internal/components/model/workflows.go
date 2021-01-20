@@ -1,25 +1,19 @@
 /*
 ------------------------------------------------------------------------------------------------------------------------
-####### pgsql ####### (c) 2020-2021 mls-361 ######################################################## MIT License #######
+####### model ####### (c) 2020-2021 mls-361 ######################################################## MIT License #######
 ------------------------------------------------------------------------------------------------------------------------
 */
 
-package pgsql
+package model
 
 import "github.com/mls-361/armen-sdk/jw"
 
-// InsertJob AFAIRE.
-func (cb *Backend) InsertJob(job *jw.Job) (bool, error) {
-	return false, nil
+// InsertWorkflow AFAIRE.
+func (cm *Model) InsertWorkflow(wf *jw.Workflow) error {
+	return nil
 }
 
-// NextJob AFAIRE.
-func (cb *Backend) NextJob() (*jw.Job, error) {
-	return nil, nil
-}
-
-// UpdateJob AFAIRE.
-func (cb *Backend) UpdateJob(job *jw.Job) error {
+func (cm *Model) updateWorkflow(job *jw.Job, wf *jw.Workflow) error {
 	return nil
 }
 
