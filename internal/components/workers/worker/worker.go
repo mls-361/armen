@@ -59,7 +59,7 @@ func (w *Worker) maybeRunJob() time.Duration {
 
 	w.publish("worker.busy", *job) //***********************************************************************************
 
-	runner.New(job, w.components, w.busCh).DoIt()
+	runner.New(job, w.components, w.busCh).RunJob()
 
 	w.publish("worker.free", nil) //************************************************************************************
 

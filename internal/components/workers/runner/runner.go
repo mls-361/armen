@@ -53,7 +53,7 @@ func (rr *Runner) publish(topic string) {
 	rr.busCh <- message.New(topic, *rr.job)
 }
 
-func (rr *Runner) runner() (jw.Runner, error) {
+func (rr *Runner) namespaceRunner() (jw.Runner, error) {
 	c, err := rr.components.CManager.GetComponent("jw."+rr.job.Namespace, true)
 	if err != nil {
 		return nil, err
@@ -73,6 +73,11 @@ func (rr *Runner) setError(errMsg string) { rr.job.Error = &errMsg }
 
 func (rr *Runner) removePossibleError() { rr.job.Error = nil }
 
+func (rr *Runner) finished() {
+	now := time.Now()
+	rr.job.FinishedAt = &now
+}
+
 func (rr *Runner) succeeded(jwr *jw.Result) {
 	if jwr == nil || jwr.Err == nil {
 		rr.removePossibleError()
@@ -81,6 +86,8 @@ func (rr *Runner) succeeded(jwr *jw.Result) {
 	}
 
 	rr.job.Status = jw.StatusSucceeded
+
+	rr.finished()
 }
 
 func (rr *Runner) failed(jwr *jw.Result) {
@@ -105,6 +112,8 @@ func (rr *Runner) failed(jwr *jw.Result) {
 	)
 
 	rr.job.Status = jw.StatusFailed
+
+	rr.finished()
 }
 
 func (rr *Runner) pending(jwr *jw.Result) {
@@ -139,7 +148,7 @@ func (rr *Runner) pending(jwr *jw.Result) {
 }
 
 // DoIt AFAIRE.
-func (rr *Runner) DoIt() {
+func (rr *Runner) RunJob() {
 	defer rr.logger.RemoveLogger("")
 
 	if rr.job.Status == jw.StatusToDo {
@@ -159,18 +168,18 @@ func (rr *Runner) DoIt() {
 		)
 	}
 
-	rr.job.Status = jw.StatusRunning
-
-	runner, err := rr.runner()
+	nsRunner, err := rr.namespaceRunner()
 
 	var jwr *jw.Result
 
-	if runner == nil {
+	if nsRunner == nil {
 		jwr = jw.Failed(err)
 	} else {
+		rr.job.Status = jw.StatusRunning
+
 		rr.publish("job.run") //****************************************************************************************
 
-		jwr = runner.RunJob(rr.job, rr.logger)
+		jwr = nsRunner.RunJob(rr.job, rr.logger)
 	}
 
 	if jwr == nil {

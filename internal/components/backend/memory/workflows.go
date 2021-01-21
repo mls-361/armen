@@ -7,21 +7,46 @@
 package memory
 
 import (
+	"errors"
+
 	"github.com/mls-361/armen-sdk/jw"
 )
 
 // Workflow AFAIRE.
 func (cb *Backend) Workflow(id string, mustExist bool) (*jw.Workflow, error) {
-	return nil, nil
+	cb.mutex.Lock()
+	defer cb.mutex.Unlock()
+
+	wf, ok := cb.workflows[id]
+	if !ok {
+		if mustExist {
+			return nil, errors.New("this workflow does not exist") /////////////////////////////////////////////////////
+		}
+
+		return nil, nil
+	}
+
+	return wf, nil
 }
 
 // InsertWorkflow AFAIRE.
 func (cb *Backend) InsertWorkflow(wf *jw.Workflow, job *jw.Job) error {
+	cb.mutex.Lock()
+	defer cb.mutex.Unlock()
+
+	cb.workflows[wf.ID] = wf
+	cb.jobs[job.ID] = job
+
 	return nil
 }
 
 // UpdateWorkflow AFAIRE.
 func (cb *Backend) UpdateWorkflow(wf *jw.Workflow) error {
+	cb.mutex.Lock()
+	defer cb.mutex.Unlock()
+
+	cb.workflows[wf.ID] = wf
+
 	return nil
 }
 

@@ -27,6 +27,7 @@ type (
 		mutex      sync.Mutex
 		locks      map[string]*lock
 		jobs       map[string]*jw.Job
+		workflows  map[string]*jw.Workflow
 	}
 )
 
@@ -35,6 +36,7 @@ func New(components *components.Components) *Backend {
 		components: components,
 		locks:      make(map[string]*lock),
 		jobs:       make(map[string]*jw.Job),
+		workflows:  make(map[string]*jw.Workflow),
 	}
 }
 
