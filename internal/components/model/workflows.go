@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/mls-361/armen-sdk/jw"
+	"github.com/mls-361/datamap"
 	"github.com/mls-361/failure"
 	"github.com/mls-361/uuid"
 )
@@ -46,10 +47,10 @@ func (cm *Model) firstJob(wf *jw.Workflow) (*jw.Job, error) {
 		return nil, err
 	}
 
-	job.Public = wf.Data
+	workflowFailed := false
 
-	wfFailed := false
-	job.WorkflowFailed = &wfFailed
+	job.Public = wf.Data
+	job.WorkflowFailed = &workflowFailed
 
 	return job, nil
 }
@@ -99,21 +100,92 @@ func (cm *Model) InsertWorkflow(wf *jw.Workflow) error {
 	return nil
 }
 
-func (cm *Model) nextStep(job *jw.Job, wf *jw.Workflow) (string, error) {
+func (cm *Model) nextLabelStep(job *jw.Job, label string, value interface{}) (string, datamap.DataMap, error) {
+	switch next := value.(type) {
+	case nil:
+		return "", nil, nil
+	case string:
+		return next, nil, nil
+	case datamap.DataMap:
+		vs, ok := next["step"]
+		if !ok {
+			return "", nil, failure.New(nil).
+				Set("job", job.Name).
+				Set("label", label).
+				Msg("the 'step' key is missing") ///////////////////////////////////////////////////////////////////////
+		}
+
+		switch name := vs.(type) {
+		case nil:
+			return "", nil, nil
+		case string:
+			vd, ok := next["data"]
+			if !ok {
+				return name, nil, nil
+			}
+
+			switch data := vd.(type) {
+			case nil:
+				return name, nil, nil
+			case datamap.DataMap:
+				return name, data, nil
+			default:
+				return "", nil, failure.New(nil).
+					Set("job", job.Name).
+					Set("label", label).
+					Msg("the 'data' key is not valid") /////////////////////////////////////////////////////////////////
+			}
+		default:
+			return "", nil, failure.New(nil).
+				Set("job", job.Name).
+				Set("label", label).
+				Msg("the 'step' key is not valid") /////////////////////////////////////////////////////////////////////
+		}
+	default:
+		return "", nil, failure.New(nil).
+			Set("job", job.Name).
+			Set("label", label).
+			Msg("the configuration for this label is not valid") ///////////////////////////////////////////////////////
+	}
+}
+
+func (cm *Model) nextStep(job *jw.Job, wf *jw.Workflow) (string, datamap.DataMap, error) {
 	step, ok := wf.AllSteps[job.Name]
 	if !ok {
-		return "", failure.New(nil).
+		return "", nil, failure.New(nil).
 			Set("step", job.Name).
-			Msg("this step does not exist") ////////////////////////////////////////////////////////////////////////////
+			Msg("strangely, this step does not seem to exist") /////////////////////////////////////////////////////////
 	}
 
 	if step.Next == nil {
-		return "", nil
+		return "", nil, nil
 	}
 
-	// AFINIR
+	var result string
 
-	return "unknown", nil
+	if job.Result != nil {
+		result = *job.Result
+
+		value, ok := step.Next[result]
+		if ok {
+			return cm.nextLabelStep(job, result, value)
+		}
+	}
+
+	status := job.Status.String()
+
+	value, ok := step.Next[status]
+	if ok {
+		return cm.nextLabelStep(job, status, value)
+	}
+
+	f := failure.New(nil).Set("job", job.Name)
+
+	if job.Result != nil {
+		_ = f.Set("result", result)
+	}
+
+	return "", nil, f.Set("status", status).Msg("impossible to determine the next step") ///////////////////////////////
 }
 
 func (cm *Model) workflowFinished(job *jw.Job, wf *jw.Workflow) error {
@@ -142,23 +214,30 @@ func (cm *Model) workflowFinished(job *jw.Job, wf *jw.Workflow) error {
 	return nil
 }
 
-func (m *Model) nextJob(wf *jw.Workflow, pJob *jw.Job, stepName string) (*jw.Job, error) {
-	// AFINIR
+func (m *Model) nextJob(wf *jw.Workflow, prevJob *jw.Job, stepName string, data datamap.DataMap) (*jw.Job, error) {
+	job, err := m.stepToJob(wf, stepName)
+	if err != nil {
+		return nil, err
+	}
 
-	return nil, nil
+	job.Private = data
+	job.Public = prevJob.Public
+	job.WorkflowFailed = prevJob.WorkflowFailed
+
+	return job, nil
 }
 
 func (cm *Model) updateWorkflow(job *jw.Job, wf *jw.Workflow) error {
-	step, err := cm.nextStep(job, wf)
+	stepName, data, err := cm.nextStep(job, wf)
 	if err != nil {
 		return err
 	}
 
-	if step == "" {
+	if stepName == "" {
 		return cm.workflowFinished(job, wf)
 	}
 
-	job, err = cm.nextJob(wf, job, step)
+	job, err = cm.nextJob(wf, job, stepName, data)
 	if err != nil {
 		return err
 	}
