@@ -96,7 +96,7 @@ func (w *Worker) Run() {
 
 	w.logger.Info("<<<Worker") //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-	w.logger.RemoveLogger("")
+	w.logger.Remove()
 }
 
 /*

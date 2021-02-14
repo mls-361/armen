@@ -149,7 +149,7 @@ func (rr *Runner) pending(jwr *jw.Result) {
 
 // DoIt AFAIRE.
 func (rr *Runner) RunJob() {
-	defer rr.logger.RemoveLogger("")
+	defer rr.logger.Remove()
 
 	if rr.job.Status == jw.StatusToDo {
 		rr.logger.Info( //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
