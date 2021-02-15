@@ -150,6 +150,10 @@ func (cm *Model) nextLabelStep(job *jw.Job, label string, value interface{}) (st
 }
 
 func (cm *Model) nextStep(job *jw.Job, wf *jw.Workflow) (string, datamap.DataMap, error) {
+	if job.NextStep != nil {
+		return *job.NextStep, nil, nil
+	}
+
 	step, ok := wf.AllSteps[job.Name]
 	if !ok {
 		return "", nil, failure.New(nil).
