@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/mls-361/armen-sdk/jw"
+	"github.com/mls-361/failure"
 	"github.com/mls-361/pgsql"
 )
 
@@ -146,7 +147,95 @@ func (cb *Backend) InsertJob(job *jw.Job) (bool, error) {
 
 // NextJob AFAIRE.
 func (cb *Backend) NextJob() (*jw.Job, error) {
-	return nil, nil
+	client, err := cb.primary()
+	if err != nil {
+		return nil, err
+	}
+
+	ctx, cancel := client.ContextWT(5 * time.Second)
+	defer cancel()
+
+	var nj *jw.Job
+
+	if err := client.Transaction(
+		ctx,
+		func(t *pgsql.Transaction) error {
+			var job jw.Job
+
+			if err := t.QueryRow(
+				`
+				SELECT id, name, namespace, type, origin, priority, key, workflow,
+                workflow_failed, emails, config, private, public, created_at, status, error,
+		        attempts, finished_at, run_after, result, next_step, weight, time_reference
+				FROM jobs
+				WHERE (status = $1 OR status = $2) AND run_after <= $3
+				ORDER BY priority DESC, weight ASC, time_reference ASC
+				LIMIT 1
+				FOR UPDATE`,
+				jw.StatusToDo,
+				jw.StatusPending,
+				time.Now(),
+			).Scan(
+				&job.ID,
+				&job.Name,
+				&job.Namespace,
+				&job.Type,
+				&job.Origin,
+				&job.Priority,
+				&job.Key,
+				&job.Workflow,
+				&job.WorkflowFailed,
+				&job.Emails,
+				&job.Config,
+				&job.Private,
+				&job.Public,
+				&job.CreatedAt,
+				&job.Status,
+				&job.Error,
+				&job.Attempts,
+				&job.FinishedAt,
+				&job.RunAfter,
+				&job.Result,
+				&job.NextStep,
+				&job.Weight,
+				&job.TimeReference,
+			); err != nil {
+				return err
+			}
+
+			clone := job
+			nj = &clone
+
+			job.Status = jw.StatusRunning
+			job.Weight++
+
+			count, err := t.Execute(
+				"UPDATE jobs SET status = $1, weight = $2 WHERE id = $3",
+				job.Status,
+				job.Weight,
+				job.ID,
+			)
+			if err != nil {
+				return err
+			}
+
+			if count != 1 {
+				return failure.New(nil).
+					Set("job", job.ID).
+					Msg("impossible to update the selected job") ///////////////////////////////////////////////////////
+			}
+
+			return cb.addJobToHistory(t, "run", &job)
+		},
+	); err != nil {
+		if errors.Is(err, pgsql.ErrNoRows) {
+			return nil, nil
+		}
+
+		return nil, err
+	}
+
+	return nj, nil
 }
 
 // UpdateJob AFAIRE.
