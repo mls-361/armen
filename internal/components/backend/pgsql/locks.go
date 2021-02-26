@@ -10,12 +10,53 @@ import "time"
 
 // AcquireLock AFAIRE.
 func (cb *Backend) AcquireLock(name, owner string, duration time.Duration) (bool, error) {
-	return false, nil
+	client, err := cb.primary()
+	if err != nil {
+		return false, err
+	}
+
+	ctx, cancel := client.ContextWT(5 * time.Second)
+	defer cancel()
+
+	now := time.Now()
+	expiry := now.Add(duration)
+
+	count, err := client.Execute(
+		ctx,
+		`
+		UPDATE locks SET owner = $1, expiry = $2
+		WHERE name = $3 AND (owner = $4 OR expiry IS NULL OR expiry <= $5)`,
+		owner,
+		expiry,
+		name,
+		owner,
+		now,
+	)
+	if err != nil {
+		return false, err
+	}
+
+	return count == 1, nil
 }
 
 // ReleaseLock AFAIRE.
 func (cb *Backend) ReleaseLock(name, owner string) error {
-	return nil
+	client, err := cb.primary()
+	if err != nil {
+		return err
+	}
+
+	ctx, cancel := client.ContextWT(5 * time.Second)
+	defer cancel()
+
+	_, err = client.Execute(
+		ctx,
+		"UPDATE locks SET owner = NULL, expiry = NULL WHERE name = $1 AND owner = $2",
+		name,
+		owner,
+	)
+
+	return err
 }
 
 /*

@@ -43,17 +43,8 @@ type (
 )
 
 func New(components *components.Components) *Backend {
-	logger := components.CLogger.CreateLogger(uuid.New(), "backend")
-
-	cluster := hapgsql.NewCluster(
-		hapgsql.WithLogger(logger),
-		hapgsql.WithUpdateInterval(_updateInterval),
-	)
-
 	return &Backend{
 		components: components,
-		logger:     logger,
-		cluster:    cluster,
 	}
 }
 
@@ -83,6 +74,15 @@ func (cb *Backend) newClient(c *config) (*pgsql.Client, error) {
 
 // Build AFAIRE.
 func (cb *Backend) Build() error {
+	logger := cb.components.CLogger.CreateLogger(uuid.New(), "backend")
+
+	cb.logger = logger
+
+	cluster := hapgsql.NewCluster(
+		hapgsql.WithLogger(logger),
+		hapgsql.WithUpdateInterval(_updateInterval),
+	)
+
 	var cfg []*config
 
 	if err := cb.components.CConfig.Decode(&cfg, true, "components", "backend", "pgsql"); err != nil {
@@ -92,39 +92,45 @@ func (cb *Backend) Build() error {
 	for _, c := range cfg {
 		client, err := cb.newClient(c)
 		if err != nil {
-			cb.cluster.Close()
+			cluster.Close()
 			return err
 		}
 
-		cb.cluster.AddNode(hapgsql.NewNode(c.Host, client))
+		cluster.AddNode(hapgsql.NewNode(c.Host, client))
 	}
+
+	cb.cluster = cluster
+
+	cluster.Update()
 
 	return nil
 }
 
-// Primary AFAIRE.
-func (cb *Backend) Primary() (*hapgsql.Node, error) {
+func (cb *Backend) primary() (*pgsql.Client, error) {
 	node := cb.cluster.Primary()
 	if node == nil {
 		return nil, failure.New(nil).Msg("there is no primary node") ///////////////////////////////////////////////////
 	}
 
-	return node, nil
+	return node.Client(), nil
 }
 
-// PrimaryPreferred AFAIRE.
-func (cb *Backend) PrimaryPreferred() (*hapgsql.Node, error) {
+/*
+func (cb *Backend) primaryPreferred() (*pgsql.Client, error) {
 	node := cb.cluster.PrimaryPreferred()
 	if node == nil {
 		return nil, failure.New(nil).Msg("there is no alive node") /////////////////////////////////////////////////////
 	}
 
-	return node, nil
+	return node.Client(), nil
 }
+*/
 
 // Close AFAIRE.
 func (cb *Backend) Close() {
-	cb.cluster.Close()
+	if cb.cluster != nil {
+		cb.cluster.Close()
+	}
 }
 
 /*
