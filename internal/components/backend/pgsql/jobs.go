@@ -100,6 +100,10 @@ func (cb *Backend) maybeInsertJob(job *jw.Job) (bool, error) {
 				return err
 			}
 
+			if err := cb.addJobToHistory(t, "add", job); err != nil {
+				return err
+			}
+
 			inserted = true
 
 			return nil
@@ -121,7 +125,12 @@ func (cb *Backend) insertJob(job *jw.Job) error {
 	return client.Transaction(
 		ctx,
 		func(t *pgsql.Transaction) error {
-			return cb.tryInsertJob(t, job)
+			if err := cb.tryInsertJob(t, job); err != nil {
+				return err
+
+			}
+
+			return cb.addJobToHistory(t, "add", job)
 		},
 	)
 }

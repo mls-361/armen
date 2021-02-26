@@ -1,6 +1,8 @@
--- Table: public.locks
+-- Database: armen
 
 -- DROP TABLE public.locks;
+
+-- Table: public.locks
 
 CREATE TABLE public.locks
 (
