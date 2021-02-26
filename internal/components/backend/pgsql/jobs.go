@@ -101,7 +101,7 @@ func (cb *Backend) maybeInsertJob(job *jw.Job) (bool, error) {
 				return err
 			}
 
-			if err := cb.addJobToHistory(t, "add", job); err != nil {
+			if err := cb.addJobToHistory(t, "insert", job); err != nil {
 				return err
 			}
 
@@ -131,7 +131,7 @@ func (cb *Backend) insertJob(job *jw.Job) error {
 
 			}
 
-			return cb.addJobToHistory(t, "add", job)
+			return cb.addJobToHistory(t, "insert", job)
 		},
 	)
 }
@@ -155,13 +155,11 @@ func (cb *Backend) NextJob() (*jw.Job, error) {
 	ctx, cancel := client.ContextWT(5 * time.Second)
 	defer cancel()
 
-	var nj *jw.Job
+	var job jw.Job
 
 	if err := client.Transaction(
 		ctx,
 		func(t *pgsql.Transaction) error {
-			var job jw.Job
-
 			if err := t.QueryRow(
 				`
 				SELECT id, name, namespace, type, origin, priority, key, workflow,
@@ -203,15 +201,11 @@ func (cb *Backend) NextJob() (*jw.Job, error) {
 				return err
 			}
 
-			clone := job
-			nj = &clone
-
-			job.Status = jw.StatusRunning
 			job.Weight++
 
 			count, err := t.Execute(
 				"UPDATE jobs SET status = $1, weight = $2 WHERE id = $3",
-				job.Status,
+				jw.StatusRunning,
 				job.Weight,
 				job.ID,
 			)
@@ -222,10 +216,10 @@ func (cb *Backend) NextJob() (*jw.Job, error) {
 			if count != 1 {
 				return failure.New(nil).
 					Set("job", job.ID).
-					Msg("impossible to update the selected job") ///////////////////////////////////////////////////////
+					Msg("impossible to update this job") ///////////////////////////////////////////////////////////////
 			}
 
-			return cb.addJobToHistory(t, "run", &job)
+			return cb.addJobToHistory(t, "select", &job)
 		},
 	); err != nil {
 		if errors.Is(err, pgsql.ErrNoRows) {
@@ -235,12 +229,53 @@ func (cb *Backend) NextJob() (*jw.Job, error) {
 		return nil, err
 	}
 
-	return nj, nil
+	return &job, nil
 }
 
 // UpdateJob AFAIRE.
 func (cb *Backend) UpdateJob(job *jw.Job) error {
-	return nil
+	client, err := cb.primary()
+	if err != nil {
+		return err
+	}
+
+	ctx, cancel := client.ContextWT(5 * time.Second)
+	defer cancel()
+
+	return client.Transaction(
+		ctx,
+		func(t *pgsql.Transaction) error {
+			count, err := t.Execute(
+				`
+				UPDATE jobs SET workflow_failed = $1,private = $2, public = $3, status = $4,
+				error = $5, attempts = $6, finished_at = $7, run_after = $8, result = $9,
+				next_step = $10
+				WHERE id = $11`,
+				job.WorkflowFailed,
+				job.Private,
+				job.Public,
+				job.Status,
+				job.Error,
+				job.Attempts,
+				job.FinishedAt,
+				job.RunAfter,
+				job.Result,
+				job.NextStep,
+				job.ID,
+			)
+			if err != nil {
+				return err
+			}
+
+			if count != 1 {
+				return failure.New(nil).
+					Set("job", job.ID).
+					Msg("impossible to update this job") ///////////////////////////////////////////////////////////////
+			}
+
+			return cb.addJobToHistory(t, "update", job)
+		},
+	)
 }
 
 /*
