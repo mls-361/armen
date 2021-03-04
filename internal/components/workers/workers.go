@@ -9,7 +9,6 @@ package workers
 import (
 	"sync"
 
-	"github.com/mls-361/armen-sdk/message"
 	"github.com/mls-361/metrics"
 	"github.com/mls-361/minikit"
 
@@ -36,7 +35,6 @@ type (
 		config      *config
 		mutex       sync.Mutex
 		workers     []chan struct{}
-		busCh       chan<- *message.Message
 		waitGroup   sync.WaitGroup
 		mcsPoolSize metrics.GaugeInt
 	}
@@ -78,7 +76,6 @@ func (cw *Workers) Build(_ *minikit.Manager) error {
 		cw.config.Pool.Size = _maxPoolSize
 	}
 
-	cw.busCh = cw.components.CBus.AddPublisher("workers", 1, 1)
 	cw.mcsPoolSize = cw.components.CMetrics.NewGaugeInt("workers.pool.size")
 
 	return nil
@@ -91,7 +88,7 @@ func (cw *Workers) startWorker() {
 	cw.workers = append(cw.workers, stopCh)
 
 	go func() { //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-		worker.New(cw.components, cw.busCh, stopCh).Run()
+		worker.New(cw.components, cw.components.CModel.ChannelJW(), stopCh).Run()
 		cw.waitGroup.Done()
 	}()
 }
@@ -127,11 +124,6 @@ func (cw *Workers) Start() {
 func (cw *Workers) Stop() {
 	cw.Resize(0)
 	cw.waitGroup.Wait()
-}
-
-// Close AFAIRE.
-func (cw *Workers) Close() {
-	close(cw.busCh)
 }
 
 /*

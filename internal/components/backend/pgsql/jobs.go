@@ -58,8 +58,7 @@ func (cb *Backend) existJob(t *pgsql.Transaction, job *jw.Job) (bool, error) {
 		SELECT id
 		FROM jobs
 		WHERE namespace = $1 AND type = $2 AND key = $3 AND (status = $4 OR status = $5 OR status = $6)
-		LIMIT 1
-		FOR UPDATE`,
+		LIMIT 1`,
 		job.Namespace,
 		job.Type,
 		job.Key,
@@ -85,7 +84,7 @@ func (cb *Backend) maybeInsertJob(job *jw.Job) (bool, error) {
 		return false, err
 	}
 
-	ctx, cancel := client.ContextWT(5 * time.Second)
+	ctx, cancel := client.ContextWT(10 * time.Second)
 	defer cancel()
 
 	inserted := false
@@ -93,6 +92,10 @@ func (cb *Backend) maybeInsertJob(job *jw.Job) (bool, error) {
 	err = client.Transaction(
 		ctx,
 		func(t *pgsql.Transaction) error {
+			if err := cb.advisoryLock(t, _lockInsertJob); err != nil {
+				return err
+			}
+
 			if exist, err := cb.existJob(t, job); exist || err != nil {
 				return err
 			}

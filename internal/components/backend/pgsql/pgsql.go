@@ -23,6 +23,7 @@ const (
 	_poolMaxConns   = 10
 	_connectTimeout = 5 * time.Second
 	_updateInterval = 5 * time.Second
+	_lockInsertJob  = 1
 )
 
 type (
@@ -125,6 +126,11 @@ func (cb *Backend) primaryPreferred() (*pgsql.Client, error) {
 	return node.Client(), nil
 }
 */
+
+func (cb *Backend) advisoryLock(t *pgsql.Transaction, id int) error {
+	_, err := t.Execute("SELECT pg_advisory_xact_lock($1)", id)
+	return err
+}
 
 // Close AFAIRE.
 func (cb *Backend) Close() {

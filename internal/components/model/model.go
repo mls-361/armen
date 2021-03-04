@@ -21,7 +21,7 @@ type (
 	Model struct {
 		*minikit.Base
 		components *components.Components
-		busCh      chan<- *message.Message
+		jwCh       chan<- *message.Message
 		njMutex    sync.Mutex
 		njTimeout  time.Time
 	}
@@ -50,17 +50,22 @@ func (cm *Model) Dependencies() []string {
 
 // Build AFAIRE.
 func (cm *Model) Build(_ *minikit.Manager) error {
-	cm.busCh = cm.components.CBus.AddPublisher("model", 1, 1)
+	cm.jwCh = cm.components.CBus.AddPublisher("jw", 10, 1)
 	return nil
 }
 
+// ChannelJW AFAIRE.
+func (cm *Model) ChannelJW() chan<- *message.Message {
+	return cm.jwCh
+}
+
 func (cm *Model) publish(topic string, data interface{}) {
-	cm.busCh <- message.New(topic, data)
+	cm.jwCh <- message.New(topic, data)
 }
 
 // Close AFAIRE.
 func (cm *Model) Close() {
-	close(cm.busCh)
+	close(cm.jwCh)
 }
 
 /*

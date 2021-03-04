@@ -21,20 +21,20 @@ type (
 	Worker struct {
 		*worker.Worker
 		components *components.Components
-		busCh      chan<- *message.Message
+		jwCh       chan<- *message.Message
 		stopCh     chan struct{}
 		logger     components.Logger
 	}
 )
 
 // New AFAIRE.
-func New(components *components.Components, busCh chan<- *message.Message, stopCh chan struct{}) *Worker {
+func New(components *components.Components, jwCh chan<- *message.Message, stopCh chan struct{}) *Worker {
 	worker := worker.New()
 
 	return &Worker{
 		Worker:     worker,
 		components: components,
-		busCh:      busCh,
+		jwCh:       jwCh,
 		stopCh:     stopCh,
 		logger:     components.CLogger.CreateLogger(worker.ID, "worker"),
 	}
@@ -42,7 +42,7 @@ func New(components *components.Components, busCh chan<- *message.Message, stopC
 
 func (w *Worker) publish(topic string, data interface{}) {
 	w.Data = data
-	w.busCh <- message.New(topic, *w.Worker)
+	w.jwCh <- message.New(topic, *w.Worker)
 	w.Data = nil
 }
 
@@ -59,7 +59,7 @@ func (w *Worker) maybeRunJob() time.Duration {
 
 	w.publish("worker.busy", *job) //***********************************************************************************
 
-	runner.New(job, w.components, w.busCh).RunJob()
+	runner.New(job, w.components, w.jwCh).RunJob()
 
 	w.publish("worker.free", nil) //************************************************************************************
 

@@ -16,6 +16,7 @@ import (
 	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/armen-sdk/jw"
 	"github.com/mls-361/armen-sdk/logger"
+	"github.com/mls-361/armen-sdk/message"
 )
 
 type (
@@ -76,6 +77,7 @@ type (
 	// Model AFAIRE.
 	Model interface {
 		components.Model
+		ChannelJW() chan<- *message.Message
 		NextJob() *jw.Job
 	}
 

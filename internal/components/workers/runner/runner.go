@@ -26,7 +26,7 @@ type (
 	Runner struct {
 		job        *jw.Job
 		components *components.Components
-		busCh      chan<- *message.Message
+		jwCh       chan<- *message.Message
 		logger     components.Logger
 	}
 )
@@ -40,17 +40,17 @@ func createLogger(job *jw.Job, components *components.Components) components.Log
 }
 
 // New AFAIRE.
-func New(job *jw.Job, components *components.Components, busCh chan<- *message.Message) *Runner {
+func New(job *jw.Job, components *components.Components, jwCh chan<- *message.Message) *Runner {
 	return &Runner{
 		job:        job,
 		components: components,
-		busCh:      busCh,
+		jwCh:       jwCh,
 		logger:     createLogger(job, components),
 	}
 }
 
 func (rr *Runner) publish(topic string) {
-	rr.busCh <- message.New(topic, *rr.job)
+	rr.jwCh <- message.New(topic, *rr.job)
 }
 
 func (rr *Runner) namespaceRunner() (jw.Runner, error) {
