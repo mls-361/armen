@@ -28,3 +28,5 @@ COMMENT ON COLUMN public.locks.owner
 COMMENT ON COLUMN public.locks.expiry
     IS 'La date d''expiration du verrou.';
 
+INSERT INTO public.locks(name, owner, expiry) VALUES ('leader', NULL, NULL);
+
