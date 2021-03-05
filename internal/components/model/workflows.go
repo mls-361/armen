@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/mls-361/armen-sdk/jw"
-	"github.com/mls-361/datamap"
 	"github.com/mls-361/failure"
 	"github.com/mls-361/uuid"
 )
@@ -100,13 +99,13 @@ func (cm *Model) InsertWorkflow(wf *jw.Workflow) error {
 	return nil
 }
 
-func (cm *Model) nextLabelStep(job *jw.Job, label string, value interface{}) (string, datamap.DataMap, error) {
+func (cm *Model) nextLabelStep(job *jw.Job, label string, value interface{}) (string, map[string]interface{}, error) {
 	switch next := value.(type) {
 	case nil:
 		return "", nil, nil
 	case string:
 		return next, nil, nil
-	case datamap.DataMap:
+	case map[string]interface{}:
 		vs, ok := next["step"]
 		if !ok {
 			return "", nil, failure.New(nil).
@@ -127,7 +126,7 @@ func (cm *Model) nextLabelStep(job *jw.Job, label string, value interface{}) (st
 			switch data := vd.(type) {
 			case nil:
 				return name, nil, nil
-			case datamap.DataMap:
+			case map[string]interface{}:
 				return name, data, nil
 			default:
 				return "", nil, failure.New(nil).
@@ -149,7 +148,7 @@ func (cm *Model) nextLabelStep(job *jw.Job, label string, value interface{}) (st
 	}
 }
 
-func (cm *Model) nextStep(job *jw.Job, wf *jw.Workflow) (string, datamap.DataMap, error) {
+func (cm *Model) nextStep(job *jw.Job, wf *jw.Workflow) (string, map[string]interface{}, error) {
 	if job.NextStep != nil {
 		return *job.NextStep, nil, nil
 	}
@@ -218,7 +217,8 @@ func (cm *Model) workflowFinished(job *jw.Job, wf *jw.Workflow) error {
 	return nil
 }
 
-func (m *Model) nextJob(wf *jw.Workflow, prevJob *jw.Job, stepName string, data datamap.DataMap) (*jw.Job, error) {
+func (m *Model) nextJob(wf *jw.Workflow, prevJob *jw.Job, stepName string,
+	data map[string]interface{}) (*jw.Job, error) {
 	job, err := m.stepToJob(wf, stepName)
 	if err != nil {
 		return nil, err

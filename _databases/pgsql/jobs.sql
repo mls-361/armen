@@ -29,8 +29,8 @@ CREATE TABLE public.jobs
     status job_status NOT NULL,
     error character varying COLLATE pg_catalog."default",
     attempts integer NOT NULL,
-    finished_at timestamp with time zone,
-    run_after timestamp with time zone NOT NULL,
+    finished_at timestamp(3) with time zone,
+    run_after timestamp(3) with time zone NOT NULL,
     result character varying(20) COLLATE pg_catalog."default",
     next_step character varying(30) COLLATE pg_catalog."default",
     weight integer NOT NULL,
@@ -66,7 +66,7 @@ Elle correspond à l''origine du workflow ou à l''entité qui a créée ce job.
 
 COMMENT ON COLUMN public.jobs.priority
     IS 'La priorité du job.
-Cette une valeur entre 0 (la priorité la plus basse) et 100 (la priorité la plus haute).';
+C''est une valeur entre 0 (la priorité la plus basse) et 100 (la priorité la plus haute).';
 
 COMMENT ON COLUMN public.jobs.key
     IS 'Clé d''unicité du job.

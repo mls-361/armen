@@ -18,11 +18,9 @@ import (
 func (cb *Backend) tryInsertJob(t *pgsql.Transaction, job *jw.Job) error {
 	_, err := t.Execute(
 		`
-		INSERT INTO jobs (id, name, namespace, type, origin, priority, key, workflow,
-        workflow_failed, emails, config, private, public, created_at, status, error,
-		attempts, finished_at, run_after, result, next_step, weight, time_reference)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15,
-		$16, $17, $18, $19, $20, $21, $22, $23)`,
+		INSERT INTO jobs
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12,
+		$13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23)`,
 		job.ID,
 		job.Name,
 		job.Namespace,
@@ -47,6 +45,7 @@ func (cb *Backend) tryInsertJob(t *pgsql.Transaction, job *jw.Job) error {
 		job.Weight,
 		job.TimeReference,
 	)
+
 	return err
 }
 
@@ -165,9 +164,7 @@ func (cb *Backend) NextJob() (*jw.Job, error) {
 		func(t *pgsql.Transaction) error {
 			if err := t.QueryRow(
 				`
-				SELECT id, name, namespace, type, origin, priority, key, workflow,
-                workflow_failed, emails, config, private, public, created_at, status, error,
-		        attempts, finished_at, run_after, result, next_step, weight, time_reference
+				SELECT *
 				FROM jobs
 				WHERE (status = $1 OR status = $2) AND run_after <= $3
 				ORDER BY priority DESC, weight ASC, time_reference ASC

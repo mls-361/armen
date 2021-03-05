@@ -88,7 +88,7 @@ func (cw *Workers) startWorker() {
 	cw.workers = append(cw.workers, stopCh)
 
 	go func() { //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-		worker.New(cw.components, cw.components.CModel.ChannelJW(), stopCh).Run()
+		worker.New(cw.components, stopCh).Run()
 		cw.waitGroup.Done()
 	}()
 }

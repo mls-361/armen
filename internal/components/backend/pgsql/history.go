@@ -25,6 +25,17 @@ func (cb *Backend) addJobToHistory(t *pgsql.Transaction, action string, job *jw.
 	return err
 }
 
+func (cb *Backend) addWorkflowToHistory(t *pgsql.Transaction, action string, wf *jw.Workflow) error {
+	_, err := t.Execute(
+		"INSERT INTO history (created_at, action, workflow, data) VALUES ($1, $2, $3, $4)",
+		time.Now(),
+		action,
+		wf.ID,
+		wf,
+	)
+	return err
+}
+
 /*
 ######################################################################################################## @(°_°)@ #######
 */
