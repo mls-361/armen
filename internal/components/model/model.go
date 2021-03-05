@@ -59,6 +59,12 @@ func (cm *Model) ChannelJW() chan<- *message.Message {
 	return cm.jwCh
 }
 
+// Clean AFAIRE.
+func (cm *Model) Clean() {
+	cm.deleteFinishedJobs()
+	cm.deleteFinishedWorkflows()
+}
+
 func (cm *Model) publish(topic string, data interface{}) {
 	cm.jwCh <- message.New(topic, data)
 }

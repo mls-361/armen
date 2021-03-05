@@ -32,9 +32,11 @@ type (
 		InsertJob(job *jw.Job) (bool, error)
 		NextJob() (*jw.Job, error)
 		UpdateJob(job *jw.Job) error
+		DeleteFinishedJobs() (int64, error)
 		Workflow(id string, mustExist bool) (*jw.Workflow, error)
 		InsertWorkflow(wf *jw.Workflow, job *jw.Job) error
 		UpdateWorkflow(wf *jw.Workflow) error
+		DeleteFinishedWorkflows() (int64, error)
 	}
 
 	// Bus AFAIRE.
@@ -79,6 +81,7 @@ type (
 		components.Model
 		ChannelJW() chan<- *message.Message
 		NextJob() *jw.Job
+		Clean()
 	}
 
 	// Router AFAIRE.

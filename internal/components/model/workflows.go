@@ -248,6 +248,16 @@ func (cm *Model) updateWorkflow(job *jw.Job, wf *jw.Workflow) error {
 	return cm.InsertJob(job)
 }
 
+func (cm *Model) deleteFinishedWorkflows() {
+	count, err := cm.components.CBackend.DeleteFinishedWorkflows()
+	if err != nil {
+		cm.components.CLogger.Error("Impossible to delete finished workflows") //:::::::::::::::::::::::::::::::::::::::
+		return
+	}
+
+	cm.components.CLogger.Info("Workflows deleted", "count", count) //::::::::::::::::::::::::::::::::::::::::::::::::::
+}
+
 /*
 ######################################################################################################## @(°_°)@ #######
 */

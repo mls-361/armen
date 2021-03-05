@@ -80,6 +80,23 @@ func (cb *Backend) UpdateJob(job *jw.Job) error {
 	return nil
 }
 
+// DeleteFinishedJobs AFAIRE.
+func (cb *Backend) DeleteFinishedJobs() (int64, error) {
+	cb.mutex.Lock()
+	defer cb.mutex.Unlock()
+
+	var count int64
+
+	for id, job := range cb.jobs {
+		if job.Status == jw.StatusFailed || job.Status == jw.StatusSucceeded {
+			delete(cb.jobs, id)
+			count++
+		}
+	}
+
+	return count, nil
+}
+
 /*
 ######################################################################################################## @(°_°)@ #######
 */

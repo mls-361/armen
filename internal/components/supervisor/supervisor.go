@@ -56,6 +56,7 @@ func (cs *Supervisor) consume(msg *message.Message) {
 
 	switch msg.Topic {
 	case "clean":
+		cs.components.CModel.Clean()
 	default:
 		cs.components.CLogger.Error( //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 			"The topic of this message is not valid",
