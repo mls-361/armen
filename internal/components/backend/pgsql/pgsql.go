@@ -116,7 +116,6 @@ func (cb *Backend) primary() (*pgsql.Client, error) {
 	return node.Client(), nil
 }
 
-/*
 func (cb *Backend) primaryPreferred() (*pgsql.Client, error) {
 	node := cb.cluster.PrimaryPreferred()
 	if node == nil {
@@ -125,7 +124,6 @@ func (cb *Backend) primaryPreferred() (*pgsql.Client, error) {
 
 	return node.Client(), nil
 }
-*/
 
 func (cb *Backend) advisoryLock(t *pgsql.Transaction, id int) error {
 	_, err := t.Execute("SELECT pg_advisory_xact_lock($1)", id)

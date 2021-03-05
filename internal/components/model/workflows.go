@@ -217,16 +217,15 @@ func (cm *Model) workflowFinished(job *jw.Job, wf *jw.Workflow) error {
 	return nil
 }
 
-func (m *Model) nextJob(wf *jw.Workflow, prevJob *jw.Job, stepName string,
-	data map[string]interface{}) (*jw.Job, error) {
+func (m *Model) nextJob(wf *jw.Workflow, pj *jw.Job, stepName string, data map[string]interface{}) (*jw.Job, error) {
 	job, err := m.stepToJob(wf, stepName)
 	if err != nil {
 		return nil, err
 	}
 
 	job.Private = data
-	job.Public = prevJob.Public
-	job.WorkflowFailed = prevJob.WorkflowFailed
+	job.Public = pj.Public
+	job.WorkflowFailed = pj.WorkflowFailed
 
 	return job, nil
 }

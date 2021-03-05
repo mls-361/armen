@@ -247,7 +247,8 @@ func (cb *Backend) UpdateJob(job *jw.Job) error {
 		func(t *pgsql.Transaction) error {
 			count, err := t.Execute(
 				`
-				UPDATE jobs SET workflow_failed = $1,private = $2, public = $3, status = $4,
+				UPDATE jobs
+				SET workflow_failed = $1,private = $2, public = $3, status = $4,
 				error = $5, attempts = $6, finished_at = $7, run_after = $8, result = $9,
 				next_step = $10
 				WHERE id = $11`,

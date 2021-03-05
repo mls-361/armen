@@ -16,7 +16,7 @@ import (
 
 // Workflow AFAIRE.
 func (cb *Backend) Workflow(id string, mustExist bool) (*jw.Workflow, error) {
-	client, err := cb.primary()
+	client, err := cb.primaryPreferred()
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +102,31 @@ func (cb *Backend) InsertWorkflow(wf *jw.Workflow, job *jw.Job) error {
 
 // UpdateWorkflow AFAIRE.
 func (cb *Backend) UpdateWorkflow(wf *jw.Workflow) error {
-	return nil
+	client, err := cb.primary()
+	if err != nil {
+		return err
+	}
+
+	ctx, cancel := client.ContextWT(5 * time.Second)
+	defer cancel()
+
+	return client.Transaction(
+		ctx,
+		func(t *pgsql.Transaction) error {
+			_, err := t.Execute(
+				"UPDATE workflows SET status = $1, finished_at = $2 WHERE id = $3",
+				wf.Status,
+				wf.FinishedAt,
+				wf.ID,
+			)
+
+			if err != nil {
+				return err
+			}
+
+			return cb.addWorkflowToHistory(t, "update", wf)
+		},
+	)
 }
 
 /*

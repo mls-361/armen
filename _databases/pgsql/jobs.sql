@@ -36,6 +36,11 @@ CREATE TABLE public.jobs
     weight integer NOT NULL,
     time_reference timestamp(3) with time zone NOT NULL,
     CONSTRAINT jobs_pkey PRIMARY KEY (id)
+    CONSTRAINT jobs_fkey FOREIGN KEY (workflow)
+        REFERENCES public.workflows (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+        NOT VALID
 )
 
 TABLESPACE pg_default;
