@@ -70,7 +70,7 @@ func (cs *Scheduler) Build(_ *minikit.Manager) error {
 		}
 	}
 
-	cs.busCh = cs.components.CBus.AddPublisher("scheduler", 1, 1)
+	cs.busCh = cs.components.CBus.AddPublisher("scheduler", 3, 1)
 
 	return nil
 }

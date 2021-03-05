@@ -32,6 +32,7 @@ import (
 	"github.com/mls-361/armen/internal/components/runner"
 	"github.com/mls-361/armen/internal/components/scheduler"
 	"github.com/mls-361/armen/internal/components/server"
+	"github.com/mls-361/armen/internal/components/supervisor"
 	"github.com/mls-361/armen/internal/components/workers"
 )
 
@@ -69,6 +70,7 @@ func run() error {
 		runner.New(cs),
 		scheduler.New(cs),
 		server.New(cs),
+		supervisor.New(cs),
 		workers.New(cs),
 	); err != nil {
 		return app.OnError(err)
