@@ -14,10 +14,6 @@ import (
 	"github.com/mls-361/pgsql"
 )
 
-const (
-	_retentionTime = 7 * 24 * time.Hour // AFINIR: configurable
-)
-
 func (cb *Backend) addJobToHistory(t *pgsql.Transaction, action string, job *jw.Job) error {
 	_, err := t.Execute(
 		"INSERT INTO history (created_at, action, job, workflow, data) VALUES ($1, $2, $3, $4, $5)",
@@ -42,7 +38,7 @@ func (cb *Backend) addWorkflowToHistory(t *pgsql.Transaction, action string, wf 
 }
 
 func (cb *Backend) deleteOldestHistory(ctx context.Context, client *pgsql.Client) error {
-	_, err := client.Execute(ctx, "DELETE FROM history WHERE created_at <= $1", time.Now().Add(-1*_retentionTime))
+	_, err := client.Execute(ctx, "DELETE FROM history WHERE created_at <= $1", time.Now().Add(cb.historyRT))
 	return err
 }
 

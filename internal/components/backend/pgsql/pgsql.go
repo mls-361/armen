@@ -20,10 +20,11 @@ import (
 )
 
 const (
-	_poolMaxConns   = 10
-	_connectTimeout = 5 * time.Second
-	_updateInterval = 5 * time.Second
-	_lockInsertJob  = 1
+	_poolMaxConns     = 10
+	_connectTimeout   = 5 * time.Second
+	_updateInterval   = 5 * time.Second
+	_lockInsertJob    = 1
+	_defaultHistoryRT = 7
 )
 
 type (
@@ -39,6 +40,7 @@ type (
 	Backend struct {
 		components *components.Components
 		logger     *logger.Logger
+		historyRT  time.Duration
 		cluster    *hapgsql.Cluster
 	}
 )
@@ -79,6 +81,17 @@ func (cb *Backend) Build() error {
 
 	cb.logger = logger
 
+	cconfig := cb.components.CConfig
+
+	hrt, err := cconfig.Data().IntWD(_defaultHistoryRT, "components", "backend", "history", "retention_time")
+	if err != nil {
+		return err
+	}
+
+	logger.Info("History retention time", "hour(s)", hrt) //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+	cb.historyRT = time.Duration(-1*hrt) * time.Hour
+
 	cluster := hapgsql.NewCluster(
 		hapgsql.WithLogger(logger),
 		hapgsql.WithUpdateInterval(_updateInterval),
@@ -86,7 +99,7 @@ func (cb *Backend) Build() error {
 
 	var cfg []*config
 
-	if err := cb.components.CConfig.Decode(&cfg, true, "components", "backend", "pgsql"); err != nil {
+	if err := cconfig.Decode(&cfg, true, "components", "backend", "pgsql"); err != nil {
 		return err
 	}
 
