@@ -152,16 +152,6 @@ func (cm *Model) UpdateJob(job *jw.Job) {
 	}
 }
 
-func (cm *Model) deleteFinishedJobs() {
-	count, err := cm.components.CBackend.DeleteFinishedJobs()
-	if err != nil {
-		cm.components.CLogger.Error("Impossible to delete finished standalone jobs") //:::::::::::::::::::::::::::::::::
-		return
-	}
-
-	cm.components.CLogger.Info("Jobs deleted", "count", count) //:::::::::::::::::::::::::::::::::::::::::::::::::::::::
-}
-
 /*
 ######################################################################################################## @(°_°)@ #######
 */

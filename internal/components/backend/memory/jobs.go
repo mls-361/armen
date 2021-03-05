@@ -80,12 +80,11 @@ func (cb *Backend) UpdateJob(job *jw.Job) error {
 	return nil
 }
 
-// DeleteFinishedJobs AFAIRE.
-func (cb *Backend) DeleteFinishedJobs() (int64, error) {
+func (cb *Backend) deleteFinishedJobs() int {
 	cb.mutex.Lock()
 	defer cb.mutex.Unlock()
 
-	var count int64
+	count := 0
 
 	for id, job := range cb.jobs {
 		if job.Status == jw.StatusFailed || job.Status == jw.StatusSucceeded {
@@ -94,7 +93,7 @@ func (cb *Backend) DeleteFinishedJobs() (int64, error) {
 		}
 	}
 
-	return count, nil
+	return count
 }
 
 /*

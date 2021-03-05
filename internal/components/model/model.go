@@ -61,8 +61,13 @@ func (cm *Model) ChannelJW() chan<- *message.Message {
 
 // Clean AFAIRE.
 func (cm *Model) Clean() {
-	cm.deleteFinishedJobs()
-	cm.deleteFinishedWorkflows()
+	cj, cw, err := cm.components.CBackend.Clean()
+	if err != nil {
+		cm.components.CLogger.Error("Clean error", "reason", err.Error()) //::::::::::::::::::::::::::::::::::::::::::::
+		return
+	}
+
+	cm.components.CLogger.Info("Clean", "jobs", cj, "workflows", cw) //:::::::::::::::::::::::::::::::::::::::::::::::::
 }
 
 func (cm *Model) publish(topic string, data interface{}) {

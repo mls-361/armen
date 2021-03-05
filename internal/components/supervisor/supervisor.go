@@ -46,6 +46,10 @@ func (cs *Supervisor) Build(_ *minikit.Manager) error {
 	)
 }
 
+func (cs *Supervisor) clean() {
+	cs.components.CModel.Clean()
+}
+
 func (cs *Supervisor) consume(msg *message.Message) {
 	cs.components.CLogger.Debug( //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 		"Consume message",
@@ -56,7 +60,7 @@ func (cs *Supervisor) consume(msg *message.Message) {
 
 	switch msg.Topic {
 	case "clean":
-		cs.components.CModel.Clean()
+		cs.clean()
 	default:
 		cs.components.CLogger.Error( //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 			"The topic of this message is not valid",

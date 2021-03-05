@@ -32,11 +32,10 @@ type (
 		InsertJob(job *jw.Job) (bool, error)
 		NextJob() (*jw.Job, error)
 		UpdateJob(job *jw.Job) error
-		DeleteFinishedJobs() (int64, error)
 		Workflow(id string, mustExist bool) (*jw.Workflow, error)
 		InsertWorkflow(wf *jw.Workflow, job *jw.Job) error
 		UpdateWorkflow(wf *jw.Workflow) error
-		DeleteFinishedWorkflows() (int64, error)
+		Clean() (int, int, error)
 	}
 
 	// Bus AFAIRE.

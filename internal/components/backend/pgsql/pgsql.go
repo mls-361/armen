@@ -130,6 +130,29 @@ func (cb *Backend) advisoryLock(t *pgsql.Transaction, id int) error {
 	return err
 }
 
+// Clean AFAIRE.
+func (cb *Backend) Clean() (int, int, error) {
+	client, err := cb.primary()
+	if err != nil {
+		return 0, 0, err
+	}
+
+	ctx, cancel := client.ContextWT(10 * time.Second)
+	defer cancel()
+
+	cj, err := cb.deleteFinishedJobs(ctx, client)
+	if err != nil {
+		return 0, 0, err
+	}
+
+	cw, err := cb.deleteFinishedWorkflows(ctx, client)
+	if err != nil {
+		return 0, 0, err
+	}
+
+	return int(cj), int(cw), cb.deleteOldestHistory(ctx, client)
+}
+
 // Close AFAIRE.
 func (cb *Backend) Close() {
 	if cb.cluster != nil {

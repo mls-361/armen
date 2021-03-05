@@ -45,6 +45,11 @@ func (cb *Backend) Build() error {
 	return nil
 }
 
+// Clean AFAIRE.
+func (cb *Backend) Clean() (int, int, error) {
+	return cb.deleteFinishedJobs(), cb.deleteFinishedWorkflows(), nil
+}
+
 // Close AFAIRE.
 func (cb *Backend) Close() {}
 

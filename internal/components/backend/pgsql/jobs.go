@@ -7,6 +7,7 @@
 package pgsql
 
 import (
+	"context"
 	"errors"
 	"time"
 
@@ -279,16 +280,7 @@ func (cb *Backend) UpdateJob(job *jw.Job) error {
 	)
 }
 
-// DeleteFinishedJobs AFAIRE.
-func (cb *Backend) DeleteFinishedJobs() (int64, error) {
-	client, err := cb.primary()
-	if err != nil {
-		return 0, err
-	}
-
-	ctx, cancel := client.ContextWT(5 * time.Second)
-	defer cancel()
-
+func (cb *Backend) deleteFinishedJobs(ctx context.Context, client *pgsql.Client) (int64, error) {
 	return client.Execute(
 		ctx,
 		"DELETE FROM jobs WHERE workflow IS NULL AND (status = $1 OR status = $2)",

@@ -50,12 +50,11 @@ func (cb *Backend) UpdateWorkflow(wf *jw.Workflow) error {
 	return nil
 }
 
-// DeleteFinishedWorkflows AFAIRE.
-func (cb *Backend) DeleteFinishedWorkflows() (int64, error) {
+func (cb *Backend) deleteFinishedWorkflows() int {
 	cb.mutex.Lock()
 	defer cb.mutex.Unlock()
 
-	var count int64
+	count := 0
 
 	for id, wf := range cb.workflows {
 		if wf.Status == jw.StatusFailed || wf.Status == jw.StatusSucceeded {
@@ -64,7 +63,7 @@ func (cb *Backend) DeleteFinishedWorkflows() (int64, error) {
 		}
 	}
 
-	return count, nil
+	return count
 }
 
 /*

@@ -7,6 +7,7 @@
 package pgsql
 
 import (
+	"context"
 	"errors"
 	"time"
 
@@ -129,16 +130,7 @@ func (cb *Backend) UpdateWorkflow(wf *jw.Workflow) error {
 	)
 }
 
-// DeleteFinishedWorkflows AFAIRE.
-func (cb *Backend) DeleteFinishedWorkflows() (int64, error) {
-	client, err := cb.primary()
-	if err != nil {
-		return 0, err
-	}
-
-	ctx, cancel := client.ContextWT(10 * time.Second)
-	defer cancel()
-
+func (cb *Backend) deleteFinishedWorkflows(ctx context.Context, client *pgsql.Client) (int64, error) {
 	return client.Execute(
 		ctx,
 		"DELETE FROM workflows WHERE (status = $1 OR status = $2)",
