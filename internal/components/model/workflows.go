@@ -55,6 +55,8 @@ func (cm *Model) firstJob(wf *jw.Workflow) (*jw.Job, error) {
 }
 
 func (cm *Model) newWorkflow(wf *jw.Workflow) {
+	cm.mcsWfsCreated.Inc()
+
 	cm.components.CLogger.Info( //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 		"New workflow [begin]",
 		"id", wf.ID,
@@ -194,8 +196,10 @@ func (cm *Model) nextStep(job *jw.Job, wf *jw.Workflow) (string, map[string]inte
 func (cm *Model) workflowFinished(job *jw.Job, wf *jw.Workflow) error {
 	if *job.WorkflowFailed {
 		wf.Status = jw.StatusFailed
+		cm.mcsWfsFailed.Inc()
 	} else {
 		wf.Status = jw.StatusSucceeded
+		cm.mcsWfsSucceeded.Inc()
 	}
 
 	now := time.Now()

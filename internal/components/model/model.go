@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/mls-361/armen-sdk/message"
+	"github.com/mls-361/metrics"
 	"github.com/mls-361/minikit"
 
 	"github.com/mls-361/armen/internal/components"
@@ -20,10 +21,16 @@ type (
 	// Model AFAIRE.
 	Model struct {
 		*minikit.Base
-		components *components.Components
-		jwCh       chan<- *message.Message
-		njMutex    sync.Mutex
-		njTimeout  time.Time
+		components       *components.Components
+		jwCh             chan<- *message.Message
+		njMutex          sync.Mutex
+		njTimeout        time.Time
+		mcsJobsCreated   metrics.Counter
+		mcsJobsFailed    metrics.Counter
+		mcsJobsSucceeded metrics.Counter
+		mcsWfsCreated    metrics.Counter
+		mcsWfsFailed     metrics.Counter
+		mcsWfsSucceeded  metrics.Counter
 	}
 )
 
@@ -51,6 +58,17 @@ func (cm *Model) Dependencies() []string {
 // Build AFAIRE.
 func (cm *Model) Build(_ *minikit.Manager) error {
 	cm.jwCh = cm.components.CBus.AddPublisher("jw", 10, 1)
+
+	cmetrics := cm.components.CMetrics
+
+	cm.mcsJobsCreated = cmetrics.NewCounter("model.jobs.created")
+	cm.mcsJobsFailed = cmetrics.NewCounter("model.jobs.failed")
+	cm.mcsJobsSucceeded = cmetrics.NewCounter("model.jobs.succeeded")
+
+	cm.mcsWfsCreated = cmetrics.NewCounter("model.workflows.created")
+	cm.mcsWfsFailed = cmetrics.NewCounter("model.workflows.failed")
+	cm.mcsWfsSucceeded = cmetrics.NewCounter("model.workflows.succeeded")
+
 	return nil
 }
 

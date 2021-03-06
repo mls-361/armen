@@ -23,6 +23,8 @@ func (cm *Model) newJob(job *jw.Job) {
 		wf = *job.Workflow
 	}
 
+	cm.mcsJobsCreated.Inc()
+
 	cm.components.Logger().Info( //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 		"New job",
 		"id", job.ID,
@@ -110,6 +112,13 @@ func (cm *Model) NextJob() *jw.Job {
 // UpdateJob AFAIRE.
 func (cm *Model) UpdateJob(job *jw.Job) {
 	cm.publish("job.after", *job) //************************************************************************************
+
+	switch job.Status {
+	case jw.StatusFailed:
+		cm.mcsJobsFailed.Inc()
+	case jw.StatusSucceeded:
+		cm.mcsJobsSucceeded.Inc()
+	}
 
 	if err := cm.components.CBackend.UpdateJob(job); err != nil {
 		cm.components.CLogger.Error( //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
