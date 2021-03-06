@@ -35,7 +35,7 @@ CREATE TABLE public.jobs
     next_step character varying(30) COLLATE pg_catalog."default",
     weight integer NOT NULL,
     time_reference timestamp(3) with time zone NOT NULL,
-    CONSTRAINT jobs_pkey PRIMARY KEY (id)
+    CONSTRAINT jobs_pkey PRIMARY KEY (id),
     CONSTRAINT jobs_fkey FOREIGN KEY (workflow)
         REFERENCES public.workflows (id) MATCH SIMPLE
         ON UPDATE NO ACTION
@@ -63,7 +63,7 @@ COMMENT ON COLUMN public.jobs.namespace
 
 COMMENT ON COLUMN public.jobs.type
     IS 'Le type de ce job.
-Ce type est unique par application.';
+Ce type est unique par espace de nom.';
 
 COMMENT ON COLUMN public.jobs.origin
     IS 'L''origine du job.

@@ -14,24 +14,26 @@ import (
 	"github.com/mls-361/pgsql"
 )
 
-func (cb *Backend) addJobToHistory(t *pgsql.Transaction, action string, job *jw.Job) error {
+func (cb *Backend) addJobToHistory(t *pgsql.Transaction, status string, job *jw.Job) error {
 	_, err := t.Execute(
-		"INSERT INTO history (created_at, action, job, workflow, data) VALUES ($1, $2, $3, $4, $5)",
+		"INSERT INTO history (created_at, job, workflow, type, status, data) VALUES ($1, $2, $3, $4, $5, $6)",
 		time.Now(),
-		action,
 		job.ID,
 		job.Workflow,
+		job.Type,
+		status,
 		job,
 	)
 	return err
 }
 
-func (cb *Backend) addWorkflowToHistory(t *pgsql.Transaction, action string, wf *jw.Workflow) error {
+func (cb *Backend) addWorkflowToHistory(t *pgsql.Transaction, status string, wf *jw.Workflow) error {
 	_, err := t.Execute(
-		"INSERT INTO history (created_at, action, workflow, data) VALUES ($1, $2, $3, $4)",
+		"INSERT INTO history (created_at, workflow, type, status, data) VALUES ($1, $2, $3, $4, $5)",
 		time.Now(),
-		action,
 		wf.ID,
+		wf.Type,
+		status,
 		wf,
 	)
 	return err

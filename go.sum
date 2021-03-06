@@ -88,6 +88,8 @@ github.com/mls-361/application v0.0.0-20210214152453-7b12c3e48592 h1:ce9OIIAuPXo
 github.com/mls-361/application v0.0.0-20210214152453-7b12c3e48592/go.mod h1:XlrgeJoMlWVsfSeM2RqzTtOS5T7CJkCAAC5QX8h5xSA=
 github.com/mls-361/armen-sdk v0.0.0-20210305110350-f4f29d94efa1 h1:nL9wEUtNwrPHBBhMLSTvKf2PguBdbxmqrREZtOJeFeY=
 github.com/mls-361/armen-sdk v0.0.0-20210305110350-f4f29d94efa1/go.mod h1:xGpqcZBc7wwPn9Wpp8sRb2ynI90J6cRNNWU7OyPgtD0=
+github.com/mls-361/armen-sdk v0.0.0-20210306161955-92d85d98fced h1:Q1kQks/CttbmwZWV0zIyApEkgtcL14IJynRtKVylYyw=
+github.com/mls-361/armen-sdk v0.0.0-20210306161955-92d85d98fced/go.mod h1:xGpqcZBc7wwPn9Wpp8sRb2ynI90J6cRNNWU7OyPgtD0=
 github.com/mls-361/buffer v0.0.0-20210214143923-2dc8b703831b h1:idkigFFk06uq8KDZjfmrIj2qXYO4F466ZHrKkA8Ak8E=
 github.com/mls-361/buffer v0.0.0-20210214143923-2dc8b703831b/go.mod h1:skxL3BFTFnQe9Z8QD8DpEygWzVGTlcRPWc3tcQgRDRY=
 github.com/mls-361/crypto v0.0.0-20210214152759-2610549629cb h1:3ivI3KisQjx/Apq/eZxbhOssACRe5mnnYva95IrRQDY=

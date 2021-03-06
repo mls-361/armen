@@ -88,7 +88,7 @@ func (cb *Backend) Build() error {
 		return err
 	}
 
-	logger.Info("History retention time", "hour(s)", hrt) //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	logger.Info("History retention time", "hours", hrt) //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 	cb.historyRT = time.Duration(-1*hrt) * time.Hour
 

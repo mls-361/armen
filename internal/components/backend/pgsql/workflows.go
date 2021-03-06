@@ -29,6 +29,7 @@ func (cb *Backend) Workflow(id string, mustExist bool) (*jw.Workflow, error) {
 
 	if err := client.QueryRow(ctx, "SELECT * FROM workflows WHERE id = $1", id).Scan(
 		&wf.ID,
+		&wf.Type,
 		&wf.Description,
 		&wf.Origin,
 		&wf.Priority,
@@ -69,8 +70,9 @@ func (cb *Backend) InsertWorkflow(wf *jw.Workflow, job *jw.Job) error {
 		ctx,
 		func(t *pgsql.Transaction) error {
 			_, err := t.Execute(
-				"INSERT INTO workflows VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)",
+				"INSERT INTO workflows VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)",
 				wf.ID,
+				wf.Type,
 				wf.Description,
 				wf.Origin,
 				wf.Priority,
@@ -88,7 +90,7 @@ func (cb *Backend) InsertWorkflow(wf *jw.Workflow, job *jw.Job) error {
 				return err
 			}
 
-			if err := cb.addWorkflowToHistory(t, "insert", wf); err != nil {
+			if err := cb.addWorkflowToHistory(t, jw.StatusRunning.String(), wf); err != nil {
 				return err
 			}
 
@@ -125,7 +127,7 @@ func (cb *Backend) UpdateWorkflow(wf *jw.Workflow) error {
 				return err
 			}
 
-			return cb.addWorkflowToHistory(t, "update", wf)
+			return cb.addWorkflowToHistory(t, wf.Status.String(), wf)
 		},
 	)
 }

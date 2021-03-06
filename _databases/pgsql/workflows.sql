@@ -13,6 +13,7 @@ CREATE TYPE public.workflow_status AS ENUM
 CREATE TABLE public.workflows
 (
     id uuid NOT NULL,
+    type character varying(20) COLLATE pg_catalog."default" NOT NULL,
     description character varying(100) COLLATE pg_catalog."default" NOT NULL,
     origin character varying(50) COLLATE pg_catalog."default" NOT NULL,
     priority integer NOT NULL,
@@ -36,6 +37,9 @@ COMMENT ON TABLE public.workflows
 
 COMMENT ON COLUMN public.workflows.id
     IS 'L''identifiant du workflow.';
+
+COMMENT ON COLUMN public.workflows.type
+    IS 'Le type de ce workflow.';
 
 COMMENT ON COLUMN public.workflows.description
     IS 'La description du workflow.';
