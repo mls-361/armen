@@ -7,6 +7,7 @@
 - API http(s) pour les composants ?
 - Recovery(RETRY) sur un job ayant une clé d'unicité ?
 - Advisory lock ? gestion des ID ?
+- Gestion de l'historique em mode backend=memory
 
 ---
 
