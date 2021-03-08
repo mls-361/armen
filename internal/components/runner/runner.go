@@ -28,7 +28,7 @@ type (
 // New AFAIRE.
 func New(components *components.Components) *Runner {
 	return &Runner{
-		Base:       minikit.NewBase("runner", minikit.CategoryRunner),
+		Base:       minikit.NewBase(minikit.CategoryRunner, ""),
 		components: components,
 	}
 }

@@ -52,7 +52,7 @@ func (rr *Runner) publish(topic string) {
 }
 
 func (rr *Runner) namespaceRunner() (jw.Runner, error) {
-	c, err := rr.components.CManager.GetComponent("jw."+rr.job.Namespace, true)
+	c, err := rr.components.CManager.GetComponent(rr.job.Namespace+".runner", true)
 	if err != nil {
 		return nil, err
 	}

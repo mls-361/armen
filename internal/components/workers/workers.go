@@ -43,7 +43,7 @@ type (
 // New AFAIRE.
 func New(components *components.Components) *Workers {
 	cw := &Workers{
-		Base:       minikit.NewBase("workers", "workers"),
+		Base:       minikit.NewBase("workers", ""),
 		components: components,
 		config:     &config{Pool: struct{ Size int }{Size: _defaultPoolSize}},
 		workers:    make([]chan struct{}, 0),

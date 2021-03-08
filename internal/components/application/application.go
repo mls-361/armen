@@ -30,7 +30,7 @@ func New(name, version, builtAt string, components *components.Components) *Appl
 	components.CApplication = ca
 
 	return &Application{
-		Base:        minikit.NewBase("application", "application"),
+		Base:        minikit.NewBase("application", ""),
 		Application: ca,
 	}
 }

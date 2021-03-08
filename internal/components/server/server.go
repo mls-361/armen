@@ -45,7 +45,7 @@ type (
 // New AFAIRE.
 func New(components *components.Components) *Server {
 	cs := &Server{
-		Base:       minikit.NewBase("server", "server"),
+		Base:       minikit.NewBase("server", ""),
 		components: components,
 		config:     &config{Port: _defaultPort},
 		errCh:      make(chan error, 1),

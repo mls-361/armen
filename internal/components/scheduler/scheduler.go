@@ -27,7 +27,7 @@ type (
 // New AFAIRE.
 func New(components *components.Components) *Scheduler {
 	cs := &Scheduler{
-		Base:       minikit.NewBase("scheduler", "scheduler"),
+		Base:       minikit.NewBase("scheduler", ""),
 		components: components,
 	}
 

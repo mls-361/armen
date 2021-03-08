@@ -37,7 +37,7 @@ type (
 // New AFAIRE.
 func New(components *components.Components) *Bus {
 	cb := &Bus{
-		Base:        minikit.NewBase("bus", "bus"),
+		Base:        minikit.NewBase("bus", ""),
 		components:  components,
 		subscribers: make(map[*regexp.Regexp]func(*message.Message)),
 	}

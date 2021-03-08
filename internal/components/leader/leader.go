@@ -35,7 +35,7 @@ type (
 // New AFAIRE.
 func New(components *components.Components) *Leader {
 	cl := &Leader{
-		Base:       minikit.NewBase("leader", "leader"),
+		Base:       minikit.NewBase("leader", ""),
 		components: components,
 	}
 

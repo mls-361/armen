@@ -28,7 +28,7 @@ type (
 // New AFAIRE.
 func New(components *components.Components) *Metrics {
 	cm := &Metrics{
-		Base:       minikit.NewBase("metrics", "metrics"),
+		Base:       minikit.NewBase("metrics", ""),
 		Metrics:    metrics.New(),
 		components: components,
 		rtMetrics:  &rtMetrics{},

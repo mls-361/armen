@@ -37,7 +37,7 @@ type (
 // New AFAIRE.
 func New(components *components.Components) *Config {
 	cc := &Config{
-		Base:       minikit.NewBase("config", "config"),
+		Base:       minikit.NewBase("config", ""),
 		components: components,
 		flagSet:    flag.NewFlagSet(components.CApplication.Name(), flag.ContinueOnError),
 	}

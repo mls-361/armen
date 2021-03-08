@@ -24,7 +24,7 @@ type (
 // New AFAIRE.
 func New(components *components.Components) *Supervisor {
 	return &Supervisor{
-		Base:       minikit.NewBase("supervisor", "supervisor"),
+		Base:       minikit.NewBase("supervisor", ""),
 		components: components,
 	}
 }

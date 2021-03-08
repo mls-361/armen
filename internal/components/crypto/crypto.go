@@ -29,7 +29,7 @@ func New(components *components.Components) *Crypto {
 	components.CCrypto = cc
 
 	return &Crypto{
-		Base:       minikit.NewBase("crypto", "crypto"),
+		Base:       minikit.NewBase("crypto", ""),
 		components: components,
 		crypto:     cc,
 	}

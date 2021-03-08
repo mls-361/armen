@@ -42,7 +42,7 @@ func New(components *components.Components) *Router {
 	)
 
 	cr := &Router{
-		Base: minikit.NewBase("router", "router"),
+		Base: minikit.NewBase("router", ""),
 		mux:  mux,
 	}
 

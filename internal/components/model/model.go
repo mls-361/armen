@@ -37,7 +37,7 @@ type (
 // New AFAIRE.
 func New(components *components.Components) *Model {
 	cm := &Model{
-		Base:       minikit.NewBase("model", "model"),
+		Base:       minikit.NewBase("model", ""),
 		components: components,
 	}
 

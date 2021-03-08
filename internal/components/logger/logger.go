@@ -31,7 +31,7 @@ func New(components *components.Components) *Logger {
 	components.CLogger = cl
 
 	return &Logger{
-		Base:       minikit.NewBase("logger", "logger"),
+		Base:       minikit.NewBase("logger", ""),
 		components: components,
 		logger:     cl,
 	}

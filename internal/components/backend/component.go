@@ -50,7 +50,7 @@ func New(components *components.Components) *Backend {
 	components.CBackend = cb
 
 	return &Backend{
-		Base:    minikit.NewBase("backend", "backend"),
+		Base:    minikit.NewBase("backend", ""),
 		backend: cb,
 	}
 }
