@@ -63,7 +63,7 @@ func (cb *Backend) Build() error {
 	}
 
 	for _, c := range cfg {
-		client, err := pgsql.Connect(c, logger)
+		client, err := c.Connect(cb.components.CCrypto, logger)
 		if err != nil {
 			cluster.Close()
 			return err
