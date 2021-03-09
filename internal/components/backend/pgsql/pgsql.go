@@ -7,34 +7,22 @@
 package pgsql
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/mls-361/failure"
 	"github.com/mls-361/hapgsql"
-	"github.com/mls-361/logger"
 	"github.com/mls-361/pgsql"
 
 	"github.com/mls-361/armen/internal/components"
 )
 
 const (
-	_poolMaxConns     = 10
-	_connectTimeout   = 5 * time.Second
 	_updateInterval   = 5 * time.Second
 	_lockInsertJob    = 1
 	_defaultHistoryRT = 7
 )
 
 type (
-	config struct {
-		Host     string
-		Port     int
-		Username string
-		Password string
-		Database string
-	}
-
 	// Backend AFAIRE.
 	Backend struct {
 		components *components.Components
@@ -47,30 +35,6 @@ func New(components *components.Components) *Backend {
 	return &Backend{
 		components: components,
 	}
-}
-
-func (cb *Backend) newClient(logger logger.Logger, cfg *config) (*pgsql.Client, error) {
-	password, err := cb.components.CCrypto.DecryptString(cfg.Password)
-	if err != nil {
-		return nil, err
-	}
-
-	uri := fmt.Sprintf(
-		"postgres://%s:%s@%s:%d/%s?pool_max_conns=%d",
-		cfg.Username,
-		password,
-		cfg.Host,
-		cfg.Port,
-		cfg.Database,
-		_poolMaxConns,
-	)
-
-	client := pgsql.NewClient(logger)
-
-	ctx, cancel := client.ContextWT(_connectTimeout)
-	defer cancel()
-
-	return client, client.Connect(ctx, uri)
 }
 
 // Build AFAIRE.
@@ -92,14 +56,14 @@ func (cb *Backend) Build() error {
 		hapgsql.WithUpdateInterval(_updateInterval),
 	)
 
-	var cfg []*config
+	var cfg []*pgsql.Config
 
 	if err := cconfig.Decode(&cfg, true, "components", "backend", "pgsql"); err != nil {
 		return err
 	}
 
 	for _, c := range cfg {
-		client, err := cb.newClient(logger, c)
+		client, err := pgsql.Connect(c, logger)
 		if err != nil {
 			cluster.Close()
 			return err

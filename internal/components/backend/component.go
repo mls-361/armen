@@ -59,6 +59,7 @@ func New(components *components.Components) *Backend {
 func (cb *Backend) Dependencies() []string {
 	return []string{
 		"config",
+		"crypto",
 		"logger",
 	}
 }
