@@ -49,19 +49,19 @@ func New(components *components.Components) *Backend {
 	}
 }
 
-func (cb *Backend) newClient(logger logger.Logger, c *config) (*pgsql.Client, error) {
-	password, err := cb.components.CCrypto.DecryptString(c.Password)
+func (cb *Backend) newClient(logger logger.Logger, cfg *config) (*pgsql.Client, error) {
+	password, err := cb.components.CCrypto.DecryptString(cfg.Password)
 	if err != nil {
 		return nil, err
 	}
 
 	uri := fmt.Sprintf(
 		"postgres://%s:%s@%s:%d/%s?pool_max_conns=%d",
-		c.Username,
+		cfg.Username,
 		password,
-		c.Host,
-		c.Port,
-		c.Database,
+		cfg.Host,
+		cfg.Port,
+		cfg.Database,
 		_poolMaxConns,
 	)
 
