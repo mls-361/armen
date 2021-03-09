@@ -12,6 +12,7 @@ import (
 	"github.com/mls-361/armen-sdk/jw"
 	"github.com/mls-361/armen-sdk/message"
 	"github.com/mls-361/failure"
+	"github.com/mls-361/logger"
 
 	"github.com/mls-361/armen/internal/components"
 )
@@ -26,11 +27,11 @@ type (
 	Runner struct {
 		job        *jw.Job
 		components *components.Components
-		logger     components.Logger
+		logger     logger.Logger
 	}
 )
 
-func createLogger(job *jw.Job, components *components.Components) components.Logger {
+func createLogger(job *jw.Job, components *components.Components) logger.Logger {
 	if job.Workflow == nil {
 		return components.CLogger.CreateLogger(job.ID, "job")
 	}

@@ -10,12 +10,12 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/mls-361/logger"
 	"github.com/mls-361/metrics"
 	"github.com/mls-361/minikit"
 
 	"github.com/mls-361/armen-sdk/components"
 	"github.com/mls-361/armen-sdk/jw"
-	"github.com/mls-361/armen-sdk/logger"
 	"github.com/mls-361/armen-sdk/message"
 )
 
@@ -58,11 +58,6 @@ type (
 		components.Leader
 		Start()
 		Stop()
-	}
-
-	// Logger AFAIRE.
-	Logger interface {
-		logger.Logger
 	}
 
 	// Manager AFAIRE.
@@ -116,7 +111,7 @@ type (
 		CConfig      Config
 		CCrypto      Crypto
 		CLeader      Leader
-		CLogger      Logger
+		CLogger      logger.Logger
 		CManager     Manager
 		CMetrics     Metrics
 		CModel       Model

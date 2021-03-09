@@ -14,7 +14,6 @@ import (
 	"github.com/mls-361/hapgsql"
 	"github.com/mls-361/logger"
 	"github.com/mls-361/pgsql"
-	"github.com/mls-361/uuid"
 
 	"github.com/mls-361/armen/internal/components"
 )
@@ -39,7 +38,6 @@ type (
 	// Backend AFAIRE.
 	Backend struct {
 		components *components.Components
-		logger     *logger.Logger
 		historyRT  time.Duration
 		cluster    *hapgsql.Cluster
 	}
@@ -51,7 +49,7 @@ func New(components *components.Components) *Backend {
 	}
 }
 
-func (cb *Backend) newClient(c *config) (*pgsql.Client, error) {
+func (cb *Backend) newClient(logger logger.Logger, c *config) (*pgsql.Client, error) {
 	password, err := cb.components.CCrypto.DecryptString(c.Password)
 	if err != nil {
 		return nil, err
@@ -67,7 +65,7 @@ func (cb *Backend) newClient(c *config) (*pgsql.Client, error) {
 		_poolMaxConns,
 	)
 
-	client := pgsql.NewClient(cb.logger)
+	client := pgsql.NewClient(logger)
 
 	ctx, cancel := client.ContextWT(_connectTimeout)
 	defer cancel()
@@ -77,10 +75,7 @@ func (cb *Backend) newClient(c *config) (*pgsql.Client, error) {
 
 // Build AFAIRE.
 func (cb *Backend) Build() error {
-	logger := cb.components.CLogger.CreateLogger(uuid.New(), "backend")
-
-	cb.logger = logger
-
+	logger := cb.components.CLogger
 	cconfig := cb.components.CConfig
 
 	hrt, err := cconfig.Data().IntWD(_defaultHistoryRT, "components", "backend", "history", "retention_time")
@@ -104,7 +99,7 @@ func (cb *Backend) Build() error {
 	}
 
 	for _, c := range cfg {
-		client, err := cb.newClient(c)
+		client, err := cb.newClient(logger, c)
 		if err != nil {
 			cluster.Close()
 			return err

@@ -11,6 +11,7 @@ import (
 
 	"github.com/mls-361/armen-sdk/message"
 	"github.com/mls-361/armen-sdk/worker"
+	"github.com/mls-361/logger"
 
 	"github.com/mls-361/armen/internal/components"
 	"github.com/mls-361/armen/internal/components/workers/runner"
@@ -22,7 +23,7 @@ type (
 		*worker.Worker
 		components *components.Components
 		stopCh     chan struct{}
-		logger     components.Logger
+		logger     logger.Logger
 	}
 )
 
