@@ -6,7 +6,11 @@
 
 package pgsql
 
-import "time"
+import (
+	"time"
+
+	"github.com/mls-361/pgsql"
+)
 
 // AcquireLock AFAIRE.
 func (cb *Backend) AcquireLock(name, owner string, duration time.Duration) (bool, error) {
@@ -15,7 +19,7 @@ func (cb *Backend) AcquireLock(name, owner string, duration time.Duration) (bool
 		return false, err
 	}
 
-	ctx, cancel := client.ContextWT(5 * time.Second)
+	ctx, cancel := pgsql.Context(5 * time.Second)
 	defer cancel()
 
 	now := time.Now()
@@ -46,7 +50,7 @@ func (cb *Backend) ReleaseLock(name, owner string) error {
 		return err
 	}
 
-	ctx, cancel := client.ContextWT(5 * time.Second)
+	ctx, cancel := pgsql.Context(5 * time.Second)
 	defer cancel()
 
 	_, err = client.Execute(

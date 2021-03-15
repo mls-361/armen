@@ -109,7 +109,7 @@ func (cb *Backend) Clean() (int, int, error) {
 		return 0, 0, err
 	}
 
-	ctx, cancel := client.ContextWT(10 * time.Second)
+	ctx, cancel := pgsql.Context(10 * time.Second)
 	defer cancel()
 
 	cj, err := cb.deleteFinishedJobs(ctx, client)

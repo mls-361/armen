@@ -22,7 +22,7 @@ func (cb *Backend) Workflow(id string, mustExist bool) (*jw.Workflow, error) {
 		return nil, err
 	}
 
-	ctx, cancel := client.ContextWT(5 * time.Second)
+	ctx, cancel := pgsql.Context(5 * time.Second)
 	defer cancel()
 
 	var wf jw.Workflow
@@ -63,7 +63,7 @@ func (cb *Backend) InsertWorkflow(wf *jw.Workflow, job *jw.Job) error {
 		return err
 	}
 
-	ctx, cancel := client.ContextWT(10 * time.Second)
+	ctx, cancel := pgsql.Context(10 * time.Second)
 	defer cancel()
 
 	return client.Transaction(
@@ -110,7 +110,7 @@ func (cb *Backend) UpdateWorkflow(wf *jw.Workflow) error {
 		return err
 	}
 
-	ctx, cancel := client.ContextWT(5 * time.Second)
+	ctx, cancel := pgsql.Context(5 * time.Second)
 	defer cancel()
 
 	return client.Transaction(

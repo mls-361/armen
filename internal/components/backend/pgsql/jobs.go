@@ -84,7 +84,7 @@ func (cb *Backend) maybeInsertJob(job *jw.Job) (bool, error) {
 		return false, err
 	}
 
-	ctx, cancel := client.ContextWT(10 * time.Second)
+	ctx, cancel := pgsql.Context(10 * time.Second)
 	defer cancel()
 
 	inserted := false
@@ -123,7 +123,7 @@ func (cb *Backend) insertJob(job *jw.Job) error {
 		return err
 	}
 
-	ctx, cancel := client.ContextWT(5 * time.Second)
+	ctx, cancel := pgsql.Context(5 * time.Second)
 	defer cancel()
 
 	return client.Transaction(
@@ -155,7 +155,7 @@ func (cb *Backend) NextJob() (*jw.Job, error) {
 		return nil, err
 	}
 
-	ctx, cancel := client.ContextWT(5 * time.Second)
+	ctx, cancel := pgsql.Context(5 * time.Second)
 	defer cancel()
 
 	var job jw.Job
@@ -240,7 +240,7 @@ func (cb *Backend) UpdateJob(job *jw.Job) error {
 		return err
 	}
 
-	ctx, cancel := client.ContextWT(5 * time.Second)
+	ctx, cancel := pgsql.Context(5 * time.Second)
 	defer cancel()
 
 	return client.Transaction(
