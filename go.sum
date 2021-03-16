@@ -47,6 +47,8 @@ github.com/jackc/pgtype v1.3.1-0.20200510190516-8cd94a14c75a/go.mod h1:vaogEUkAL
 github.com/jackc/pgtype v1.3.1-0.20200606141011-f6355165a91c/go.mod h1:cvk9Bgu/VzJ9/lxTO5R5sf80p0DiucVtN7ZxvaC4GmQ=
 github.com/jackc/pgtype v1.6.2 h1:b3pDeuhbbzBYcg5kwNmNDun4pFUD/0AAr1kLXZLeNt8=
 github.com/jackc/pgtype v1.6.2/go.mod h1:JCULISAZBFGrHaOXIIFiyfzW5VY0GRitRr8NeJsrdig=
+github.com/jackc/pgx v3.6.2+incompatible h1:2zP5OD7kiyR3xzRYMhOcXVvkDZsImVXfj+yIyTQf3/o=
+github.com/jackc/pgx v3.6.2+incompatible/go.mod h1:0ZGrqGqkRlliWnWB4zKnWtjbSWbGkVEFm4TeybAXq+I=
 github.com/jackc/pgx/v4 v4.0.0-20190420224344-cc3461e65d96/go.mod h1:mdxmSJJuR08CZQyj1PVQBHy9XOp5p8/SHH6a0psbY9Y=
 github.com/jackc/pgx/v4 v4.0.0-20190421002000-1b8f0016e912/go.mod h1:no/Y67Jkk/9WuGR0JG/JseM9irFbnEPbuWV2EELPNuM=
 github.com/jackc/pgx/v4 v4.0.0-pre1.0.20190824185557-6972a5742186/go.mod h1:X+GQnOEnf1dqHGpw7JmHqHc1NxDoalibchSk9/RWuDc=
@@ -98,8 +100,8 @@ github.com/mls-361/failure v0.0.0-20210214150656-bf33513ce561 h1:KMNRnoFBAQT3GAC
 github.com/mls-361/failure v0.0.0-20210214150656-bf33513ce561/go.mod h1:BWQr6RZOwoWz8xbSaQ/UDhncmL+diACBTHa1CEYLfSA=
 github.com/mls-361/fqdn v0.0.0-20210214151148-645391277194 h1:BPABw9IRNn3Du2QOhlQ9YJtlND/qT15qqeE/1QFwM48=
 github.com/mls-361/fqdn v0.0.0-20210214151148-645391277194/go.mod h1:MrE8P3VHVvYulr9VPiku1lsnG8z6KBBEfGvI0sC2J14=
-github.com/mls-361/hapgsql v0.0.0-20210315172346-64b32d6a4cae h1:eEQd6BN/by1IwysiWakQ2XuRUVgnVGZmupLXQopa7LI=
-github.com/mls-361/hapgsql v0.0.0-20210315172346-64b32d6a4cae/go.mod h1:BxmFUtADnV+oh7NQDSxwvUFf7gOJHOCsOWzO7ezPXpc=
+github.com/mls-361/hapgsql v0.0.0-20210316134610-e38bcc45577f h1:5CGVoutrt3SxtHwLPDc4DTzTAvcbKjMGLcFa9yIpwKc=
+github.com/mls-361/hapgsql v0.0.0-20210316134610-e38bcc45577f/go.mod h1:ZJqp5TVSqArFmHyJotsYJ+4Sg6VBLb4BFEiPi1C9CDo=
 github.com/mls-361/logfmt v0.0.0-20210214150102-dc79140262f2 h1:Zt6lQ5jFV60/7KuP2zqgI1kCOhXsoUmwfANYR/5vtTM=
 github.com/mls-361/logfmt v0.0.0-20210214150102-dc79140262f2/go.mod h1:DKp8pWoA93y8WBQiSR0KDpNsE2rAioxfQNL+rLcKslU=
 github.com/mls-361/logger v0.0.0-20210309094146-fcd3b273b1f1 h1:eg5+J2tYf8YbZ1WttL5ctGsf0xR/dXULqW0h/erpQ/g=
@@ -108,8 +110,8 @@ github.com/mls-361/metrics v0.0.0-20210111181710-b7fea8fd978b h1:bVmWp0V1nMbYSbk
 github.com/mls-361/metrics v0.0.0-20210111181710-b7fea8fd978b/go.mod h1:5Y4ckyelXDC6QO6ykJBaGUs32AA/WrYGcdDOJ9FtenQ=
 github.com/mls-361/minikit v0.0.0-20210308181221-313f5b950015 h1:Qs8kkhE9TzTlHjcq4n/JFdogvMYhuCN9xZ2aXijX+go=
 github.com/mls-361/minikit v0.0.0-20210308181221-313f5b950015/go.mod h1:UsCd8YWgxJjBSy30V5BNLjZKIvtGnstOpxcHxe/BA88=
-github.com/mls-361/pgsql v0.0.0-20210315172301-cb4166448f79 h1:/vWFowKBEGb5cqMq+GC4IXsSB8aFH0R/XO95UCS3Hco=
-github.com/mls-361/pgsql v0.0.0-20210315172301-cb4166448f79/go.mod h1:oumPlQrKlIIXcPxCG+8an2Rb/X7ptF9jhE2bQcvtv+E=
+github.com/mls-361/pgsql v0.0.0-20210316133812-0bf08ea62536 h1:TL5Np2w4VwEc9UYgI0dZ1nHerTYylp+UNzsCiR3N4dU=
+github.com/mls-361/pgsql v0.0.0-20210316133812-0bf08ea62536/go.mod h1:4rqY3WhwqHWa4cN2nbsgKmKC/9QiV4VtNdA1Zh2Owgs=
 github.com/mls-361/scheduler v0.0.0-20210214153543-65a661fd26f3 h1:1e6Gyzfd4CaSJtY8HeIK07/Ked3bVTiZbBultwbGmvU=
 github.com/mls-361/scheduler v0.0.0-20210214153543-65a661fd26f3/go.mod h1:pR0q9aIN3rMMVkXXeOUVRpjMSmypI3v25wlXOU+LRD4=
 github.com/mls-361/uuid v0.0.0-20210103213509-f52b091b96f3 h1:AZahXz9O0+Wc0BlyZ3JUESgMNAs58RHBHzs2O2yb9No=
