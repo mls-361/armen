@@ -14,6 +14,7 @@ CREATE DATABASE armen
 */
 
 -- Table: public.locks
+------------------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE public.locks
 (
@@ -47,6 +48,7 @@ COMMENT ON COLUMN public.locks.expiry
 INSERT INTO public.locks VALUES ('leader', NULL, NULL);
 
 -- Table: public.history
+------------------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE public.history
 (
@@ -94,6 +96,7 @@ COMMENT ON COLUMN public.history.data
     IS 'Le job ou le workflow.';
 
 -- Type: workflow_status
+------------------------------------------------------------------------------------------------------------------------
 
 CREATE TYPE public.workflow_status AS ENUM
     ('running', 'succeeded', 'failed');
@@ -102,6 +105,7 @@ ALTER TYPE public.workflow_status
     OWNER TO postgres;
 
 -- Table: public.workflows
+------------------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE public.workflows
 (
@@ -174,6 +178,7 @@ COMMENT ON COLUMN public.workflows.finished_at
     IS 'La date et l''heure à laquelle l''exécution du workflow s''est terminée.';
 
 -- Type: job_status
+------------------------------------------------------------------------------------------------------------------------
 
 CREATE TYPE public.job_status AS ENUM
     ('todo', 'running', 'pending', 'succeeded', 'failed');
@@ -182,6 +187,7 @@ ALTER TYPE public.job_status
     OWNER TO postgres;
 
 -- Table: public.jobs
+------------------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE public.jobs
 (
