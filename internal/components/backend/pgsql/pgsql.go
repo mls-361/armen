@@ -18,8 +18,8 @@ import (
 
 const (
 	_updateInterval   = 5 * time.Second
+	_defaultHistoryRT = 48 * time.Hour
 	_lockInsertJob    = 1
-	_defaultHistoryRT = 7
 )
 
 type (
@@ -42,14 +42,14 @@ func (cb *Backend) Build() error {
 	logger := cb.components.CLogger
 	cconfig := cb.components.CConfig
 
-	hrt, err := cconfig.Data().IntWD(_defaultHistoryRT, "components", "backend", "history", "retention_time")
+	hrt, err := cconfig.Data().DurationWD(_defaultHistoryRT, "components", "backend", "history", "retention_time")
 	if err != nil {
 		return err
 	}
 
-	logger.Info("History retention time", "hours", hrt) //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	logger.Info("History retention time", "duration", hrt.String()) //::::::::::::::::::::::::::::::::::::::::::::::::::
 
-	cb.historyRT = time.Duration(-1*hrt) * time.Hour
+	cb.historyRT = time.Duration(-1) * hrt
 
 	cluster := hapgsql.NewCluster(
 		hapgsql.WithLogger(logger),
@@ -109,7 +109,7 @@ func (cb *Backend) Clean() (int, int, error) {
 		return 0, 0, err
 	}
 
-	ctx, cancel := pgsql.Context(10 * time.Second)
+	ctx, cancel := pgsql.Context(5 * time.Second)
 	defer cancel()
 
 	cj, err := cb.deleteFinishedJobs(ctx, client)
