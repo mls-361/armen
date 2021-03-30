@@ -13,6 +13,7 @@ import (
 
 	"github.com/mls-361/minikit"
 
+	"github.com/mls-361/armen/internal/api"
 	"github.com/mls-361/armen/internal/client"
 	"github.com/mls-361/armen/internal/components"
 )
@@ -50,20 +51,27 @@ func (cr *Runner) run(m *minikit.Manager) error {
 		return err
 	}
 
-	leader := cr.components.CLeader
-	scheduler := cr.components.CScheduler
 	server := cr.components.CServer
-	workers := cr.components.CWorkers
 
 	if err := server.Start(); err != nil {
 		return err
 	}
+
+	api := api.New(cr.components)
+
+	api.Setup()
+
+	leader := cr.components.CLeader
+	scheduler := cr.components.CScheduler
+	workers := cr.components.CWorkers
 
 	workers.Start()
 	leader.Start()
 	scheduler.Start()
 
 	cr.waitEnd()
+
+	api.AppStopping()
 
 	scheduler.Stop()
 	leader.Stop()
