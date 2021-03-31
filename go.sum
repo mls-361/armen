@@ -262,8 +262,8 @@ github.com/mls-361/fqdn v0.0.0-20210214151148-645391277194 h1:BPABw9IRNn3Du2QOhl
 github.com/mls-361/fqdn v0.0.0-20210214151148-645391277194/go.mod h1:MrE8P3VHVvYulr9VPiku1lsnG8z6KBBEfGvI0sC2J14=
 github.com/mls-361/hapgsql v0.0.0-20210327155842-e94be26c0e66 h1:kyFpKdOqHWaX0R2CU+L/yOhUHs6I49CysQVtszmRxdA=
 github.com/mls-361/hapgsql v0.0.0-20210327155842-e94be26c0e66/go.mod h1:BY6v9AaJ7BJ2vONImcD6U3hLTx+RU3MFKs4YA8DOdDA=
-github.com/mls-361/jsonapi v0.0.0-20210331152641-19225ac6122f h1:v0Ugr6wbONt7g6apQsZiAhxwBObaWDGKvqZ2VU5p9yo=
-github.com/mls-361/jsonapi v0.0.0-20210331152641-19225ac6122f/go.mod h1:bRoxpWILjhiXMlyE25Ws2OO34d+xLcRDYKJ7jLCTl8I=
+github.com/mls-361/jsonapi v0.0.0-20210331153631-38e325d9649e h1:wQAcbV32dpSu3BYHcpKKiqgpo6uf/D8SCz+BstJLbxM=
+github.com/mls-361/jsonapi v0.0.0-20210331153631-38e325d9649e/go.mod h1:bRoxpWILjhiXMlyE25Ws2OO34d+xLcRDYKJ7jLCTl8I=
 github.com/mls-361/logfmt v0.0.0-20210214150102-dc79140262f2 h1:Zt6lQ5jFV60/7KuP2zqgI1kCOhXsoUmwfANYR/5vtTM=
 github.com/mls-361/logfmt v0.0.0-20210214150102-dc79140262f2/go.mod h1:DKp8pWoA93y8WBQiSR0KDpNsE2rAioxfQNL+rLcKslU=
 github.com/mls-361/logger v0.0.0-20210309094146-fcd3b273b1f1 h1:eg5+J2tYf8YbZ1WttL5ctGsf0xR/dXULqW0h/erpQ/g=

@@ -11,7 +11,7 @@ require (
 	github.com/mls-361/datamap v0.0.0-20210214153142-5338a640d895
 	github.com/mls-361/failure v0.0.0-20210214150656-bf33513ce561
 	github.com/mls-361/hapgsql v0.0.0-20210327155842-e94be26c0e66
-	github.com/mls-361/jsonapi v0.0.0-20210331152641-19225ac6122f
+	github.com/mls-361/jsonapi v0.0.0-20210331153631-38e325d9649e
 	github.com/mls-361/logger v0.0.0-20210309094146-fcd3b273b1f1
 	github.com/mls-361/metrics v0.0.0-20210111181710-b7fea8fd978b
 	github.com/mls-361/minikit v0.0.0-20210308181221-313f5b950015

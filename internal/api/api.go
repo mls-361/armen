@@ -11,6 +11,7 @@ import (
 	"net/http"
 
 	"github.com/mls-361/armen-sdk/jw"
+	"github.com/mls-361/failure"
 	"github.com/mls-361/jsonapi"
 
 	"github.com/mls-361/armen/internal/components"
@@ -23,6 +24,10 @@ const (
 type (
 	API struct {
 		components *components.Components
+	}
+
+	outCreateJob struct {
+		ID string `json:"id"`
 	}
 )
 
@@ -41,17 +46,40 @@ func (api *API) createJob(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	if jc.Namespace == "" {
-		jsonapi.BadRequest(rw, "the namespace of the job is not specified", nil)
+		jsonapi.BadRequest(rw, "the namespace of the job is not specified", nil) ///////////////////////////////////////
 		return
 	}
 
-	_, err := api.components.CManager.GetComponent(jc.Namespace+".factory", true)
+	c, err := api.components.CManager.GetComponent(jc.Namespace+".factory", true)
 	if err != nil {
-		jsonapi.BadRequest(rw, "the namespace of the job is not valid", err)
+		jsonapi.BadRequest(rw, "the namespace of the job is not valid", err) ///////////////////////////////////////////
 		return
 	}
 
-	rw.WriteHeader(http.StatusOK)
+	factory, ok := c.(jw.Factory)
+	if !ok {
+		jsonapi.InternalServerError( ///////////////////////////////////////////////////////////////////////////////////
+			rw,
+			failure.New(nil).Set("category", c.Category()).Msg("this component is not a job factory"),
+		)
+	}
+
+	if jc.Type == "" {
+		jsonapi.BadRequest(rw, "the type of the job is not specified", nil) ////////////////////////////////////////////
+		return
+	}
+
+	id, err := factory.CreateJob(jc)
+	if err != nil {
+		jsonapi.InternalServerError(rw, err) ///////////////////////////////////////////////////////////////////////////
+		return
+	}
+
+	result := &outCreateJob{
+		ID: id,
+	}
+
+	jsonapi.Render(rw, r, result, api.components.CLogger)
 }
 
 // Setup AFAIRE.
