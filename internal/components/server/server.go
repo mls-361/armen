@@ -15,9 +15,12 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/mls-361/logger"
 	"github.com/mls-361/minikit"
+	"github.com/mls-361/uuid"
 
 	"github.com/mls-361/armen/internal/components"
+	"github.com/mls-361/armen/internal/middleware"
 )
 
 const (
@@ -36,6 +39,7 @@ type (
 	Server struct {
 		*minikit.Base
 		components *components.Components
+		logger     logger.Logger
 		config     *config
 		server     *http.Server
 		errCh      chan error
@@ -65,16 +69,24 @@ func (cs *Server) Dependencies() []string {
 	}
 }
 
+func (cs *Server) handler() http.Handler {
+	return middleware.Trace(cs.components.CRouter.Handler(), cs.logger)
+}
+
 // Build AFAIRE.
 func (cs *Server) Build(_ *minikit.Manager) error {
+	logger := cs.components.CLogger.CreateLogger(uuid.New(), "server")
+
+	cs.logger = logger
+
 	if err := cs.components.CConfig.Decode(&cs.config, false, "components", "server"); err != nil {
 		return err
 	}
 
 	cs.server = &http.Server{
 		Addr:         fmt.Sprintf(":%d", cs.config.Port),
-		Handler:      cs.components.CRouter.Handler(),
-		ErrorLog:     cs.components.CLogger.NewStdLogger("error", "", log.Llongfile),
+		Handler:      cs.handler(),
+		ErrorLog:     logger.NewStdLogger("error", "", log.Llongfile),
 		IdleTimeout:  1 * time.Minute,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
@@ -114,7 +126,7 @@ func (cs *Server) Start() error {
 
 	select {
 	case <-timer.C:
-		cs.components.CLogger.Info(">>>Server", "port", cs.config.Port) //::::::::::::::::::::::::::::::::::::::::::::::
+		cs.logger.Info(">>>Server", "port", cs.config.Port) //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 		return nil
 	case err := <-cs.errCh:
 		return err
@@ -129,14 +141,14 @@ func (cs *Server) Stop() {
 	cs.server.SetKeepAlivesEnabled(false)
 
 	if err := cs.server.Shutdown(ctx); err != nil {
-		cs.components.CLogger.Error(err.Error(), "func", "server.Shutdown") //::::::::::::::::::::::::::::::::::::::::::
+		cs.logger.Error(err.Error(), "func", "server.Shutdown") //::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	}
 
 	if err := <-cs.errCh; !errors.Is(err, http.ErrServerClosed) {
-		cs.components.CLogger.Error(err.Error(), "func", "server.ListenAndServe[TLS]") //:::::::::::::::::::::::::::::::
+		cs.logger.Error(err.Error(), "func", "server.ListenAndServe[TLS]") //:::::::::::::::::::::::::::::::::::::::::::
 	}
 
-	cs.components.CLogger.Info("<<<Server") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	cs.logger.Info("<<<Server") //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 }
 
 // Close AFAIRE.

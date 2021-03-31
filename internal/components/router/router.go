@@ -7,7 +7,6 @@
 package router
 
 import (
-	"expvar"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
@@ -32,15 +31,6 @@ func New(components *components.Components) *Router {
 		rw.WriteHeader(http.StatusInternalServerError)
 	}
 
-	mux.Handler(http.MethodGet, "/debug", expvar.Handler())
-
-	mux.GET(
-		"/status",
-		func(rw http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-			rw.WriteHeader(http.StatusOK)
-		},
-	)
-
 	cr := &Router{
 		Base: minikit.NewBase("router", ""),
 		mux:  mux,
@@ -57,13 +47,13 @@ func (cr *Router) Handler() http.Handler {
 }
 
 // Get AFAIRE.
-func (cr *Router) Get(path string, handler http.HandlerFunc) {
-	cr.mux.HandlerFunc(http.MethodGet, path, handler)
+func (cr *Router) Get(path string, handler http.Handler) {
+	cr.mux.Handler(http.MethodGet, path, handler)
 }
 
 // Post AFAIRE.
-func (cr *Router) Post(path string, handler http.HandlerFunc) {
-	cr.mux.HandlerFunc(http.MethodPost, path, handler)
+func (cr *Router) Post(path string, handler http.Handler) {
+	cr.mux.Handler(http.MethodPost, path, handler)
 }
 
 /*
