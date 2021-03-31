@@ -10,7 +10,14 @@ import (
 	"expvar"
 	"net/http"
 
+	"github.com/mls-361/armen-sdk/jw"
+	"github.com/mls-361/jsonapi"
+
 	"github.com/mls-361/armen/internal/components"
+)
+
+const (
+	_maxBodySize = 1024 * 4
 )
 
 type (
@@ -26,7 +33,24 @@ func New(cs *components.Components) *API {
 	}
 }
 
-func (api *API) createJob(rw http.ResponseWriter, _ *http.Request) {
+func (api *API) createJob(rw http.ResponseWriter, r *http.Request) {
+	var jc *jw.JobCore
+
+	if err := jsonapi.Decode(rw, r, _maxBodySize, &jc); err != nil {
+		return
+	}
+
+	if jc.Namespace == "" {
+		jsonapi.BadRequest(rw, "the namespace of the job is not specified", nil)
+		return
+	}
+
+	_, err := api.components.CManager.GetComponent(jc.Namespace+".factory", true)
+	if err != nil {
+		jsonapi.BadRequest(rw, "the namespace of the job is not valid", err)
+		return
+	}
+
 	rw.WriteHeader(http.StatusOK)
 }
 

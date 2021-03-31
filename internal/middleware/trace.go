@@ -9,6 +9,7 @@ package middleware
 import (
 	"net/http"
 
+	"github.com/mls-361/jsonapi"
 	"github.com/mls-361/logger"
 	"github.com/mls-361/uuid"
 )
@@ -46,7 +47,7 @@ func Trace(next http.Handler, logger logger.Logger) http.Handler {
 			"uri", r.URL.RequestURI(),
 		)
 
-		next.ServeHTTP(rw, r)
+		next.ServeHTTP(rw, jsonapi.NewRequestWithID(r, id))
 
 		logger.Trace( //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 			"Response",
