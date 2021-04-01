@@ -90,7 +90,7 @@ func (cb *Backend) InsertWorkflow(wf *jw.Workflow, job *jw.Job) error {
 				return err
 			}
 
-			if err := cb.addWorkflowToHistory(t, jw.StatusRunning.String(), wf); err != nil {
+			if err := cb.addWorkflowToHistory(t, string(jw.StatusRunning), wf); err != nil {
 				return err
 			}
 
@@ -127,7 +127,7 @@ func (cb *Backend) UpdateWorkflow(wf *jw.Workflow) error {
 				return err
 			}
 
-			return cb.addWorkflowToHistory(t, wf.Status.String(), wf)
+			return cb.addWorkflowToHistory(t, string(wf.Status), wf)
 		},
 	)
 }

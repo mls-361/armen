@@ -177,7 +177,7 @@ func (cm *Model) nextStep(job *jw.Job, wf *jw.Workflow) (string, map[string]inte
 		}
 	}
 
-	status := job.Status.String()
+	status := string(job.Status)
 
 	value, ok := step.Next[status]
 	if ok {
@@ -249,7 +249,9 @@ func (cm *Model) updateWorkflow(job *jw.Job, wf *jw.Workflow) error {
 		return err
 	}
 
-	return cm.InsertJob(job)
+	_, err = cm.InsertJob(job) //AFINIR ?
+
+	return err
 }
 
 /*

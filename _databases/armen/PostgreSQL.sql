@@ -110,8 +110,8 @@ ALTER TYPE public.workflow_status
 CREATE TABLE public.workflows
 (
     id uuid NOT NULL,
-    type character varying(20) COLLATE pg_catalog."default" NOT NULL,
-    description character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    type character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    description character varying(200) COLLATE pg_catalog."default" NOT NULL,
     origin character varying(50) COLLATE pg_catalog."default" NOT NULL,
     priority smallint NOT NULL,
     first_step character varying(30) COLLATE pg_catalog."default" NOT NULL,
@@ -192,7 +192,7 @@ ALTER TYPE public.job_status
 CREATE TABLE public.jobs
 (
     id uuid NOT NULL,
-    name character varying(30) COLLATE pg_catalog."default" NOT NULL,
+    name character varying(50) COLLATE pg_catalog."default" NOT NULL,
     namespace character varying(10) COLLATE pg_catalog."default" NOT NULL,
     type character varying(50) COLLATE pg_catalog."default" NOT NULL,
     origin character varying(50) COLLATE pg_catalog."default" NOT NULL,

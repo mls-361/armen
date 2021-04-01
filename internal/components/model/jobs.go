@@ -40,7 +40,7 @@ func (cm *Model) newJob(job *jw.Job) {
 }
 
 // InsertJob AFAIRE.
-func (cm *Model) InsertJob(job *jw.Job) error {
+func (cm *Model) InsertJob(job *jw.Job) (bool, error) {
 	done, err := cm.components.CBackend.InsertJob(job)
 	if err != nil {
 		var wf string
@@ -61,7 +61,7 @@ func (cm *Model) InsertJob(job *jw.Job) error {
 			"reason", err.Error(),
 		)
 
-		return err
+		return false, err
 	}
 
 	if !done {
@@ -73,12 +73,12 @@ func (cm *Model) InsertJob(job *jw.Job) error {
 			"key", *job.Key,
 		)
 
-		return nil
+		return false, nil
 	}
 
 	cm.newJob(job)
 
-	return nil
+	return true, nil
 }
 
 // NextJob AFAIRE.

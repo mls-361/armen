@@ -104,7 +104,7 @@ func (cb *Backend) maybeInsertJob(job *jw.Job) (bool, error) {
 				return err
 			}
 
-			if err := cb.addJobToHistory(t, job.Status.String(), job); err != nil {
+			if err := cb.addJobToHistory(t, string(job.Status), job); err != nil {
 				return err
 			}
 
@@ -134,7 +134,7 @@ func (cb *Backend) insertJob(job *jw.Job) error {
 
 			}
 
-			return cb.addJobToHistory(t, job.Status.String(), job)
+			return cb.addJobToHistory(t, string(job.Status), job)
 		},
 	)
 }
@@ -220,7 +220,7 @@ func (cb *Backend) NextJob() (*jw.Job, error) {
 					Msg("impossible to update this job") ///////////////////////////////////////////////////////////////
 			}
 
-			return cb.addJobToHistory(t, jw.StatusRunning.String(), &job)
+			return cb.addJobToHistory(t, string(jw.StatusRunning), &job)
 		},
 	); err != nil {
 		if errors.Is(err, pgsql.ErrNoRows) {
@@ -275,7 +275,7 @@ func (cb *Backend) UpdateJob(job *jw.Job) error {
 					Msg("impossible to update this job") ///////////////////////////////////////////////////////////////
 			}
 
-			return cb.addJobToHistory(t, job.Status.String(), job)
+			return cb.addJobToHistory(t, string(job.Status), job)
 		},
 	)
 }

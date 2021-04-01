@@ -25,10 +25,6 @@ type (
 	API struct {
 		components *components.Components
 	}
-
-	outCreateJob struct {
-		ID string `json:"id"`
-	}
 )
 
 // New AFAIRE.
@@ -69,17 +65,13 @@ func (api *API) createJob(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, err := factory.CreateJob(jc)
+	job, err := factory.CreateJob(r.RemoteAddr, jc)
 	if err != nil {
 		jsonapi.InternalServerError(rw, err) ///////////////////////////////////////////////////////////////////////////
 		return
 	}
 
-	result := &outCreateJob{
-		ID: id,
-	}
-
-	jsonapi.Render(rw, r, result, api.components.CLogger)
+	jsonapi.Render(rw, r, job, api.components.CLogger)
 }
 
 // Setup AFAIRE.

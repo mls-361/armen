@@ -248,8 +248,8 @@ github.com/mitchellh/mapstructure v1.4.1 h1:CpVNEelQCZBooIPDn+AR3NpivK/TIKU8bDxd
 github.com/mitchellh/mapstructure v1.4.1/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
 github.com/mls-361/application v0.0.0-20210214152453-7b12c3e48592 h1:ce9OIIAuPXooOp/5IAW2dW32ody5rGMMeMbKgD42L5c=
 github.com/mls-361/application v0.0.0-20210214152453-7b12c3e48592/go.mod h1:XlrgeJoMlWVsfSeM2RqzTtOS5T7CJkCAAC5QX8h5xSA=
-github.com/mls-361/armen-sdk v0.0.0-20210331153159-5d9bc3bbbd8b h1:xGtf0URmUWTGcr3m2DACKGhaI0nFDgc6RYnCtqqOWDo=
-github.com/mls-361/armen-sdk v0.0.0-20210331153159-5d9bc3bbbd8b/go.mod h1:KLsBYyD8MYsnNF+xipiPiTL4CaUcU8jfyKRH+hwT4es=
+github.com/mls-361/armen-sdk v0.0.0-20210401162512-04e8514b007a h1:/Z3j5qt3WXpUdeCg5ue9sY8Um9HfZkXlX4Bivh+u3fo=
+github.com/mls-361/armen-sdk v0.0.0-20210401162512-04e8514b007a/go.mod h1:/gjfAFgxPZkWr+XgoLyBtrg0+ZzLJzNIL/1tV9zCcyo=
 github.com/mls-361/buffer v0.0.0-20210214143923-2dc8b703831b h1:idkigFFk06uq8KDZjfmrIj2qXYO4F466ZHrKkA8Ak8E=
 github.com/mls-361/buffer v0.0.0-20210214143923-2dc8b703831b/go.mod h1:skxL3BFTFnQe9Z8QD8DpEygWzVGTlcRPWc3tcQgRDRY=
 github.com/mls-361/crypto v0.0.0-20210214152759-2610549629cb h1:3ivI3KisQjx/Apq/eZxbhOssACRe5mnnYva95IrRQDY=
